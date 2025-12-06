@@ -53,26 +53,26 @@ run_tests_in_dir() {
     fi
 }
 
+# Function to simply check if the dataset exists (No Copying)
+check_dataset() {
+    dir="$1"
+    if [ -d "$dir" ]; then
+        if [ -f "$dir/numbers.txt" ]; then
+            echo "[OK] Found numbers.txt in $dir"
+        else
+            echo "[WARNING] numbers.txt NOT found in $dir. Tests will use fallback data."
+        fi
+    fi
+}
+
 echo "========================================"
-echo "      PREPARING DATASETS                "
+echo "      VERIFYING DATASETS                "
 echo "========================================"
 
-# 1. Ensure directories exist
-if [ ! -d "InorderTraversals" ]; then mkdir "InorderTraversals"; fi
-if [ ! -d "Postorder Traversals" ]; then mkdir "Postorder Traversals"; fi
-
-# 2. Distribute numbers.txt if found in Quicksort
-if [ -f "Quicksort/numbers.txt" ]; then
-    echo "Found numbers.txt in Quicksort. Copying to other folders..."
-    cp "Quicksort/numbers.txt" "InorderTraversals/numbers.txt"
-    cp "Quicksort/numbers.txt" "Postorder Traversals/numbers.txt"
-    # Also copy to BFS just in case you standardize inputs later
-    if [ -d "BFS" ]; then cp "Quicksort/numbers.txt" "BFS/numbers.txt"; fi
-    echo "Data distributed successfully."
-else
-    echo "[WARNING] Quicksort/numbers.txt not found!"
-    echo "Tests will run using their internal small fallback datasets."
-fi
+# Check for datasets without overwriting them
+check_dataset "Quicksort"
+check_dataset "InorderTraversals"
+check_dataset "Postorder Traversals"
 
 echo ""
 echo "========================================"
@@ -87,11 +87,11 @@ echo ""
 run_tests_in_dir "BFS"
 echo ""
 
-# 3. Inorder Traversals (Added this)
+# 3. Inorder Traversals
 run_tests_in_dir "InorderTraversals"
 echo ""
 
-# 4. Postorder Traversals (Added this, quoted for spaces)
+# 4. Postorder Traversals
 run_tests_in_dir "Postorder Traversals"
 
 echo "========================================"
