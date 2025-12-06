@@ -2,7 +2,6 @@ import os
 import re
 
 # The new test harness to append to every file
-# It reads numbers.txt, builds a tree, runs the solution, and compares against a reference.
 NEW_HARNESS = """
 // --- VERIFICATION HARNESS ---
 #include <fstream>
@@ -78,22 +77,20 @@ def fix_file(filepath):
 
     # Skip files that don't look like standard Solution class files
     if "class Solution" not in content:
-        print(f"Skipping {filepath} (No Solution class found)")
+        print("Skipping {} (No Solution class found)".format(filepath))
         return
 
     # 1. FIX COMPILER ERRORS: Ensure struct TreeNode is defined before it's used
     # If we find "struct Task" or similar before "struct TreeNode", we prepend a forward declaration
     if "struct Task" in content and content.find("struct Task") < content.find("struct TreeNode"):
         content = "struct TreeNode;\n" + content
-        print(f"  - Added forward declaration to {filepath}")
+        print("  - Added forward declaration to {}".format(filepath))
 
     # 2. ALIAS FIX: Harness uses 'Node' in insert(), but struct is 'TreeNode'
-    # We add a typedef or ensure the constructor match
     if "struct TreeNode {" in content and "struct Node" not in content:
         content = content.replace("struct TreeNode {", "struct TreeNode {\n    typedef TreeNode Node; // Harness Compatibility\n")
 
     # 3. REPLACE MAIN: Remove the old main() and append the new one
-    # We look for the start of main()
     main_pattern = re.compile(r'\n\s*int\s+main\s*\(')
     match = main_pattern.search(content)
     
@@ -105,9 +102,9 @@ def fix_file(filepath):
         
         with open(filepath, 'w') as f:
             f.write(new_content)
-        print(f"  - Updated Harness in {filepath}")
+        print("  - Updated Harness in {}".format(filepath))
     else:
-        print(f"  - Warning: No main() found in {filepath}")
+        print("  - Warning: No main() found in {}".format(filepath))
 
 # Run on Postorder folder
 folder = "Postorder Traversals"
@@ -119,4 +116,4 @@ if os.path.exists(folder):
             
             fix_file(os.path.join(folder, filename))
 else:
-    print(f"Folder '{folder}' not found.")
+    print("Folder '{}' not found.".format(folder))
