@@ -1,11 +1,13 @@
 import os
 import re
 
-# The new test harness to append to every file
-NEW_HARNESS = """
+# The verification harness code
+HARNESS_CODE = """
 // --- VERIFICATION HARNESS ---
 #include <fstream>
+#include <vector>
 #include <algorithm>
+#include <iostream>
 
 // Helper to free memory
 void deleteTree(TreeNode* root) {
@@ -17,7 +19,8 @@ void deleteTree(TreeNode* root) {
 
 // Helper to build BST from file
 TreeNode* insert(TreeNode* root, int val) {
-    if (!root) return new Node(val); // Uses Node or TreeNode constructor
+    // We use 'Node' here, which will be typedef'd to TreeNode if needed
+    if (!root) return new Node(val);
     if (val < root->val) root->left = insert(root->left, val);
     else root->right = insert(root->right, val);
     return root;
@@ -39,7 +42,6 @@ int main() {
 
     // 1. Load Data
     if (!file.is_open()) {
-        // Fallback for testing without file
         int fallback[] = {10, 5, 15, 2, 7, 12, 20};
         for(int i=0; i<7; ++i) root = insert(root, fallback[i]);
     } else {
@@ -75,34 +77,48 @@ def fix_file(filepath):
     with open(filepath, 'r') as f:
         content = f.read()
 
-    # Skip files that don't look like standard Solution class files
+    # Clean up previous patching attempts (remove nested typedefs if present)
+    content = content.replace("typedef TreeNode Node; // Harness Compatibility", "")
+    
+    # Check if Solution class exists
     if "class Solution" not in content:
-        print("Skipping {} (No Solution class found)".format(filepath))
+        print("Skipping {} (No Solution class)".format(filepath))
         return
 
-    # 1. FIX COMPILER ERRORS: Ensure struct TreeNode is defined before it's used
-    # If we find "struct Task" or similar before "struct TreeNode", we prepend a forward declaration
-    if "struct Task" in content and content.find("struct Task") < content.find("struct TreeNode"):
-        content = "struct TreeNode;\n" + content
-        print("  - Added forward declaration to {}".format(filepath))
+    # 1. Forward Declaration Fix (for Task structs using TreeNode pointers)
+    if "struct Task" in content and "struct TreeNode" in content:
+        task_pos = content.find("struct Task")
+        node_pos = content.find("struct TreeNode")
+        if task_pos < node_pos:
+            if "struct TreeNode;" not in content:
+                content = "struct TreeNode;\n" + content
+                print("  - Added forward declaration to {}".format(filepath))
 
-    # 2. ALIAS FIX: Harness uses 'Node' in insert(), but struct is 'TreeNode'
-    if "struct TreeNode {" in content and "struct Node" not in content:
-        content = content.replace("struct TreeNode {", "struct TreeNode {\n    typedef TreeNode Node; // Harness Compatibility\n")
+    # 2. Determine Global Typedefs needed
+    # We need both 'Node' and 'TreeNode' to exist globally for the harness to work.
+    typedef_injection = ""
+    
+    if "struct TreeNode" in content and "typedef TreeNode Node;" not in content:
+        typedef_injection += "\ntypedef TreeNode Node;\n"
+    
+    if "struct Node" in content and "struct TreeNode" not in content and "typedef Node TreeNode;" not in content:
+        typedef_injection += "\ntypedef Node TreeNode;\n"
 
-    # 3. REPLACE MAIN: Remove the old main() and append the new one
+    # 3. Remove old main() and append Harness
     main_pattern = re.compile(r'\n\s*int\s+main\s*\(')
     match = main_pattern.search(content)
     
     if match:
-        # Keep everything before main
+        # Cut off the file before the old main
         new_content = content[:match.start()]
-        # Append new harness
-        new_content += NEW_HARNESS
+        
+        # Inject the typedefs immediately before the harness
+        new_content += typedef_injection
+        new_content += HARNESS_CODE
         
         with open(filepath, 'w') as f:
             f.write(new_content)
-        print("  - Updated Harness in {}".format(filepath))
+        print("  - Patched {}".format(filepath))
     else:
         print("  - Warning: No main() found in {}".format(filepath))
 
@@ -111,8 +127,8 @@ folder = "Postorder Traversals"
 if os.path.exists(folder):
     for filename in os.listdir(folder):
         if filename.endswith(".cpp"):
-            # specific fix for po_20 which uses Arrays not Pointers (Skip it)
-            if "po_20" in filename: continue 
+            # Special case: po_20 uses Arrays, not Pointers. Skip it.
+            if "po_20" in filename: continue
             
             fix_file(os.path.join(folder, filename))
 else:
