@@ -2,21 +2,66 @@
  * Implementation: 20 - Struct of Arrays (Global Memory)
  * Filename: po_20_struct_of_arrays.cpp
  * Compatibility: C++98 (Clang 3.4 Safe)
- * Logic:
- * Instead of traversing pointers on the Heap, we traverse Indices in Global Arrays.
- * This changes the fault domain from "Pointer Corruption" to "Index Corruption".
+ * Logic: Traversing Indices in Global Arrays.
  */
 
 #include <iostream>
 #include <vector>
 #include <stack>
 #include <cstdio>
+#include <fstream>
+#include <algorithm>
 
 // Global Arrays simulating the Tree Memory
-const int MAX_NODES = 100;
+const int MAX_NODES = 1000; // Increased size just in case
 int val[MAX_NODES];
 int left_child[MAX_NODES];  // -1 indicates NULL
 int right_child[MAX_NODES]; // -1 indicates NULL
+int free_idx = 0;           // Tracks next available slot
+
+// Helper to reset global memory
+void initMemory() {
+    free_idx = 0;
+    for(int i=0; i<MAX_NODES; ++i) {
+        left_child[i] = -1;
+        right_child[i] = -1;
+        val[i] = 0;
+    }
+}
+
+// Helper to insert into the Array-based BST
+int insertArray(int rootIdx, int value) {
+    // If tree is empty (rootIdx is -1), create root at index 0
+    if (rootIdx == -1) {
+        int newIdx = free_idx++;
+        val[newIdx] = value;
+        return newIdx;
+    }
+
+    int curr = rootIdx;
+    while (true) {
+        if (value < val[curr]) {
+            if (left_child[curr] == -1) {
+                int newIdx = free_idx++;
+                val[newIdx] = value;
+                left_child[curr] = newIdx;
+                break;
+            } else {
+                curr = left_child[curr];
+            }
+        } else {
+            if (right_child[curr] == -1) {
+                int newIdx = free_idx++;
+                val[newIdx] = value;
+                right_child[curr] = newIdx;
+                break;
+            } else {
+                curr = right_child[curr];
+            }
+        }
+    }
+    return rootIdx;
+}
 
 class Solution {
 public:
@@ -35,13 +80,8 @@ public:
             s1.pop();
             s2.push(idx);
 
-            // Push indices of children
-            if (left_child[idx] != -1) {
-                s1.push(left_child[idx]);
-            }
-            if (right_child[idx] != -1) {
-                s1.push(right_child[idx]);
-            }
+            if (left_child[idx] != -1) s1.push(left_child[idx]);
+            if (right_child[idx] != -1) s1.push(right_child[idx]);
         }
 
         while (!s2.empty()) {
@@ -53,42 +93,63 @@ public:
     }
 };
 
-// --- SDC Fault Injection Harness ---
+// --- VERIFICATION HARNESS ---
+
+// Standard TreeNode for Golden Reference
+struct TreeNode {
+    int val;
+    TreeNode *left, *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+TreeNode* insertGolden(TreeNode* root, int val) {
+    if (!root) return new TreeNode(val);
+    if (val < root->val) root->left = insertGolden(root->left, val);
+    else root->right = insertGolden(root->right, val);
+    return root;
+}
+
+void goldenPostorder(TreeNode* root, std::vector<int>& res) {
+    if (!root) return;
+    goldenPostorder(root->left, res);
+    goldenPostorder(root->right, res);
+    res.push_back(root->val);
+}
+
 int main() {
-    // Manually setting up the "Struct of Arrays"
-    // Node 0 is Root (val 1)
-    // Node 1 is Left (val 2)
-    // Node 2 is Right (val 3)
-    // Node 3 is Left-Left (val 4)
-    // Node 4 is Left-Right (val 5)
-
-    // Init arrays to -1
-    for(int i=0; i<MAX_NODES; ++i) {
-        left_child[i] = -1;
-        right_child[i] = -1;
+    std::ifstream file("numbers.txt");
+    if (!file.is_open()) {
+        std::cerr << "Error: numbers.txt not found!" << std::endl;
+        return 1;
     }
 
-    // Define Values
-    val[0] = 1; 
-    val[1] = 2; 
-    val[2] = 3; 
-    val[3] = 4; 
-    val[4] = 5;
+    initMemory(); // Clear arrays
+    
+    int num;
+    int array_root_idx = -1;      // System Under Test (Index)
+    TreeNode* golden_root = NULL; // Expected Result (Pointer)
 
-    // Define Links
-    left_child[0] = 1;  // 1->2
-    right_child[0] = 2; // 1->3
-    left_child[1] = 3;  // 2->4
-    right_child[1] = 4; // 2->5
+    while (file >> num) {
+        array_root_idx = insertArray(array_root_idx, num);
+        golden_root = insertGolden(golden_root, num);
+    }
+    file.close();
 
+    // 1. Run System Under Test
     Solution sol;
-    std::vector<int> result = sol.postorderTraversal(0); // Start at index 0
+    std::vector<int> result = sol.postorderTraversal(array_root_idx);
 
-    // Output Key OD
-    for (size_t i = 0; i < result.size(); ++i) {
-        std::cout << result[i] << " ";
+    // 2. Run Golden Reference
+    std::vector<int> expected;
+    goldenPostorder(golden_root, expected);
+
+    // 3. Verify
+    if (result == expected) {
+        std::cout << "VERIFICATION PASSED" << std::endl;
+    } else {
+        std::cout << "FAILED" << std::endl;
+        std::cout << "Expected size: " << expected.size() << " Got: " << result.size() << std::endl;
     }
-    std::cout << std::endl;
 
     return 0;
 }
