@@ -1,4 +1,3 @@
-cat > reset.py <<EOF
 import os
 import re
 
@@ -67,38 +66,41 @@ int main() {
 """
 
 def reset_and_fix_file(filepath):
-    with open(filepath, 'r') as f:
-        content = f.read()
+    try:
+        with open(filepath, 'r') as f:
+            content = f.read()
 
-    cutoff_index = -1
-    marker_pos = content.find("// --- VERIFICATION HARNESS ---")
-    if marker_pos != -1:
-        cutoff_index = marker_pos
-    else:
-        match = re.search(r'\\n\s*int\s+main\s*\(', content)
-        if match:
-            cutoff_index = match.start()
+        cutoff_index = -1
+        marker_pos = content.find("// --- VERIFICATION HARNESS ---")
+        if marker_pos != -1:
+            cutoff_index = marker_pos
+        else:
+            match = re.search(r'\n\s*int\s+main\s*\(', content)
+            if match:
+                cutoff_index = match.start()
 
-    if cutoff_index != -1:
-        content = content[:cutoff_index]
-    
-    content = content.replace("typedef TreeNode Node; // Harness Compatibility", "")
-    content = re.sub(r'\s*typedef\s+TreeNode\s+Node;\s*', '\\n', content)
-
-    if "struct Task" in content and "struct TreeNode" in content:
-        task_pos = content.find("struct Task")
-        node_pos = content.find("struct TreeNode")
-        if task_pos < node_pos and "struct TreeNode;" not in content:
-            content = re.sub(r'(#include .+\\n)+', r'\g<0>\\nstruct TreeNode;\\n', content, count=1)
-
-    if "struct TreeNode" in content:
-        content += "\\n\\n// Global typedef for Harness compatibility\\n"
-        content += "typedef TreeNode Node;\\n"
-        content += NEW_HARNESS
+        if cutoff_index != -1:
+            content = content[:cutoff_index]
         
-        with open(filepath, 'w') as f:
-            f.write(content)
-        print("Fixed: " + filepath)
+        content = content.replace("typedef TreeNode Node; // Harness Compatibility", "")
+        content = re.sub(r'\s*typedef\s+TreeNode\s+Node;\s*', '\n', content)
+
+        if "struct Task" in content and "struct TreeNode" in content:
+            task_pos = content.find("struct Task")
+            node_pos = content.find("struct TreeNode")
+            if task_pos < node_pos and "struct TreeNode;" not in content:
+                content = re.sub(r'(#include .+\n)+', r'\g<0>\nstruct TreeNode;\n', content, count=1)
+
+        if "struct TreeNode" in content:
+            content += "\n\n// Global typedef for Harness compatibility\n"
+            content += "typedef TreeNode Node;\n"
+            content += NEW_HARNESS
+            
+            with open(filepath, 'w') as f:
+                f.write(content)
+            print("Fixed: " + filepath)
+    except Exception as e:
+        print("Error processing " + filepath + ": " + str(e))
 
 folder = "Postorder Traversals"
 if os.path.exists(folder):
@@ -112,4 +114,5 @@ if os.path.exists(folder):
             if "po_18" in filename: continue  # Skipping Manual Fix
             
             reset_and_fix_file(os.path.join(folder, filename))
-EOF
+else:
+    print("Folder not found: " + folder)
