@@ -1,27 +1,9 @@
-/*
- * Implementation: 16 - Iterative using Raw C-Array Stack
- * Filename: po_16_raw_array_stack.cpp
- * Compatibility: C++98 (Clang 3.4 Safe)
- * Logic:
- * Uses the 'Reverse Preorder' strategy (Root -> Right -> Left).
- * Manages a raw array 'stack[100]' and integer 'top' index manually.
- * Stores result in a raw array 'output[100]' and prints backwards.
- */
-
-#include <iostream>
-#include <cstdio>
-
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-
 class Solution {
 public:
-    void postorderTraversal(TreeNode* root) {
-        if (root == NULL) return;
+    // CHANGED: Return type is now std::vector<int> instead of void
+    std::vector<int> postorderTraversal(TreeNode* root) {
+        std::vector<int> result; // The container to return
+        if (root == NULL) return result;
 
         // Raw Array Stack Simulation
         const int MAX_SIZE = 100;
@@ -52,39 +34,11 @@ public:
             }
         }
 
-        // Print Output Backwards (simulating reverse)
-        // Key OD
+        // CHANGED: Transfer from raw array to vector (simulating reverse)
         for (int i = outIndex - 1; i >= 0; i--) {
-            std::cout << output[i] << " ";
+            result.push_back(output[i]);
         }
+        
+        return result;
     }
 };
-
-// --- SDC Fault Injection Harness ---
-int main() {
-    // Constructing the tree
-    //      1
-    //     / \
-    //    2   3
-    //   / \
-    //  4   5
-    
-    TreeNode* root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
-
-    Solution sol;
-    sol.postorderTraversal(root);
-    std::cout << std::endl;
-
-    // Cleanup
-    delete root->left->left;
-    delete root->left->right;
-    delete root->left;
-    delete root->right;
-    delete root;
-
-    return 0;
-}
