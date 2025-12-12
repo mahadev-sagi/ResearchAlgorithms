@@ -1,14 +1,16 @@
 /*
  * Implementation: 06 - Pure C Recursive (Procedural)
- * Filename: po_06_pure_c.cpp
- * Compatibility: C/C++98 (Clang 3.4 Safe)
- * Logic: Standard recursion, but implemented as a standalone procedure
- * rather than a class method.
+ * Filename: po_06_c_recursive.cpp
+ * Compatibility: C++ (Uses C-style structs)
+ * Logic: Standard recursion, adapted to capture output for verification.
  */
 
 #include <iostream>
+#include <vector>
 #include <cstdio>
 #include <cstdlib>
+#include <fstream>
+#include <algorithm>
 
 // Define the C-style struct
 typedef struct Node {
@@ -17,6 +19,9 @@ typedef struct Node {
     struct Node* right;
 } Node;
 
+// Global buffer to capture output during recursion
+std::vector<int> global_result;
+
 // Helper to create a new node (C-style)
 Node* createNode(int data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
@@ -24,6 +29,16 @@ Node* createNode(int data) {
     newNode->left = NULL;
     newNode->right = NULL;
     return newNode;
+}
+
+// Helper to insert into C-style BST
+Node* insertC(Node* root, int data) {
+    if (root == NULL) return createNode(data);
+    if (data < root->data)
+        root->left = insertC(root->left, data);
+    else
+        root->right = insertC(root->right, data);
+    return root;
 }
 
 // The Algorithm: Pure C Recursive Function
@@ -35,36 +50,67 @@ void postOrder(Node* root) {
         // 2. Visit Right
         postOrder(root->right);
         
-        // 3. Visit Root
-        printf("%d ", root->data);
+        // 3. Visit Root (Store in global buffer instead of printf)
+        global_result.push_back(root->data);
     }
 }
 
-// --- SDC Fault Injection Harness ---
+// --- VERIFICATION HARNESS ---
+
+// Standard TreeNode for Golden Reference calculation
+struct TreeNode {
+    int val;
+    TreeNode *left, *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+TreeNode* insertGolden(TreeNode* root, int val) {
+    if (!root) return new TreeNode(val);
+    if (val < root->val) root->left = insertGolden(root->left, val);
+    else root->right = insertGolden(root->right, val);
+    return root;
+}
+
+void goldenPostorder(TreeNode* root, std::vector<int>& res) {
+    if (!root) return;
+    goldenPostorder(root->left, res);
+    goldenPostorder(root->right, res);
+    res.push_back(root->val);
+}
+
 int main() {
-    // Constructing the tree using C-style allocation
-    //      1
-    //     / \
-    //    2   3
-    //   / \
-    //  4   5
-    
-    Node* root = createNode(1);
-    root->left = createNode(2);
-    root->right = createNode(3);
-    root->left->left = createNode(4);
-    root->left->right = createNode(5);
+    std::ifstream file("numbers.txt");
+    if (!file.is_open()) {
+        std::cerr << "Error: numbers.txt not found!" << std::endl;
+        return 1;
+    }
 
-    // Execute Traversal
-    postOrder(root);
-    printf("\n");
+    int num;
+    Node* c_root = NULL;         // System Under Test
+    TreeNode* golden_root = NULL; // Expected Result
 
-    // Cleanup (free)
-    free(root->left->left);
-    free(root->left->right);
-    free(root->left);
-    free(root->right);
-    free(root);
+    // Load Data into both trees
+    while (file >> num) {
+        c_root = insertC(c_root, num);
+        golden_root = insertGolden(golden_root, num);
+    }
+    file.close();
+
+    // 1. Run System Under Test
+    global_result.clear();
+    postOrder(c_root);
+
+    // 2. Run Golden Reference
+    std::vector<int> expected;
+    goldenPostorder(golden_root, expected);
+
+    // 3. Verify
+    if (global_result == expected) {
+        std::cout << "VERIFICATION PASSED" << std::endl;
+    } else {
+        std::cout << "FAILED" << std::endl;
+        std::cout << "Expected size: " << expected.size() << " Got: " << global_result.size() << std::endl;
+    }
 
     return 0;
 }
