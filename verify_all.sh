@@ -66,7 +66,7 @@ check_dataset() {
 }
 
 echo "========================================"
-echo "      VERIFYING DATASETS                "
+echo "      VERIFYING DATASETS (numbers.txt)  "
 echo "========================================"
 
 # Check for datasets without overwriting them
@@ -97,3 +97,4 @@ run_tests_in_dir "Postorder Traversals"
 echo "========================================"
 echo "           DONE                         "
 echo "========================================"
+
