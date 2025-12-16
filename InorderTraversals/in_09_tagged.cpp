@@ -2,6 +2,7 @@
 #include <vector>
 #include <stack>
 #include <fstream>
+#include <string> 
 
 using namespace std;
 
@@ -45,8 +46,18 @@ Node* insert(Node* root, int val) {
     else root->right = insert(root->right, val);
     return root;
 }
-int main() {
-    ifstream file("numbers.txt");
+
+// --- UPDATED MAIN ---
+int main(int argc, char** argv) {
+    // 1. Logic to pick the file from argument OR default
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    // 2. Open file using the variable
+    ifstream file(filename.c_str());
+    
     int num;
     Node* root = nullptr;
     if (!file.is_open()) {
