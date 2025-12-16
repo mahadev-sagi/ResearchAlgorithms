@@ -2,6 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <cstdlib>
+#include <string> // <--- Added for string handling
 
 using namespace std;
 
@@ -74,14 +75,22 @@ void in_order_traversal(Node* head, vector<int>& result) {
 }
 
 // --- HARNESS ---
-int main() {
-    // Initialize Dummy Head for TBT
+int main(int argc, char** argv) {
+    // 1. Initialize Dummy Head for TBT (Critical for this algo)
     Node* head = new Node;
     head->lbit = 0; head->rbit = 1;
     head->left = head->right = head;
 
-    ifstream file("numbers.txt");
+    // 2. Logic to pick the file from argument OR default
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    // 3. Open file
+    ifstream file(filename.c_str());
     int num;
+    
     if (!file.is_open()) {
         vector<int> f = {5,3,7,2,4,6,8}; for(int i:f) insertTBT(head,i);
     } else {
@@ -96,6 +105,7 @@ int main() {
     for (size_t i = 0; i < result.size() - 1; ++i) {
         if (result[i] > result[i+1]) { passed = false; break; }
     }
+    
     if (passed && !result.empty()) cout << "VERIFICATION PASSED" << endl;
     else cout << "FAILED" << endl;
     return 0;
