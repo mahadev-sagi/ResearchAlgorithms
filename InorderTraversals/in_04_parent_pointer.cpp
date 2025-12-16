@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -56,10 +57,17 @@ Node* insert(Node* root, int val) {
     return root;
 }
 
-int main() {
-    ifstream file("numbers.txt");
+// --- MAIN ---
+int main(int argc, char** argv) {
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    ifstream file(filename.c_str());
     int num;
     Node* root = nullptr;
+    
     if (!file.is_open()) {
         vector<int> fb = {5, 3, 7, 1, 4, 6, 8};
         for(int x : fb) root = insert(root, x);
