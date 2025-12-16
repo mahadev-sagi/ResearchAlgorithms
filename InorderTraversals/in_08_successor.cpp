@@ -1,121 +1,97 @@
-/*
- * Implementation: 08 - Successor / Parent Pointer
- */
-
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include <string>
+#include <string> // <--- Added for string handling
 
 using namespace std;
 
-// Modified struct to include constructor and parent pointer
-struct TreeNode {
-    int data;
-    struct TreeNode *left, *right, *parent;
-    
-    TreeNode(int val) : data(val), left(NULL), right(NULL), parent(NULL) {}
+// Node with Parent Pointer
+struct Node {
+    int val;
+    Node *left, *right, *parent;
+    Node(int v) : val(v), left(nullptr), right(nullptr), parent(nullptr) {}
 };
 
-// --- IMPLEMENTATION (Core Logic) ---
-
-// Find the inorder successor of a node
-TreeNode *tree_successor(TreeNode *p) {
-    TreeNode *h;
-    h = p->right; // Check right child
-
-    if (h != NULL) {
-        // Return the leftmost node of right subtree
-        while (h->left != NULL)
+// --- IMPLEMENTATION ---
+Node* tree_successor(Node* p) {
+    // 1. If right subtree exists, successor is the leftmost node of right subtree
+    Node* h = p->right;
+    if (h != nullptr) {
+        while (h->left != nullptr)
             h = h->left;
         return h;
     }
     
-    TreeNode *y = p->parent;
-    // Go up until we are no longer the right child of our parent
-    while (y != NULL && p == y->right) {
+    // 2. Otherwise, go up until we are the left child of our parent
+    Node* y = p->parent;
+    while (y != nullptr && p == y->right) {
         p = y;
-        y = y->parent; // Keep moving up
+        y = y->parent;
     }
     return y;
 }
 
-// Wrapper to perform the full traversal using the successor logic
-void in_order_traversal(TreeNode* root, vector<int>& result) {
+void in_order_traversal(Node* root, vector<int>& result) {
     if (!root) return;
 
     // 1. Start at the leftmost node (Minimum value)
-    TreeNode* curr = root;
-    while (curr->left != NULL) {
+    Node* curr = root;
+    while (curr->left != nullptr) {
         curr = curr->left;
     }
 
     // 2. Iterate using tree_successor
-    while (curr != NULL) {
-        result.push_back(curr->data);
+    while (curr != nullptr) {
+        result.push_back(curr->val);
         curr = tree_successor(curr);
     }
 }
 
-// --- VERIFICATION HARNESS ---
-
-// Helper to build tree dynamically and maintain Parent Pointers
-TreeNode* insert(TreeNode* root, int val) {
-    if (!root) return new TreeNode(val);
+// --- HARNESS ---
+Node* insert(Node* root, int val) {
+    if (!root) return new Node(val);
     
-    if (val < root->data) {
-        TreeNode* lchild = insert(root->left, val);
+    if (val < root->val) {
+        Node* lchild = insert(root->left, val);
         root->left = lchild;
         lchild->parent = root; // Critical: Set parent pointer
     } else {
-        TreeNode* rchild = insert(root->right, val);
+        Node* rchild = insert(root->right, val);
         root->right = rchild;
         rchild->parent = root; // Critical: Set parent pointer
     }
     return root;
 }
 
+// --- MAIN ---
 int main(int argc, char** argv) {
-    // 1. Determine input file (Compatible with runFi.py)
+    // 1. Logic to pick the file from argument OR default
     string filename = "numbers.txt";
     if (argc > 1) {
         filename = argv[1];
     }
 
-    // 2. Build Tree from File
+    // 2. Open file
     ifstream file(filename.c_str());
     int num;
-    TreeNode* root = NULL;
+    Node* root = nullptr;
 
     if (!file.is_open()) {
-        // Fallback default tree if file missing
-        vector<int> fb;
-        fb.push_back(5); fb.push_back(3); fb.push_back(7);
-        fb.push_back(1); fb.push_back(4); fb.push_back(6); fb.push_back(8);
-        for(size_t i=0; i<fb.size(); ++i) root = insert(root, fb[i]);
+        vector<int> f = {5,3,7,2,4,6,8}; for(int i:f) root=insert(root,i);
     } else {
-        int limit = 0;
-        while(file >> num && limit++ < 2000) {
-            root = insert(root, num);
-        }
+        while(file >> num) root = insert(root, num);
         file.close();
     }
 
-    // 3. Run Traversal
     vector<int> result;
     if (root) in_order_traversal(root, result);
 
-    // 4. Verification (Check if sorted)
     bool passed = true;
     for (size_t i = 0; i < result.size() - 1; ++i) {
-        if (result[i] > result[i+1]) { 
-            passed = false;
-            break; 
-        }
+        if (result[i] > result[i+1]) { passed = false; break; }
     }
     
     if (passed && !result.empty()) cout << "VERIFICATION PASSED" << endl;
     else cout << "FAILED" << endl;
-    
     return 0;
 }
