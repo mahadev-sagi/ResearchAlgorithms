@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <cstdio>
+#include <cstdlib>
+#include <string> 
 
 using namespace std;
 
@@ -22,7 +25,7 @@ void in_order_traversal(Node* root, vector<int>& result) {
     helper(root, result);
 }
 
-// --- VERIFICATION HARNESS ---
+// --- VERIFICATION HARNESS ( ---
 Node* insert(Node* root, int val) {
     if (!root) return new Node(val);
     if (val < root->val) {
@@ -35,11 +38,23 @@ Node* insert(Node* root, int val) {
     return root;
 }
 
-int main() {
-    ifstream file("numbers.txt");
+// --- MAIN (Modified for Automation) ---
+int main(int argc, char** argv) { // <--- 2. Update function signature
+    
+    // 3. Logic to pick the file from argument OR default
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    // 4. Pass the variable 'filename.c_str()' instead of the hardcoded string
+    ifstream file(filename.c_str());
+    
     int num;
     Node* root = nullptr;
+    
     if (!file.is_open()) {
+        // Fallback if file is missing
         vector<int> fb = {5, 3, 7, 1, 4, 6, 8};
         for(int x : fb) root = insert(root, x);
     } else {
