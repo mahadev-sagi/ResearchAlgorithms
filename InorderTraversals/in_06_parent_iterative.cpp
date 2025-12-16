@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <string> // <--- Added for string handling
 
 using namespace std;
 
@@ -57,8 +58,17 @@ Node* insert(Node* root, int val) {
     return root;
 }
 
-int main() {
-    ifstream file("numbers.txt");
+// --- MAIN ---
+int main(int argc, char** argv) {
+    // 1. Logic to pick the file from argument OR default
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    // 2. Open the file using the variable
+    ifstream file(filename.c_str());
+    
     int num;
     Node* root = nullptr;
     if (!file.is_open()) {
@@ -69,7 +79,7 @@ int main() {
     }
 
     vector<int> result;
-    in_order_traversal(root, result);
+    if(root) in_order_traversal(root, result);
 
     bool passed = true;
     for (size_t i = 0; i < result.size() - 1; ++i) {
