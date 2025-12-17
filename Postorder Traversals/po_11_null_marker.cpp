@@ -1,18 +1,19 @@
 /*
- * Implementation: 11 - Iterative Stack with NULL Marker
- * Filename: po_11_null_marker.cpp
+ * Implementation: 11 - Iterative Reverse (Linked List / Deque push_front)
+ * Filename: po_11_linked_list_reverse.cpp
  * Compatibility: C++98 (Clang 3.4 Safe)
- * Logic:
- * 1. Stack stores pure Node pointers.
- * 2. When popping 'node':
- * - If it is not NULL, push it back, push NULL (marker), then push Right, then Left.
- * - If it is NULL, the *next* pop is the node to visit.
  */
 
 #include <iostream>
 #include <vector>
+#include <deque> // Efficient push_front
 #include <stack>
 #include <cstdio>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+
+using namespace std;
 
 struct TreeNode {
     int val;
@@ -24,74 +25,78 @@ struct TreeNode {
 class Solution {
 public:
     std::vector<int> postorderTraversal(TreeNode* root) {
-        std::vector<int> result;
-        if (root == NULL) return result;
+        if (root == NULL) return std::vector<int>();
 
-        std::stack<TreeNode*> st;
-        st.push(root);
+        // OD: Using deque to push_front (O(1)) avoids the explicit reverse step
+        // Traversal Order: Root -> Right -> Left
+        // List Order: Left <- Right <- Root
+        std::deque<int> d;
+        std::stack<TreeNode*> s;
+        s.push(root);
 
-        while (!st.empty()) {
-            TreeNode* node = st.top();
-            st.pop();
+        while (!s.empty()) {
+            TreeNode* node = s.top();
+            s.pop();
 
-            if (node != NULL) {
-                // Not a marker, so we need to process its children
-                
-                // 1. Push node back (to be visited later)
-                st.push(node);
-                
-                // 2. Push NULL marker (indicates the node below is ready to visit)
-                st.push(NULL);
-                
-                // 3. Push Right child (LIFO order ensures Right is processed after Left)
-                if (node->right) st.push(node->right);
-                
-                // 4. Push Left child
-                if (node->left) st.push(node->left);
-            } else {
-                // We encountered a marker (NULL)
-                // This implies the NEXT element on the stack is the one to visit
-                if (!st.empty()) {
-                    node = st.top();
-                    st.pop();
-                    result.push_back(node->val);
-                }
+            // Insert at HEAD of the list
+            d.push_front(node->val);
+
+            // Push Left first so it is processed LAST (and ends up at FRONT of result)
+            // Wait: We want Root -> Right -> Left traversal.
+            // Stack is LIFO.
+            // Push Left: Top is Left. Pop Left. Add Left to front.
+            // Push Right: Top is Right. Pop Right. Add Right to front.
+            // Result: Left, Right, Root. Correct.
+            
+            if (node->left) {
+                s.push(node->left);
+            }
+            if (node->right) {
+                s.push(node->right);
             }
         }
-        return result;
+        
+        // Convert deque to vector for standard return type
+        return std::vector<int>(d.begin(), d.end());
     }
 };
 
-// --- SDC Fault Injection Harness ---
-int main() {
-    // Constructing the tree
-    //      1
-    //     / \
-    //    2   3
-    //   / \
-    //  4   5
-    
-    TreeNode* root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
+// --- HARNESS ---
+TreeNode* insert(TreeNode* root, int val) {
+    if (!root) return new TreeNode(val);
+    if (val < root->val)
+        root->left = insert(root->left, val);
+    else
+        root->right = insert(root->right, val);
+    return root;
+}
+
+// --- MAIN ---
+int main(int argc, char** argv) {
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    ifstream file(filename.c_str());
+    int num;
+    TreeNode* root = NULL;
+
+    if (!file.is_open()) {
+        vector<int> f; f.push_back(1); f.push_back(2); f.push_back(3); f.push_back(4); f.push_back(5);
+        for(size_t i=0; i<f.size(); ++i) root = insert(root, f[i]);
+    } else {
+        while(file >> num) root = insert(root, num);
+        file.close();
+    }
 
     Solution sol;
     std::vector<int> result = sol.postorderTraversal(root);
 
-    // Output Key OD
     for (size_t i = 0; i < result.size(); ++i) {
-        std::cout << result[i] << " ";
+        cout << result[i] << " ";
     }
-    std::cout << std::endl;
-
-    // Cleanup
-    delete root->left->left;
-    delete root->left->right;
-    delete root->left;
-    delete root->right;
-    delete root;
+    cout << endl;
 
     return 0;
 }
