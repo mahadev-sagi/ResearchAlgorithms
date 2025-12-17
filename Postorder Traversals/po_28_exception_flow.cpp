@@ -1,16 +1,21 @@
 /*
- * Implementation: 28 - Recursive with Exception Flow
- * Filename: po_28_exception_flow.cpp
+ * Implementation: 27 - Iterative with Bit-Vector (Bitwise Logic)
+ * Filename: po_27_bit_vector.cpp
  * Compatibility: C++98 (Clang 3.4 Safe)
  * Logic:
- * Instead of standard returns, the recursive function 'throws' an integer
- * to signal completion to its parent.
- * The parent wraps calls in try-catch blocks to handle the control flow.
+ * Uses a parallel stack approach.
+ * 'visitStack' is a vector<bool>, which uses 1 bit per element.
+ * We must use bitwise operations to check if a node is ready to visit.
  */
 
 #include <iostream>
 #include <vector>
 #include <cstdio>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+
+using namespace std;
 
 struct TreeNode {
     int val;
@@ -19,82 +24,86 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-// Define a specific type for control flow signal
-struct TraversalSignal {
-    int dummy;
-};
-
 class Solution {
 public:
     std::vector<int> postorderTraversal(TreeNode* root) {
         std::vector<int> result;
-        try {
-            traverse(root, result);
-        } catch (TraversalSignal) {
-            // Catch the final throw from the root node
+        if (root == NULL) return result;
+
+        std::vector<TreeNode*> nodeStack;
+        // vector<bool> is a specialization that uses 1 bit per value
+        std::vector<bool> visitStack;
+
+        nodeStack.push_back(root);
+        visitStack.push_back(false); // false = traverse children
+
+        while (!nodeStack.empty()) {
+            TreeNode* node = nodeStack.back();
+            nodeStack.pop_back();
+
+            // Accessing vector<bool> involves bit-masks
+            bool visited = visitStack.back();
+            visitStack.pop_back();
+
+            if (node == NULL) continue;
+
+            if (visited) {
+                // Bit was 1: Visit Node
+                result.push_back(node->val);
+            } else {
+                // Bit was 0: Push back as 1, process children
+                nodeStack.push_back(node);
+                visitStack.push_back(true);
+
+                // Push Right (with bit 0)
+                nodeStack.push_back(node->right);
+                visitStack.push_back(false);
+
+                // Push Left (with bit 0)
+                nodeStack.push_back(node->left);
+                visitStack.push_back(false);
+            }
         }
         return result;
     }
-
-private:
-    void traverse(TreeNode* node, std::vector<int>& result) {
-        if (node == NULL) {
-            return; // Standard return for NULL base case
-        }
-
-        // 1. Try to traverse Left
-        try {
-            traverse(node->left, result);
-        } catch (TraversalSignal) {
-            // Caught signal that Left child is done
-        }
-
-        // 2. Try to traverse Right
-        try {
-            traverse(node->right, result);
-        } catch (TraversalSignal) {
-            // Caught signal that Right child is done
-        }
-
-        // 3. Visit Node
-        result.push_back(node->val);
-
-        // 4. Signal completion to parent via Exception
-        TraversalSignal sig;
-        throw sig; 
-    }
 };
 
-// --- SDC Fault Injection Harness ---
-int main() {
-    // Constructing the tree
-    //      1
-    //     / \
-    //    2   3
-    //   / \
-    //  4   5
-    
-    TreeNode* root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
+// --- HARNESS ---
+TreeNode* insert(TreeNode* root, int val) {
+    if (!root) return new TreeNode(val);
+    if (val < root->val)
+        root->left = insert(root->left, val);
+    else
+        root->right = insert(root->right, val);
+    return root;
+}
+
+// --- MAIN ---
+int main(int argc, char** argv) {
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    ifstream file(filename.c_str());
+    int num;
+    TreeNode* root = NULL;
+
+    if (!file.is_open()) {
+        vector<int> f; f.push_back(1); f.push_back(2); f.push_back(3); f.push_back(4); f.push_back(5);
+        for(size_t i=0; i<f.size(); ++i) root = insert(root, f[i]);
+    } else {
+        while(file >> num) root = insert(root, num);
+        file.close();
+    }
 
     Solution sol;
     std::vector<int> result = sol.postorderTraversal(root);
 
-    // Output Key OD
     for (size_t i = 0; i < result.size(); ++i) {
-        std::cout << result[i] << " ";
+        cout << result[i] << " ";
     }
-    std::cout << std::endl;
-
-    // Cleanup
-    delete root->left->left;
-    delete root->left->right;
-    delete root->left;
-    delete root->right;
-    delete root;
+    cout << endl;
 
     return 0;
 }
