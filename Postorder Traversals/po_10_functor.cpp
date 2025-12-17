@@ -1,16 +1,17 @@
 /*
- * Implementation: 10 - Recursive Functor (Function Object)
- * Filename: po_10_functor.cpp
- * Compatibility: C++98 (Clang 3.4 Safe)
- * Logic:
- * Defines a local struct 'PostOrderWorker'.
- * Overloads operator() to make the struct instance callable like a function.
- * This encapsulates the recursion logic within a temporary stack object.
+ * Implementation: 10 - Class-Based Recursive (Member State)
+ * Filename: po_10_recursive_class.cpp
+ * Compatibility: C++98 (Safe for Clang 3.4)
  */
 
 #include <iostream>
 #include <vector>
 #include <cstdio>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+
+using namespace std;
 
 struct TreeNode {
     int val;
@@ -20,67 +21,61 @@ struct TreeNode {
 };
 
 class Solution {
-    // Functor Definition
-    struct PostOrderWorker {
-        std::vector<int>& ref_res;
-        
-        // Constructor to bind the result vector
-        PostOrderWorker(std::vector<int>& r) : ref_res(r) {}
-        
-        // Overloaded () operator to act as the recursive function
-        void operator()(TreeNode* node) {
-            if (node == NULL) return;
-            
-            // Recurse by calling the object itself
-            (*this)(node->left);
-            (*this)(node->right);
-            
-            // Access bound reference
-            ref_res.push_back(node->val);
-        }
-    };
+private:
+    // OD: Result vector is a member variable, not passed as argument
+    std::vector<int> result;
+
+    void traverse(TreeNode* node) {
+        if (!node) return;
+        traverse(node->left);
+        traverse(node->right);
+        result.push_back(node->val);
+    }
 
 public:
     std::vector<int> postorderTraversal(TreeNode* root) {
-        std::vector<int> result;
-        // Instantiate the functor on the stack
-        PostOrderWorker worker(result);
-        // Invoke it
-        worker(root);
+        result.clear();
+        traverse(root);
         return result;
     }
 };
 
-// --- SDC Fault Injection Harness ---
-int main() {
-    // Constructing the tree
-    //      1
-    //     / \
-    //    2   3
-    //   / \
-    //  4   5
-    
-    TreeNode* root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
+// --- HARNESS ---
+TreeNode* insert(TreeNode* root, int val) {
+    if (!root) return new TreeNode(val);
+    if (val < root->val)
+        root->left = insert(root->left, val);
+    else
+        root->right = insert(root->right, val);
+    return root;
+}
+
+// --- MAIN ---
+int main(int argc, char** argv) {
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    ifstream file(filename.c_str());
+    int num;
+    TreeNode* root = NULL;
+
+    if (!file.is_open()) {
+        vector<int> f; f.push_back(1); f.push_back(2); f.push_back(3); f.push_back(4); f.push_back(5);
+        for(size_t i=0; i<f.size(); ++i) root = insert(root, f[i]);
+    } else {
+        while(file >> num) root = insert(root, num);
+        file.close();
+    }
 
     Solution sol;
     std::vector<int> result = sol.postorderTraversal(root);
 
-    // Output Key OD
     for (size_t i = 0; i < result.size(); ++i) {
-        std::cout << result[i] << " ";
+        cout << result[i] << " ";
     }
-    std::cout << std::endl;
-
-    // Cleanup
-    delete root->left->left;
-    delete root->left->right;
-    delete root->left;
-    delete root->right;
-    delete root;
+    cout << endl;
 
     return 0;
 }
