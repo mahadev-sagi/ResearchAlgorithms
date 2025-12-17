@@ -1,12 +1,7 @@
 /*
  * Implementation: 08 - Iterative Stack with Explicit State Machine
  * Filename: po_08_iterative_state.cpp
- * Compatibility: C++98 (Clang 3.4 Safe)
- * Logic:
- * Stack stores pair<Node*, int> where int is the state:
- * State 0: Push Left child, advance state to 1.
- * State 1: Push Right child, advance state to 2.
- * State 2: Visit Node (Pop).
+ * Compatibility: C++98 (Safe for Clang 3.4)
  */
 
 #include <iostream>
@@ -14,6 +9,11 @@
 #include <stack>
 #include <utility> // for std::pair
 #include <cstdio>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+
+using namespace std;
 
 struct TreeNode {
     int val;
@@ -28,69 +28,75 @@ public:
         std::vector<int> result;
         if (root == NULL) return result;
 
-        // Stack stores <Node*, State>
-        // State 0: Ready to traverse Left
-        // State 1: Ready to traverse Right
-        // State 2: Ready to Visit (Postorder)
-        std::stack<std::pair<TreeNode*, int> > st;
-        st.push(std::make_pair(root, 0));
+        // Stack stores pair<Node*, int> where int is the state:
+        // State 0: Go Left
+        // State 1: Go Right
+        // State 2: Visit Node
+        std::stack<std::pair<TreeNode*, int> > s;
+        s.push(std::make_pair(root, 0));
 
-        while (!st.empty()) {
-            TreeNode* node = st.top().first;
-            int& state = st.top().second; // Reference to update state in place
+        while (!s.empty()) {
+            TreeNode* node = s.top().first;
+            int& state = s.top().second; // Reference to update state in-place
 
             if (state == 0) {
-                // Move to State 1 and process Left Child
+                // State 0: Prepare to traverse Left
                 state = 1; 
                 if (node->left) {
-                    st.push(std::make_pair(node->left, 0));
+                    s.push(std::make_pair(node->left, 0));
                 }
             } else if (state == 1) {
-                // Move to State 2 and process Right Child
-                state = 2; 
+                // State 1: Left is done. Prepare to traverse Right.
+                state = 2;
                 if (node->right) {
-                    st.push(std::make_pair(node->right, 0));
+                    s.push(std::make_pair(node->right, 0));
                 }
             } else {
-                // State 2: Both children visited, now visit self
+                // State 2: Right is done. Visit Node and Pop.
                 result.push_back(node->val);
-                st.pop();
+                s.pop();
             }
         }
         return result;
     }
 };
 
-// --- SDC Fault Injection Harness ---
-int main() {
-    // Constructing the tree
-    //      1
-    //     / \
-    //    2   3
-    //   / \
-    //  4   5
-    
-    TreeNode* root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
+// --- HARNESS ---
+TreeNode* insert(TreeNode* root, int val) {
+    if (!root) return new TreeNode(val);
+    if (val < root->val)
+        root->left = insert(root->left, val);
+    else
+        root->right = insert(root->right, val);
+    return root;
+}
+
+// --- MAIN ---
+int main(int argc, char** argv) {
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    ifstream file(filename.c_str());
+    int num;
+    TreeNode* root = NULL;
+
+    if (!file.is_open()) {
+        vector<int> f; f.push_back(1); f.push_back(2); f.push_back(3); f.push_back(4); f.push_back(5);
+        for(size_t i=0; i<f.size(); ++i) root = insert(root, f[i]);
+    } else {
+        while(file >> num) root = insert(root, num);
+        file.close();
+    }
 
     Solution sol;
     std::vector<int> result = sol.postorderTraversal(root);
 
-    // Output Key OD
     for (size_t i = 0; i < result.size(); ++i) {
-        std::cout << result[i] << " ";
+        cout << result[i] << " ";
     }
-    std::cout << std::endl;
-
-    // Cleanup
-    delete root->left->left;
-    delete root->left->right;
-    delete root->left;
-    delete root->right;
-    delete root;
+    cout << endl;
 
     return 0;
 }
