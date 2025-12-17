@@ -15,7 +15,10 @@ struct Node {
 // --- IMPLEMENTATION ---
 struct CoState {
     Node* node;
-    int step = 0;
+    int step;
+    
+    // Constructor added to fix {node, 0} initialization issues
+    CoState(Node* n, int s) : node(n), step(s) {}
 };
 
 // OD: "Resume" function takes state by reference
@@ -27,12 +30,12 @@ bool resume(stack<CoState>& s, vector<int>& result) {
     switch (frame.step) {
         case 0:
             frame.step = 1;
-            if (frame.node->left) s.push({frame.node->left, 0});
+            if (frame.node->left) s.push(CoState(frame.node->left, 0));
             return true; // Yield
         case 1:
             result.push_back(frame.node->val);
             frame.step = 2;
-            if (frame.node->right) s.push({frame.node->right, 0});
+            if (frame.node->right) s.push(CoState(frame.node->right, 0));
             return true; // Yield
         case 2:
             s.pop();
@@ -44,7 +47,7 @@ bool resume(stack<CoState>& s, vector<int>& result) {
 void in_order_traversal(Node* root, vector<int>& result) {
     if (!root) return;
     stack<CoState> s;
-    s.push({root, 0});
+    s.push(CoState(root, 0));
     
     while (resume(s, result)); // Run until done
 }
