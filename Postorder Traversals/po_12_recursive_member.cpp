@@ -1,15 +1,18 @@
 /*
- * Implementation: 12 - Recursive with Member Variable
- * Filename: po_11_recursive_member.cpp
+ * Implementation: 12 - Custom Iterator Pattern
+ * Filename: po_12_iterator.cpp
  * Compatibility: C++98 (Clang 3.4 Safe)
- * Logic:
- * Uses a class member variable 'result' to accumulate values.
- * The recursive function returns void and takes only the node.
  */
 
 #include <iostream>
 #include <vector>
+#include <stack>
 #include <cstdio>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+
+using namespace std;
 
 struct TreeNode {
     int val;
@@ -18,64 +21,92 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-class Solution {
-    // Member variable to store result (Heap/Object state)
-    std::vector<int> result;
+// OD: Encapsulates traversal state in a class
+class PostOrderIterator {
+private:
+    std::stack<TreeNode*> s;
+    TreeNode* lastVisited;
+    TreeNode* current;
 
 public:
-    std::vector<int> postorderTraversal(TreeNode* root) {
-        // Ensure vector is empty before starting (in case of object reuse)
-        result.clear();
-        traverse(root);
-        return result;
+    PostOrderIterator(TreeNode* root) {
+        lastVisited = NULL;
+        current = root;
     }
 
-    void traverse(TreeNode* node) {
-        if (node == NULL) {
-            return;
+    bool hasNext() {
+        return !s.empty() || current != NULL;
+    }
+
+    int next() {
+        while (current != NULL || !s.empty()) {
+            if (current != NULL) {
+                s.push(current);
+                current = current->left;
+            } else {
+                TreeNode* peekNode = s.top();
+                if (peekNode->right != NULL && lastVisited != peekNode->right) {
+                    current = peekNode->right;
+                } else {
+                    int val = peekNode->val;
+                    lastVisited = peekNode;
+                    s.pop();
+                    return val;
+                }
+            }
         }
-        
-        // 1. Recurse Left
-        traverse(node->left);
-        
-        // 2. Recurse Right
-        traverse(node->right);
-        
-        // 3. Visit (Write to member variable)
-        result.push_back(node->val);
+        return -1; // Should not reach here if hasNext checked
     }
 };
 
-// --- SDC Fault Injection Harness ---
-int main() {
-    // Constructing the tree
-    //      1
-    //     / \
-    //    2   3
-    //   / \
-    //  4   5
-    
-    TreeNode* root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
+class Solution {
+public:
+    std::vector<int> postorderTraversal(TreeNode* root) {
+        std::vector<int> result;
+        PostOrderIterator it(root);
+        while (it.hasNext()) {
+            result.push_back(it.next());
+        }
+        return result;
+    }
+};
+
+// --- HARNESS ---
+TreeNode* insert(TreeNode* root, int val) {
+    if (!root) return new TreeNode(val);
+    if (val < root->val)
+        root->left = insert(root->left, val);
+    else
+        root->right = insert(root->right, val);
+    return root;
+}
+
+// --- MAIN ---
+int main(int argc, char** argv) {
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    ifstream file(filename.c_str());
+    int num;
+    TreeNode* root = NULL;
+
+    if (!file.is_open()) {
+        vector<int> f; f.push_back(1); f.push_back(2); f.push_back(3); f.push_back(4); f.push_back(5);
+        for(size_t i=0; i<f.size(); ++i) root = insert(root, f[i]);
+    } else {
+        while(file >> num) root = insert(root, num);
+        file.close();
+    }
 
     Solution sol;
     std::vector<int> result = sol.postorderTraversal(root);
 
-    // Output Key OD
     for (size_t i = 0; i < result.size(); ++i) {
-        std::cout << result[i] << " ";
+        cout << result[i] << " ";
     }
-    std::cout << std::endl;
-
-    // Cleanup
-    delete root->left->left;
-    delete root->left->right;
-    delete root->left;
-    delete root->right;
-    delete root;
+    cout << endl;
 
     return 0;
 }
