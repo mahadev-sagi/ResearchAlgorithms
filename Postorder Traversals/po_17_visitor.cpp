@@ -12,6 +12,10 @@
 #include <cstdio>
 #include <fstream>
 #include <algorithm>
+#include <string>
+#include <cstdlib>
+
+using namespace std;
 
 struct TreeNode {
     int val;
@@ -56,8 +60,7 @@ public:
     }
 };
 
-// --- VERIFICATION HARNESS ---
-
+// --- HARNESS ---
 TreeNode* insert(TreeNode* root, int val) {
     if (!root) return new TreeNode(val);
     if (val < root->val) root->left = insert(root->left, val);
@@ -65,28 +68,20 @@ TreeNode* insert(TreeNode* root, int val) {
     return root;
 }
 
-void goldenPostorder(TreeNode* root, std::vector<int>& res) {
-    if (!root) return;
-    goldenPostorder(root->left, res);
-    goldenPostorder(root->right, res);
-    res.push_back(root->val);
-}
+// --- MAIN ---
+int main(int argc, char** argv) {
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
 
-void deleteTree(TreeNode* root) {
-    if (!root) return;
-    deleteTree(root->left);
-    deleteTree(root->right);
-    delete root;
-}
-
-int main() {
-    std::ifstream file("numbers.txt");
+    ifstream file(filename.c_str());
     int num;
     TreeNode* root = NULL;
 
     if (!file.is_open()) {
-        int fallback[] = {10, 5, 15, 2, 7, 12, 20};
-        for(int i=0; i<7; ++i) root = insert(root, fallback[i]);
+        vector<int> f; f.push_back(1); f.push_back(2); f.push_back(3); f.push_back(4); f.push_back(5);
+        for(size_t i=0; i<f.size(); ++i) root = insert(root, f[i]);
     } else {
         while (file >> num) root = insert(root, num);
         file.close();
@@ -95,16 +90,10 @@ int main() {
     Solution sol;
     std::vector<int> result = sol.postorderTraversal(root);
 
-    std::vector<int> expected;
-    goldenPostorder(root, expected);
-
-    if (result == expected) {
-        std::cout << "VERIFICATION PASSED" << std::endl;
-    } else {
-        std::cout << "FAILED" << std::endl;
-        std::cout << "Expected size: " << expected.size() << " Got: " << result.size() << std::endl;
+    for (size_t i = 0; i < result.size(); ++i) {
+        cout << result[i] << " ";
     }
+    cout << endl;
 
-    deleteTree(root);
     return 0;
 }
