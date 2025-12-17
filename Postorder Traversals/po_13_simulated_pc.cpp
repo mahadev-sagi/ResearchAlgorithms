@@ -2,18 +2,17 @@
  * Implementation: 13 - Iterative Simulated Stack Frame (Program Counter)
  * Filename: po_13_simulated_pc.cpp
  * Compatibility: C++98 (Clang 3.4 Safe)
- * Logic:
- * Simulates the CPU call stack explicitly.
- * Each frame has a Node* and a 'pc' (Program Counter).
- * PC 0: Try to push Left child, move to PC 1.
- * PC 1: Try to push Right child, move to PC 2.
- * PC 2: Visit Node, Pop frame.
  */
 
 #include <iostream>
 #include <vector>
 #include <stack>
 #include <cstdio>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+
+using namespace std;
 
 struct TreeNode {
     int val;
@@ -65,36 +64,42 @@ public:
     }
 };
 
-// --- SDC Fault Injection Harness ---
-int main() {
-    // Constructing the tree
-    //      1
-    //     / \
-    //    2   3
-    //   / \
-    //  4   5
-    
-    TreeNode* root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
+// --- HARNESS ---
+TreeNode* insert(TreeNode* root, int val) {
+    if (!root) return new TreeNode(val);
+    if (val < root->val)
+        root->left = insert(root->left, val);
+    else
+        root->right = insert(root->right, val);
+    return root;
+}
+
+// --- MAIN ---
+int main(int argc, char** argv) {
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    ifstream file(filename.c_str());
+    int num;
+    TreeNode* root = NULL;
+
+    if (!file.is_open()) {
+        vector<int> f; f.push_back(1); f.push_back(2); f.push_back(3); f.push_back(4); f.push_back(5);
+        for(size_t i=0; i<f.size(); ++i) root = insert(root, f[i]);
+    } else {
+        while(file >> num) root = insert(root, num);
+        file.close();
+    }
 
     Solution sol;
     std::vector<int> result = sol.postorderTraversal(root);
 
-    // Output Key OD
     for (size_t i = 0; i < result.size(); ++i) {
-        std::cout << result[i] << " ";
+        cout << result[i] << " ";
     }
-    std::cout << std::endl;
-
-    // Cleanup
-    delete root->left->left;
-    delete root->left->right;
-    delete root->left;
-    delete root->right;
-    delete root;
+    cout << endl;
 
     return 0;
 }
