@@ -1,7 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include <algorithm> // Required for std::reverse
+#include <algorithm> 
+#include <string> 
 
 using namespace std;
 
@@ -42,10 +43,19 @@ Node* insert(Node* root, int val) {
     return root;
 }
 
-int main() {
-    ifstream file("numbers.txt");
+// --- MAIN ---
+int main(int argc, char** argv) {
+    // 1. Logic to pick the file from argument OR default
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    // 2. Open file
+    ifstream file(filename.c_str());
     int num;
     Node* root = nullptr;
+
     if (!file.is_open()) {
         vector<int> f = {5,3,7,2,4,6,8}; for(int i:f) root=insert(root,i);
     } else {
