@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <string> 
 
 using namespace std;
 
@@ -44,10 +45,18 @@ Node* insert(Node* root, int val) {
     else root->right = insert(root->right, val);
     return root;
 }
-int main() {
-    ifstream file("numbers.txt");
+
+// --- MAIN ---
+int main(int argc, char** argv) {
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    ifstream file(filename.c_str());
     int num;
     Node* root = nullptr;
+
     if (!file.is_open()) {
         vector<int> f = {5,3,7,2,4,6,8}; for(int i:f) root=insert(root,i);
     } else {
@@ -62,6 +71,7 @@ int main() {
     for (size_t i = 0; i < result.size() - 1; ++i) {
         if (result[i] > result[i+1]) { passed = false; break; }
     }
+    
     if (passed && !result.empty()) cout << "VERIFICATION PASSED" << endl;
     else cout << "FAILED" << endl;
     return 0;
