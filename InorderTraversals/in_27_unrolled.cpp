@@ -2,6 +2,7 @@
 #include <vector>
 #include <stack>
 #include <fstream>
+#include <string> 
 
 using namespace std;
 
@@ -38,8 +39,7 @@ void recursive_part(Node* root, vector<int>& result, int depth) {
     }
 
     // Keep recursing
-    // Note: Standard recursive logic needs care to not double-process
-    // if we switch.
+    // Note: Standard recursive logic needs care to not double-process if we switch.
     // Correct Hybrid Logic:
     // If we are below threshold, do standard recursion steps.
     // If we hit threshold, call iterative on that SUBTREE.
@@ -62,22 +62,35 @@ Node* insert(Node* root, int val) {
     else root->right = insert(root->right, val);
     return root;
 }
-int main() {
-    ifstream file("numbers.txt");
+
+// --- MAIN ---
+int main(int argc, char** argv) {
+    // 1. Logic to pick the file from argument OR default
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    // 2. Open file
+    ifstream file(filename.c_str());
     int num;
     Node* root = nullptr;
+
     if (!file.is_open()) {
         vector<int> f = {5,3,7}; for(int i:f) root=insert(root,i);
     } else {
         while(file >> num) root = insert(root, num);
         file.close();
     }
+
     vector<int> result;
     in_order_traversal(root, result);
+
     bool passed = true;
     for (size_t i = 0; i < result.size() - 1; ++i) {
         if (result[i] > result[i+1]) { passed = false; break; }
     }
+    
     if (passed && !result.empty()) cout << "VERIFICATION PASSED" << endl;
     else cout << "FAILED" << endl;
     return 0;
