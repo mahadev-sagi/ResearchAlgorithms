@@ -1,15 +1,18 @@
 /*
- * Implementation: 09 - Recursive with Helper Reference
- * Filename: po_09_recursive_helper.cpp
- * Compatibility: C++98 (Clang 3.4 Safe)
- * Logic:
- * Uses a private helper function that takes the Result Vector by reference.
- * This avoids copying vectors and simulates "accumulator" logic.
+ * Implementation: 09 - Classic Iterative 1-Stack (Prev Pointer)
+ * Filename: po_09_iterative_classic.cpp
+ * Compatibility: C++98 (Safe for Clang 3.4)
  */
 
 #include <iostream>
 #include <vector>
+#include <stack>
 #include <cstdio>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+
+using namespace std;
 
 struct TreeNode {
     int val;
@@ -20,54 +23,86 @@ struct TreeNode {
 
 class Solution {
 public:
-    std::vector<int> postorderTraversal(TreeNode *root) {
-        std::vector<int> v;
-        postorderHelper(root, v);
-        return v;
-    }
+    std::vector<int> postorderTraversal(TreeNode* root) {
+        std::vector<int> result;
+        if (root == NULL) return result;
 
-private:
-    // Helper passes vector by reference (creating consistent register dependency)
-    void postorderHelper(TreeNode *root, std::vector<int> &v) {
-        if (root == NULL) {
-            return;
+        std::stack<TreeNode*> s;
+        s.push(root);
+        TreeNode* prev = NULL;
+
+        while (!s.empty()) {
+            TreeNode* curr = s.top();
+
+            // Case 1: Moving Down the tree
+            if (!prev || prev->left == curr || prev->right == curr) {
+                if (curr->left) {
+                    s.push(curr->left);
+                } else if (curr->right) {
+                    s.push(curr->right);
+                } else {
+                    // Leaf node
+                    s.pop();
+                    result.push_back(curr->val);
+                }
+            } 
+            // Case 2: Moving Up from Left Child
+            else if (curr->left == prev) {
+                if (curr->right) {
+                    s.push(curr->right);
+                } else {
+                    s.pop();
+                    result.push_back(curr->val);
+                }
+            } 
+            // Case 3: Moving Up from Right Child
+            else if (curr->right == prev) {
+                s.pop();
+                result.push_back(curr->val);
+            }
+
+            prev = curr;
         }
-        postorderHelper(root->left, v);
-        postorderHelper(root->right, v);
-        v.push_back(root->val);
+        return result;
     }
 };
 
-// --- SDC Fault Injection Harness ---
-int main() {
-    // Constructing the tree
-    //      1
-    //     / \
-    //    2   3
-    //   / \
-    //  4   5
-    
-    TreeNode* root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
+// --- HARNESS ---
+TreeNode* insert(TreeNode* root, int val) {
+    if (!root) return new TreeNode(val);
+    if (val < root->val)
+        root->left = insert(root->left, val);
+    else
+        root->right = insert(root->right, val);
+    return root;
+}
+
+// --- MAIN ---
+int main(int argc, char** argv) {
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    ifstream file(filename.c_str());
+    int num;
+    TreeNode* root = NULL;
+
+    if (!file.is_open()) {
+        vector<int> f; f.push_back(1); f.push_back(2); f.push_back(3); f.push_back(4); f.push_back(5);
+        for(size_t i=0; i<f.size(); ++i) root = insert(root, f[i]);
+    } else {
+        while(file >> num) root = insert(root, num);
+        file.close();
+    }
 
     Solution sol;
     std::vector<int> result = sol.postorderTraversal(root);
 
-    // Output Key OD
     for (size_t i = 0; i < result.size(); ++i) {
-        std::cout << result[i] << " ";
+        cout << result[i] << " ";
     }
-    std::cout << std::endl;
-
-    // Cleanup
-    delete root->left->left;
-    delete root->left->right;
-    delete root->left;
-    delete root->right;
-    delete root;
+    cout << endl;
 
     return 0;
 }
