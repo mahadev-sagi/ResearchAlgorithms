@@ -1,11 +1,11 @@
 /*
- * Implementation: 27 - Iterative with Bit-Vector (Bitwise Logic)
- * Filename: po_27_bit_vector.cpp
+ * Implementation: 28 - Recursive with Exception Flow
+ * Filename: po_28_exception_flow.cpp
  * Compatibility: C++98 (Clang 3.4 Safe)
  * Logic:
- * Uses a parallel stack approach.
- * 'visitStack' is a vector<bool>, which uses 1 bit per element.
- * We must use bitwise operations to check if a node is ready to visit.
+ * Instead of standard returns, the recursive function 'throws' an integer
+ * to signal completion to its parent.
+ * The parent wraps calls in try-catch blocks to handle the control flow.
  */
 
 #include <iostream>
@@ -24,47 +24,49 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
+// Define a specific type for control flow signal
+struct TraversalSignal {
+    int dummy;
+};
+
 class Solution {
 public:
     std::vector<int> postorderTraversal(TreeNode* root) {
         std::vector<int> result;
-        if (root == NULL) return result;
-
-        std::vector<TreeNode*> nodeStack;
-        // vector<bool> is a specialization that uses 1 bit per value
-        std::vector<bool> visitStack;
-
-        nodeStack.push_back(root);
-        visitStack.push_back(false); // false = traverse children
-
-        while (!nodeStack.empty()) {
-            TreeNode* node = nodeStack.back();
-            nodeStack.pop_back();
-
-            // Accessing vector<bool> involves bit-masks
-            bool visited = visitStack.back();
-            visitStack.pop_back();
-
-            if (node == NULL) continue;
-
-            if (visited) {
-                // Bit was 1: Visit Node
-                result.push_back(node->val);
-            } else {
-                // Bit was 0: Push back as 1, process children
-                nodeStack.push_back(node);
-                visitStack.push_back(true);
-
-                // Push Right (with bit 0)
-                nodeStack.push_back(node->right);
-                visitStack.push_back(false);
-
-                // Push Left (with bit 0)
-                nodeStack.push_back(node->left);
-                visitStack.push_back(false);
-            }
+        try {
+            traverse(root, result);
+        } catch (TraversalSignal) {
+            // Catch the final throw from the root node
         }
         return result;
+    }
+
+private:
+    void traverse(TreeNode* node, std::vector<int>& result) {
+        if (node == NULL) {
+            return; // Standard return for NULL base case
+        }
+
+        // 1. Try to traverse Left
+        try {
+            traverse(node->left, result);
+        } catch (TraversalSignal) {
+            // Caught signal that Left child is done
+        }
+
+        // 2. Try to traverse Right
+        try {
+            traverse(node->right, result);
+        } catch (TraversalSignal) {
+            // Caught signal that Right child is done
+        }
+
+        // 3. Visit Node
+        result.push_back(node->val);
+
+        // 4. Signal completion to parent via Exception
+        TraversalSignal sig;
+        throw sig; 
     }
 };
 
