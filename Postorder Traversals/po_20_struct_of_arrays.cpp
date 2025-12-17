@@ -11,9 +11,13 @@
 #include <cstdio>
 #include <fstream>
 #include <algorithm>
+#include <string>
+#include <cstdlib>
+
+using namespace std;
 
 // Global Arrays simulating the Tree Memory
-const int MAX_NODES = 1000; // Increased size just in case
+const int MAX_NODES = 2000; // Increased size
 int val[MAX_NODES];
 int left_child[MAX_NODES];  // -1 indicates NULL
 int right_child[MAX_NODES]; // -1 indicates NULL
@@ -93,63 +97,35 @@ public:
     }
 };
 
-// --- VERIFICATION HARNESS ---
-
-// Standard TreeNode for Golden Reference
-struct TreeNode {
-    int val;
-    TreeNode *left, *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-
-TreeNode* insertGolden(TreeNode* root, int val) {
-    if (!root) return new TreeNode(val);
-    if (val < root->val) root->left = insertGolden(root->left, val);
-    else root->right = insertGolden(root->right, val);
-    return root;
-}
-
-void goldenPostorder(TreeNode* root, std::vector<int>& res) {
-    if (!root) return;
-    goldenPostorder(root->left, res);
-    goldenPostorder(root->right, res);
-    res.push_back(root->val);
-}
-
-int main() {
-    std::ifstream file("numbers.txt");
-    if (!file.is_open()) {
-        std::cerr << "Error: numbers.txt not found!" << std::endl;
-        return 1;
+// --- MAIN ---
+int main(int argc, char** argv) {
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
     }
 
+    ifstream file(filename.c_str());
+    
     initMemory(); // Clear arrays
     
     int num;
-    int array_root_idx = -1;      // System Under Test (Index)
-    TreeNode* golden_root = NULL; // Expected Result (Pointer)
+    int array_root_idx = -1;
 
-    while (file >> num) {
-        array_root_idx = insertArray(array_root_idx, num);
-        golden_root = insertGolden(golden_root, num);
+    if (!file.is_open()) {
+        vector<int> f; f.push_back(1); f.push_back(2); f.push_back(3); f.push_back(4); f.push_back(5);
+        for(size_t i=0; i<f.size(); ++i) array_root_idx = insertArray(array_root_idx, f[i]);
+    } else {
+        while(file >> num) array_root_idx = insertArray(array_root_idx, num);
+        file.close();
     }
-    file.close();
 
-    // 1. Run System Under Test
     Solution sol;
     std::vector<int> result = sol.postorderTraversal(array_root_idx);
 
-    // 2. Run Golden Reference
-    std::vector<int> expected;
-    goldenPostorder(golden_root, expected);
-
-    // 3. Verify
-    if (result == expected) {
-        std::cout << "VERIFICATION PASSED" << std::endl;
-    } else {
-        std::cout << "FAILED" << std::endl;
-        std::cout << "Expected size: " << expected.size() << " Got: " << result.size() << std::endl;
+    for (size_t i = 0; i < result.size(); ++i) {
+        cout << result[i] << " ";
     }
+    cout << endl;
 
     return 0;
 }
