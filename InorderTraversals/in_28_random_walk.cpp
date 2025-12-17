@@ -3,6 +3,7 @@
 #include <set>
 #include <fstream>
 #include <cstdlib>
+#include <string> 
 
 using namespace std;
 
@@ -43,15 +44,6 @@ void in_order_traversal(Node* root, vector<int>& result) {
         }
         
         // 3. Try Right
-        // We only go right if we just processed self
-        // But we need to mark that we are "done" with this node to move up
-        
-        // Simpler Logic matching InOrder:
-        // If Left not done -> Go Left
-        // If Left done and Self not done -> Process Self
-        // If Self done and Right not done -> Go Right
-        // If All done -> Go Parent
-        
         if (curr->left && left_done.find(curr) == left_done.end()) {
             curr = curr->left;
         } else if (visited.find(curr) == visited.end()) {
@@ -59,11 +51,6 @@ void in_order_traversal(Node* root, vector<int>& result) {
             visited.insert(curr);
             left_done.insert(curr); // Mark left as done implicitly
         } else if (curr->right && visited.find(curr->right) == visited.end()) {
-             // This check is tricky: we need to know if right is FULLY done.
-             // Simplified: Just go right if it exists and isn't processed.
-             // But 'visited' set only tracks "processed self".
-             
-             // Use standard state machine logic but implemented with Sets instead of Stack
              curr = curr->right;
         } else {
              // Retreat
@@ -92,22 +79,35 @@ Node* insert(Node* root, int val) {
     }
     return root;
 }
-int main() {
-    ifstream file("numbers.txt");
+
+// --- MAIN ---
+int main(int argc, char** argv) {
+    // 1. Logic to pick the file from argument OR default
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    // 2. Open file
+    ifstream file(filename.c_str());
     int num;
     Node* root = nullptr;
+
     if (!file.is_open()) {
         vector<int> f = {5,3,7}; for(int i:f) root=insert(root,i);
     } else {
         while(file >> num) root = insert(root, num);
         file.close();
     }
+
     vector<int> result;
     in_order_traversal(root, result);
+
     bool passed = true;
     for (size_t i = 0; i < result.size() - 1; ++i) {
         if (result[i] > result[i+1]) { passed = false; break; }
     }
+    
     if (passed && !result.empty()) cout << "VERIFICATION PASSED" << endl;
     else cout << "FAILED" << endl;
     return 0;
