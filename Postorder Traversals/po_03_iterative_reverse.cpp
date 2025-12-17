@@ -2,19 +2,18 @@
  * Implementation: 03 - Iterative 1-Stack (Reverse Preorder Strategy)
  * Filename: po_03_iterative_reverse.cpp
  * Compatibility: C++98 (Clang 3.4 Safe)
- * Logic:
- * 1. Process node (push to vector).
- * 2. Push Left child to stack.
- * 3. Push Right child to stack.
- * 4. This creates Root->Right->Left order.
- * 5. Reverse the vector at the end to get Left->Right->Root.
  */
 
 #include <iostream>
 #include <vector>
 #include <stack>
-#include <algorithm> // Required for std::reverse
+#include <algorithm>
 #include <cstdio>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+
+using namespace std;
 
 struct TreeNode {
     int val;
@@ -52,13 +51,34 @@ public:
     }
 };
 
-// --- SDC Fault Injection Harness ---
-int main() {
-    TreeNode* root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(4);
-    root->left->right = new TreeNode(5);
+// --- HARNESS ---
+TreeNode* insert(TreeNode* root, int val) {
+    if (!root) return new TreeNode(val);
+    if (val < root->val)
+        root->left = insert(root->left, val);
+    else
+        root->right = insert(root->right, val);
+    return root;
+}
+
+// --- MAIN ---
+int main(int argc, char** argv) {
+    string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    ifstream file(filename.c_str());
+    int num;
+    TreeNode* root = NULL;
+
+    if (!file.is_open()) {
+        vector<int> f; f.push_back(1); f.push_back(2); f.push_back(3); f.push_back(4); f.push_back(5);
+        for(size_t i=0; i<f.size(); ++i) root = insert(root, f[i]);
+    } else {
+        while(file >> num) root = insert(root, num);
+        file.close();
+    }
 
     Solution sol;
     std::vector<int> result = sol.postorderTraversal(root);
@@ -67,12 +87,6 @@ int main() {
         std::cout << result[i] << " ";
     }
     std::cout << std::endl;
-
-    delete root->left->left;
-    delete root->left->right;
-    delete root->left;
-    delete root->right;
-    delete root;
 
     return 0;
 }
