@@ -2,7 +2,6 @@
  * Implementation: 06 - Pure C Recursive (Procedural)
  * Filename: po_06_c_recursive.cpp
  * Compatibility: C++ (Uses C-style structs)
- * Logic: Standard recursion, adapted to capture output for verification.
  */
 
 #include <iostream>
@@ -11,6 +10,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <algorithm>
+#include <string>
 
 // Define the C-style struct
 typedef struct Node {
@@ -78,11 +78,37 @@ void goldenPostorder(TreeNode* root, std::vector<int>& res) {
     res.push_back(root->val);
 }
 
-int main() {
-    std::ifstream file("numbers.txt");
+// --- MAIN ---
+int main(int argc, char** argv) {
+    std::string filename = "numbers.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    std::ifstream file(filename.c_str());
     if (!file.is_open()) {
-        std::cerr << "Error: numbers.txt not found!" << std::endl;
-        return 1;
+        // Fallback default
+        int defaults[] = {5, 3, 7, 2, 4, 6, 8};
+        int num_defaults = sizeof(defaults) / sizeof(defaults[0]);
+        
+        Node* c_root = NULL;
+        TreeNode* golden_root = NULL;
+        
+        for (int i = 0; i < num_defaults; ++i) {
+            c_root = insertC(c_root, defaults[i]);
+            golden_root = insertGolden(golden_root, defaults[i]);
+        }
+        
+        global_result.clear();
+        postOrder(c_root);
+        
+        std::vector<int> expected;
+        goldenPostorder(golden_root, expected);
+        
+        if (global_result == expected) std::cout << "VERIFICATION PASSED" << std::endl;
+        else std::cout << "FAILED" << std::endl;
+        
+        return 0;
     }
 
     int num;
