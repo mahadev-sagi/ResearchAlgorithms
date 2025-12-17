@@ -16,15 +16,18 @@ struct Node {
 // OD: Cursor Node (Index based)
 struct CursorNode {
     int val;
-    int left = -1;
-    int right = -1;
+    int left;
+    int right;
+    
+    // Constructor added to allow {val, -1, -1} initialization
+    CursorNode(int v, int l, int r) : val(v), left(l), right(r) {}
 };
 
 // Helper: Convert pointer tree to Cursor Vector
 int build_cursor_tree(Node* root, vector<CursorNode>& nodes) {
     if (!root) return -1;
     int idx = nodes.size();
-    nodes.push_back({root->val, -1, -1}); // Reserve slot
+    nodes.push_back(CursorNode(root->val, -1, -1)); // Use Constructor
     
     nodes[idx].left = build_cursor_tree(root->left, nodes);
     nodes[idx].right = build_cursor_tree(root->right, nodes);
