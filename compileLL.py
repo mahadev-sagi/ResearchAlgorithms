@@ -2,7 +2,7 @@ import os
 import subprocess
 
 # Configuration
-SOURCE_DIR = "PostorderTraversals"
+SOURCE_DIR = "InorderTraversals"
 OUTPUT_DIR = "ll_files"
 
 # 1. Create the output directory if it doesn't exist

@@ -58,23 +58,25 @@ target triple = "x86_64-unknown-linux-gnu"
 @.str6 = private unnamed_addr constant [28 x i8] c"vector::_M_emplace_back_aux\00", align 1
 @llvm.global_ctors = appending global [1 x { i32, void ()* }] [{ i32, void ()* } { i32 65535, void ()* @_GLOBAL__I_a }]
 
-define internal void @__cxx_global_var_init() section ".text.startup" {
+; Function Attrs: nounwind
+define internal void @__cxx_global_var_init() #0 section ".text.startup" {
   call void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"* @_ZStL8__ioinit)
-  %1 = call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::ios_base::Init"*)* @_ZNSt8ios_base4InitD1Ev to void (i8*)*), i8* getelementptr inbounds (%"class.std::ios_base::Init"* @_ZStL8__ioinit, i32 0, i32 0), i8* @__dso_handle) #2
+  %1 = call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::ios_base::Init"*)* @_ZNSt8ios_base4InitD1Ev to void (i8*)*), i8* getelementptr inbounds (%"class.std::ios_base::Init"* @_ZStL8__ioinit, i32 0, i32 0), i8* @__dso_handle) #0
   ret void
 }
 
-declare void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"*) #0
+declare void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"*) #1
 
 ; Function Attrs: nounwind
-declare void @_ZNSt8ios_base4InitD1Ev(%"class.std::ios_base::Init"*) #1
+declare void @_ZNSt8ios_base4InitD1Ev(%"class.std::ios_base::Init"*) #2
 
 ; Function Attrs: nounwind
-declare i32 @__cxa_atexit(void (i8*)*, i8*, i8*) #2
+declare i32 @__cxa_atexit(void (i8*)*, i8*, i8*) #0
 
-define internal void @__cxx_global_var_init1() section ".text.startup" {
-  call void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* @global_result) #2
-  %1 = call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::vector"*)* @_ZNSt6vectorIiSaIiEED2Ev to void (i8*)*), i8* bitcast (%"class.std::vector"* @global_result to i8*), i8* @__dso_handle) #2
+; Function Attrs: nounwind
+define internal void @__cxx_global_var_init1() #0 section ".text.startup" {
+  call void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* @global_result) #0
+  %1 = call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::vector"*)* @_ZNSt6vectorIiSaIiEED2Ev to void (i8*)*), i8* bitcast (%"class.std::vector"* @global_result to i8*), i8* @__dso_handle) #0
   ret void
 }
 
@@ -84,60 +86,29 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %this) 
   store %"class.std::vector"* %this, %"class.std::vector"** %1, align 8
   %2 = load %"class.std::vector"** %1
   %3 = bitcast %"class.std::vector"* %2 to %"struct.std::_Vector_base"*
-  invoke void @_ZNSt12_Vector_baseIiSaIiEEC2Ev(%"struct.std::_Vector_base"* %3)
-          to label %4 unwind label %5
-
-; <label>:4                                       ; preds = %0
+  call void @_ZNSt12_Vector_baseIiSaIiEEC2Ev(%"struct.std::_Vector_base"* %3)
   ret void
-
-; <label>:5                                       ; preds = %0
-  %6 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %7 = extractvalue { i8*, i32 } %6, 0
-  call void @__clang_call_terminate(i8* %7) #11
-  unreachable
 }
 
 ; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
-  %2 = alloca i8*
-  %3 = alloca i32
   store %"class.std::vector"* %this, %"class.std::vector"** %1, align 8
-  %4 = load %"class.std::vector"** %1
-  %5 = bitcast %"class.std::vector"* %4 to %"struct.std::_Vector_base"*
-  %6 = getelementptr inbounds %"struct.std::_Vector_base"* %5, i32 0, i32 0
-  %7 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %6, i32 0, i32 0
-  %8 = load i32** %7, align 8
-  %9 = bitcast %"class.std::vector"* %4 to %"struct.std::_Vector_base"*
-  %10 = getelementptr inbounds %"struct.std::_Vector_base"* %9, i32 0, i32 0
-  %11 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %10, i32 0, i32 1
-  %12 = load i32** %11, align 8
-  %13 = bitcast %"class.std::vector"* %4 to %"struct.std::_Vector_base"*
-  %14 = call %"class.std::allocator"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %13) #2
-  invoke void @_ZSt8_DestroyIPiiEvT_S1_RSaIT0_E(i32* %8, i32* %12, %"class.std::allocator"* %14)
-          to label %15 unwind label %17
-
-; <label>:15                                      ; preds = %0
-  %16 = bitcast %"class.std::vector"* %4 to %"struct.std::_Vector_base"*
-  call void @_ZNSt12_Vector_baseIiSaIiEED2Ev(%"struct.std::_Vector_base"* %16) #2
+  %2 = load %"class.std::vector"** %1
+  %3 = bitcast %"class.std::vector"* %2 to %"struct.std::_Vector_base"*
+  %4 = getelementptr inbounds %"struct.std::_Vector_base"* %3, i32 0, i32 0
+  %5 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %4, i32 0, i32 0
+  %6 = load i32** %5, align 8
+  %7 = bitcast %"class.std::vector"* %2 to %"struct.std::_Vector_base"*
+  %8 = getelementptr inbounds %"struct.std::_Vector_base"* %7, i32 0, i32 0
+  %9 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %8, i32 0, i32 1
+  %10 = load i32** %9, align 8
+  %11 = bitcast %"class.std::vector"* %2 to %"struct.std::_Vector_base"*
+  %12 = call %"class.std::allocator"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %11) #0
+  call void @_ZSt8_DestroyIPiiEvT_S1_RSaIT0_E(i32* %6, i32* %10, %"class.std::allocator"* %12)
+  %13 = bitcast %"class.std::vector"* %2 to %"struct.std::_Vector_base"*
+  call void @_ZNSt12_Vector_baseIiSaIiEED2Ev(%"struct.std::_Vector_base"* %13) #0
   ret void
-
-; <label>:17                                      ; preds = %0
-  %18 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %19 = extractvalue { i8*, i32 } %18, 0
-  store i8* %19, i8** %2
-  %20 = extractvalue { i8*, i32 } %18, 1
-  store i32 %20, i32* %3
-  %21 = bitcast %"class.std::vector"* %4 to %"struct.std::_Vector_base"*
-  call void @_ZNSt12_Vector_baseIiSaIiEED2Ev(%"struct.std::_Vector_base"* %21) #2
-  br label %22
-
-; <label>:22                                      ; preds = %17
-  %23 = load i8** %2
-  call void @__clang_call_terminate(i8* %23) #11
-  unreachable
 }
 
 ; Function Attrs: nounwind uwtable
@@ -145,7 +116,7 @@ define %struct.Node* @_Z10createNodei(i32 %data) #3 {
   %1 = alloca i32, align 4
   %newNode = alloca %struct.Node*, align 8
   store i32 %data, i32* %1, align 4
-  %2 = call noalias i8* @malloc(i64 24) #2
+  %2 = call noalias i8* @malloc(i64 24) #0
   %3 = bitcast i8* %2 to %struct.Node*
   store %struct.Node* %3, %struct.Node** %newNode, align 8
   %4 = load i32* %1, align 4
@@ -163,10 +134,10 @@ define %struct.Node* @_Z10createNodei(i32 %data) #3 {
 }
 
 ; Function Attrs: nounwind
-declare noalias i8* @malloc(i64) #1
+declare noalias i8* @malloc(i64) #2
 
-; Function Attrs: uwtable
-define %struct.Node* @_Z7insertCP4Nodei(%struct.Node* %root, i32 %data) #4 {
+; Function Attrs: nounwind uwtable
+define %struct.Node* @_Z7insertCP4Nodei(%struct.Node* %root, i32 %data) #3 {
   %1 = alloca %struct.Node*, align 8
   %2 = alloca %struct.Node*, align 8
   %3 = alloca i32, align 4
@@ -222,8 +193,8 @@ define %struct.Node* @_Z7insertCP4Nodei(%struct.Node* %root, i32 %data) #4 {
   ret %struct.Node* %34
 }
 
-; Function Attrs: uwtable
-define void @_Z9postOrderP4Node(%struct.Node* %root) #4 {
+; Function Attrs: nounwind uwtable
+define void @_Z9postOrderP4Node(%struct.Node* %root) #3 {
   %1 = alloca %struct.Node*, align 8
   store %struct.Node* %root, %struct.Node** %1, align 8
   %2 = load %struct.Node** %1, align 8
@@ -248,8 +219,8 @@ define void @_Z9postOrderP4Node(%struct.Node* %root) #4 {
   ret void
 }
 
-; Function Attrs: uwtable
-define linkonce_odr void @_ZNSt6vectorIiSaIiEE9push_backERKi(%"class.std::vector"* %this, i32* %__x) #4 align 2 {
+; Function Attrs: nounwind uwtable
+define linkonce_odr void @_ZNSt6vectorIiSaIiEE9push_backERKi(%"class.std::vector"* %this, i32* %__x) #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
   %2 = alloca i32*, align 8
   store %"class.std::vector"* %this, %"class.std::vector"** %1, align 8
@@ -293,89 +264,67 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE9push_backERKi(%"class.std::vector
   ret void
 }
 
-; Function Attrs: uwtable
-define %struct.TreeNode* @_Z12insertGoldenP8TreeNodei(%struct.TreeNode* %root, i32 %val) #4 {
+; Function Attrs: nounwind uwtable
+define %struct.TreeNode* @_Z12insertGoldenP8TreeNodei(%struct.TreeNode* %root, i32 %val) #3 {
   %1 = alloca %struct.TreeNode*, align 8
   %2 = alloca %struct.TreeNode*, align 8
   %3 = alloca i32, align 4
-  %4 = alloca i8*
-  %5 = alloca i32
   store %struct.TreeNode* %root, %struct.TreeNode** %2, align 8
   store i32 %val, i32* %3, align 4
-  %6 = load %struct.TreeNode** %2, align 8
-  %7 = icmp ne %struct.TreeNode* %6, null
-  br i1 %7, label %17, label %8
+  %4 = load %struct.TreeNode** %2, align 8
+  %5 = icmp ne %struct.TreeNode* %4, null
+  br i1 %5, label %10, label %6
 
-; <label>:8                                       ; preds = %0
-  %9 = call noalias i8* @_Znwm(i64 24) #12
-  %10 = bitcast i8* %9 to %struct.TreeNode*
+; <label>:6                                       ; preds = %0
+  %7 = call noalias i8* @_Znwm(i64 24) #8
+  %8 = bitcast i8* %7 to %struct.TreeNode*
+  %9 = load i32* %3, align 4
+  call void @_ZN8TreeNodeC2Ei(%struct.TreeNode* %8, i32 %9)
+  store %struct.TreeNode* %8, %struct.TreeNode** %1
+  br label %34
+
+; <label>:10                                      ; preds = %0
   %11 = load i32* %3, align 4
-  invoke void @_ZN8TreeNodeC2Ei(%struct.TreeNode* %10, i32 %11)
-          to label %12 unwind label %13
+  %12 = load %struct.TreeNode** %2, align 8
+  %13 = getelementptr inbounds %struct.TreeNode* %12, i32 0, i32 0
+  %14 = load i32* %13, align 4
+  %15 = icmp slt i32 %11, %14
+  br i1 %15, label %16, label %24
 
-; <label>:12                                      ; preds = %8
-  store %struct.TreeNode* %10, %struct.TreeNode** %1
-  br label %41
+; <label>:16                                      ; preds = %10
+  %17 = load %struct.TreeNode** %2, align 8
+  %18 = getelementptr inbounds %struct.TreeNode* %17, i32 0, i32 1
+  %19 = load %struct.TreeNode** %18, align 8
+  %20 = load i32* %3, align 4
+  %21 = call %struct.TreeNode* @_Z12insertGoldenP8TreeNodei(%struct.TreeNode* %19, i32 %20)
+  %22 = load %struct.TreeNode** %2, align 8
+  %23 = getelementptr inbounds %struct.TreeNode* %22, i32 0, i32 1
+  store %struct.TreeNode* %21, %struct.TreeNode** %23, align 8
+  br label %32
 
-; <label>:13                                      ; preds = %8
-  %14 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %15 = extractvalue { i8*, i32 } %14, 0
-  store i8* %15, i8** %4
-  %16 = extractvalue { i8*, i32 } %14, 1
-  store i32 %16, i32* %5
-  call void @_ZdlPv(i8* %9) #13
-  br label %43
+; <label>:24                                      ; preds = %10
+  %25 = load %struct.TreeNode** %2, align 8
+  %26 = getelementptr inbounds %struct.TreeNode* %25, i32 0, i32 2
+  %27 = load %struct.TreeNode** %26, align 8
+  %28 = load i32* %3, align 4
+  %29 = call %struct.TreeNode* @_Z12insertGoldenP8TreeNodei(%struct.TreeNode* %27, i32 %28)
+  %30 = load %struct.TreeNode** %2, align 8
+  %31 = getelementptr inbounds %struct.TreeNode* %30, i32 0, i32 2
+  store %struct.TreeNode* %29, %struct.TreeNode** %31, align 8
+  br label %32
 
-; <label>:17                                      ; preds = %0
-  %18 = load i32* %3, align 4
-  %19 = load %struct.TreeNode** %2, align 8
-  %20 = getelementptr inbounds %struct.TreeNode* %19, i32 0, i32 0
-  %21 = load i32* %20, align 4
-  %22 = icmp slt i32 %18, %21
-  br i1 %22, label %23, label %31
+; <label>:32                                      ; preds = %24, %16
+  %33 = load %struct.TreeNode** %2, align 8
+  store %struct.TreeNode* %33, %struct.TreeNode** %1
+  br label %34
 
-; <label>:23                                      ; preds = %17
-  %24 = load %struct.TreeNode** %2, align 8
-  %25 = getelementptr inbounds %struct.TreeNode* %24, i32 0, i32 1
-  %26 = load %struct.TreeNode** %25, align 8
-  %27 = load i32* %3, align 4
-  %28 = call %struct.TreeNode* @_Z12insertGoldenP8TreeNodei(%struct.TreeNode* %26, i32 %27)
-  %29 = load %struct.TreeNode** %2, align 8
-  %30 = getelementptr inbounds %struct.TreeNode* %29, i32 0, i32 1
-  store %struct.TreeNode* %28, %struct.TreeNode** %30, align 8
-  br label %39
-
-; <label>:31                                      ; preds = %17
-  %32 = load %struct.TreeNode** %2, align 8
-  %33 = getelementptr inbounds %struct.TreeNode* %32, i32 0, i32 2
-  %34 = load %struct.TreeNode** %33, align 8
-  %35 = load i32* %3, align 4
-  %36 = call %struct.TreeNode* @_Z12insertGoldenP8TreeNodei(%struct.TreeNode* %34, i32 %35)
-  %37 = load %struct.TreeNode** %2, align 8
-  %38 = getelementptr inbounds %struct.TreeNode* %37, i32 0, i32 2
-  store %struct.TreeNode* %36, %struct.TreeNode** %38, align 8
-  br label %39
-
-; <label>:39                                      ; preds = %31, %23
-  %40 = load %struct.TreeNode** %2, align 8
-  store %struct.TreeNode* %40, %struct.TreeNode** %1
-  br label %41
-
-; <label>:41                                      ; preds = %39, %12
-  %42 = load %struct.TreeNode** %1
-  ret %struct.TreeNode* %42
-
-; <label>:43                                      ; preds = %13
-  %44 = load i8** %4
-  %45 = load i32* %5
-  %46 = insertvalue { i8*, i32 } undef, i8* %44, 0
-  %47 = insertvalue { i8*, i32 } %46, i32 %45, 1
-  resume { i8*, i32 } %47
+; <label>:34                                      ; preds = %32, %6
+  %35 = load %struct.TreeNode** %1
+  ret %struct.TreeNode* %35
 }
 
 ; Function Attrs: nobuiltin
-declare noalias i8* @_Znwm(i64) #5
+declare noalias i8* @_Znwm(i64) #4
 
 ; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZN8TreeNodeC2Ei(%struct.TreeNode* %this, i32 %x) unnamed_addr #3 align 2 {
@@ -394,13 +343,8 @@ define linkonce_odr void @_ZN8TreeNodeC2Ei(%struct.TreeNode* %this, i32 %x) unna
   ret void
 }
 
-declare i32 @__gxx_personality_v0(...)
-
-; Function Attrs: nobuiltin nounwind
-declare void @_ZdlPv(i8*) #6
-
-; Function Attrs: uwtable
-define void @_Z15goldenPostorderP8TreeNodeRSt6vectorIiSaIiEE(%struct.TreeNode* %root, %"class.std::vector"* %res) #4 {
+; Function Attrs: nounwind uwtable
+define void @_Z15goldenPostorderP8TreeNodeRSt6vectorIiSaIiEE(%struct.TreeNode* %root, %"class.std::vector"* %res) #3 {
   %1 = alloca %struct.TreeNode*, align 8
   %2 = alloca %"class.std::vector"*, align 8
   store %struct.TreeNode* %root, %struct.TreeNode** %1, align 8
@@ -433,15 +377,13 @@ define void @_Z15goldenPostorderP8TreeNodeRSt6vectorIiSaIiEE(%struct.TreeNode* %
   ret void
 }
 
-; Function Attrs: uwtable
-define i32 @main(i32 %argc, i8** %argv) #4 {
+; Function Attrs: nounwind uwtable
+define i32 @main(i32 %argc, i8** %argv) #3 {
   %1 = alloca i32, align 4
   %2 = alloca i32, align 4
   %3 = alloca i8**, align 8
   %filename = alloca %"class.std::__cxx11::basic_string", align 8
   %4 = alloca %"class.std::allocator.0", align 1
-  %5 = alloca i8*
-  %6 = alloca i32
   %file = alloca %"class.std::basic_ifstream", align 8
   %defaults = alloca [7 x i32], align 16
   %num_defaults = alloca i32, align 4
@@ -449,7 +391,7 @@ define i32 @main(i32 %argc, i8** %argv) #4 {
   %golden_root = alloca %struct.TreeNode*, align 8
   %i = alloca i32, align 4
   %expected = alloca %"class.std::vector", align 8
-  %7 = alloca i32
+  %5 = alloca i32
   %num = alloca i32, align 4
   %c_root1 = alloca %struct.Node*, align 8
   %golden_root2 = alloca %struct.TreeNode*, align 8
@@ -457,333 +399,180 @@ define i32 @main(i32 %argc, i8** %argv) #4 {
   store i32 0, i32* %1
   store i32 %argc, i32* %2, align 4
   store i8** %argv, i8*** %3, align 8
-  call void @_ZNSaIcEC1Ev(%"class.std::allocator.0"* %4) #2
-  invoke void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EPKcRKS3_(%"class.std::__cxx11::basic_string"* %filename, i8* getelementptr inbounds ([12 x i8]* @.str, i32 0, i32 0), %"class.std::allocator.0"* %4)
-          to label %8 unwind label %17
+  call void @_ZNSaIcEC1Ev(%"class.std::allocator.0"* %4) #0
+  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EPKcRKS3_(%"class.std::__cxx11::basic_string"* %filename, i8* getelementptr inbounds ([12 x i8]* @.str, i32 0, i32 0), %"class.std::allocator.0"* %4)
+  call void @_ZNSaIcED1Ev(%"class.std::allocator.0"* %4) #0
+  %6 = load i32* %2, align 4
+  %7 = icmp sgt i32 %6, 1
+  br i1 %7, label %8, label %13
 
 ; <label>:8                                       ; preds = %0
-  call void @_ZNSaIcED1Ev(%"class.std::allocator.0"* %4) #2
-  %9 = load i32* %2, align 4
-  %10 = icmp sgt i32 %9, 1
-  br i1 %10, label %11, label %25
+  %9 = load i8*** %3, align 8
+  %10 = getelementptr inbounds i8** %9, i64 1
+  %11 = load i8** %10, align 8
+  %12 = call %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEaSEPKc(%"class.std::__cxx11::basic_string"* %filename, i8* %11)
+  br label %13
 
-; <label>:11                                      ; preds = %8
-  %12 = load i8*** %3, align 8
-  %13 = getelementptr inbounds i8** %12, i64 1
-  %14 = load i8** %13, align 8
-  %15 = invoke %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEaSEPKc(%"class.std::__cxx11::basic_string"* %filename, i8* %14)
-          to label %16 unwind label %21
+; <label>:13                                      ; preds = %8, %0
+  %14 = call i8* @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv(%"class.std::__cxx11::basic_string"* %filename) #0
+  call void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEEC1EPKcSt13_Ios_Openmode(%"class.std::basic_ifstream"* %file, i8* %14, i32 8)
+  %15 = call zeroext i1 @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE7is_openEv(%"class.std::basic_ifstream"* %file)
+  br i1 %15, label %49, label %16
 
-; <label>:16                                      ; preds = %11
-  br label %25
-
-; <label>:17                                      ; preds = %0
-  %18 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %19 = extractvalue { i8*, i32 } %18, 0
-  store i8* %19, i8** %5
-  %20 = extractvalue { i8*, i32 } %18, 1
-  store i32 %20, i32* %6
-  call void @_ZNSaIcED1Ev(%"class.std::allocator.0"* %4) #2
-  br label %143
-
-; <label>:21                                      ; preds = %25, %11
-  %22 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %23 = extractvalue { i8*, i32 } %22, 0
-  store i8* %23, i8** %5
-  %24 = extractvalue { i8*, i32 } %22, 1
-  store i32 %24, i32* %6
-  br label %142
-
-; <label>:25                                      ; preds = %16, %8
-  %26 = call i8* @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv(%"class.std::__cxx11::basic_string"* %filename) #2
-  invoke void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEEC1EPKcSt13_Ios_Openmode(%"class.std::basic_ifstream"* %file, i8* %26, i32 8)
-          to label %27 unwind label %21
-
-; <label>:27                                      ; preds = %25
-  %28 = invoke zeroext i1 @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE7is_openEv(%"class.std::basic_ifstream"* %file)
-          to label %29 unwind label %54
-
-; <label>:29                                      ; preds = %27
-  br i1 %28, label %80, label %30
-
-; <label>:30                                      ; preds = %29
-  %31 = bitcast [7 x i32]* %defaults to i8*
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %31, i8* bitcast ([7 x i32]* @_ZZ4mainE8defaults to i8*), i64 28, i32 16, i1 false)
+; <label>:16                                      ; preds = %13
+  %17 = bitcast [7 x i32]* %defaults to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %17, i8* bitcast ([7 x i32]* @_ZZ4mainE8defaults to i8*), i64 28, i32 16, i1 false)
   store i32 7, i32* %num_defaults, align 4
   store %struct.Node* null, %struct.Node** %c_root, align 8
   store %struct.TreeNode* null, %struct.TreeNode** %golden_root, align 8
   store i32 0, i32* %i, align 4
-  br label %32
+  br label %18
 
-; <label>:32                                      ; preds = %51, %30
-  %33 = load i32* %i, align 4
-  %34 = load i32* %num_defaults, align 4
-  %35 = icmp slt i32 %33, %34
-  br i1 %35, label %36, label %58
+; <label>:18                                      ; preds = %35, %16
+  %19 = load i32* %i, align 4
+  %20 = load i32* %num_defaults, align 4
+  %21 = icmp slt i32 %19, %20
+  br i1 %21, label %22, label %38
 
-; <label>:36                                      ; preds = %32
-  %37 = load %struct.Node** %c_root, align 8
-  %38 = load i32* %i, align 4
-  %39 = sext i32 %38 to i64
-  %40 = getelementptr inbounds [7 x i32]* %defaults, i32 0, i64 %39
-  %41 = load i32* %40, align 4
-  %42 = invoke %struct.Node* @_Z7insertCP4Nodei(%struct.Node* %37, i32 %41)
-          to label %43 unwind label %54
+; <label>:22                                      ; preds = %18
+  %23 = load %struct.Node** %c_root, align 8
+  %24 = load i32* %i, align 4
+  %25 = sext i32 %24 to i64
+  %26 = getelementptr inbounds [7 x i32]* %defaults, i32 0, i64 %25
+  %27 = load i32* %26, align 4
+  %28 = call %struct.Node* @_Z7insertCP4Nodei(%struct.Node* %23, i32 %27)
+  store %struct.Node* %28, %struct.Node** %c_root, align 8
+  %29 = load %struct.TreeNode** %golden_root, align 8
+  %30 = load i32* %i, align 4
+  %31 = sext i32 %30 to i64
+  %32 = getelementptr inbounds [7 x i32]* %defaults, i32 0, i64 %31
+  %33 = load i32* %32, align 4
+  %34 = call %struct.TreeNode* @_Z12insertGoldenP8TreeNodei(%struct.TreeNode* %29, i32 %33)
+  store %struct.TreeNode* %34, %struct.TreeNode** %golden_root, align 8
+  br label %35
 
-; <label>:43                                      ; preds = %36
-  store %struct.Node* %42, %struct.Node** %c_root, align 8
-  %44 = load %struct.TreeNode** %golden_root, align 8
-  %45 = load i32* %i, align 4
-  %46 = sext i32 %45 to i64
-  %47 = getelementptr inbounds [7 x i32]* %defaults, i32 0, i64 %46
-  %48 = load i32* %47, align 4
-  %49 = invoke %struct.TreeNode* @_Z12insertGoldenP8TreeNodei(%struct.TreeNode* %44, i32 %48)
-          to label %50 unwind label %54
+; <label>:35                                      ; preds = %22
+  %36 = load i32* %i, align 4
+  %37 = add nsw i32 %36, 1
+  store i32 %37, i32* %i, align 4
+  br label %18
 
-; <label>:50                                      ; preds = %43
-  store %struct.TreeNode* %49, %struct.TreeNode** %golden_root, align 8
-  br label %51
+; <label>:38                                      ; preds = %18
+  call void @_ZNSt6vectorIiSaIiEE5clearEv(%"class.std::vector"* @global_result) #0
+  %39 = load %struct.Node** %c_root, align 8
+  call void @_Z9postOrderP4Node(%struct.Node* %39)
+  call void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %expected) #0
+  %40 = load %struct.TreeNode** %golden_root, align 8
+  call void @_Z15goldenPostorderP8TreeNodeRSt6vectorIiSaIiEE(%struct.TreeNode* %40, %"class.std::vector"* %expected)
+  %41 = call zeroext i1 @_ZSteqIiSaIiEEbRKSt6vectorIT_T0_ES6_(%"class.std::vector"* @global_result, %"class.std::vector"* %expected)
+  br i1 %41, label %42, label %45
 
-; <label>:51                                      ; preds = %50
-  %52 = load i32* %i, align 4
-  %53 = add nsw i32 %52, 1
-  store i32 %53, i32* %i, align 4
-  br label %32
+; <label>:42                                      ; preds = %38
+  %43 = call %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* @_ZSt4cout, i8* getelementptr inbounds ([20 x i8]* @.str2, i32 0, i32 0))
+  %44 = call %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* %43, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
+  br label %48
 
-; <label>:54                                      ; preds = %105, %104, %99, %95, %84, %81, %58, %43, %36, %27
-  %55 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %56 = extractvalue { i8*, i32 } %55, 0
-  store i8* %56, i8** %5
-  %57 = extractvalue { i8*, i32 } %55, 1
-  store i32 %57, i32* %6
-  br label %141
+; <label>:45                                      ; preds = %38
+  %46 = call %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* @_ZSt4cout, i8* getelementptr inbounds ([7 x i8]* @.str3, i32 0, i32 0))
+  %47 = call %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* %46, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
+  br label %48
 
-; <label>:58                                      ; preds = %32
-  call void @_ZNSt6vectorIiSaIiEE5clearEv(%"class.std::vector"* @global_result) #2
-  %59 = load %struct.Node** %c_root, align 8
-  invoke void @_Z9postOrderP4Node(%struct.Node* %59)
-          to label %60 unwind label %54
-
-; <label>:60                                      ; preds = %58
-  call void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %expected) #2
-  %61 = load %struct.TreeNode** %golden_root, align 8
-  invoke void @_Z15goldenPostorderP8TreeNodeRSt6vectorIiSaIiEE(%struct.TreeNode* %61, %"class.std::vector"* %expected)
-          to label %62 unwind label %70
-
-; <label>:62                                      ; preds = %60
-  %63 = invoke zeroext i1 @_ZSteqIiSaIiEEbRKSt6vectorIT_T0_ES6_(%"class.std::vector"* @global_result, %"class.std::vector"* %expected)
-          to label %64 unwind label %70
-
-; <label>:64                                      ; preds = %62
-  br i1 %63, label %65, label %74
-
-; <label>:65                                      ; preds = %64
-  %66 = invoke %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* @_ZSt4cout, i8* getelementptr inbounds ([20 x i8]* @.str2, i32 0, i32 0))
-          to label %67 unwind label %70
-
-; <label>:67                                      ; preds = %65
-  %68 = invoke %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* %66, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
-          to label %69 unwind label %70
-
-; <label>:69                                      ; preds = %67
-  br label %79
-
-; <label>:70                                      ; preds = %76, %74, %67, %65, %62, %60
-  %71 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %72 = extractvalue { i8*, i32 } %71, 0
-  store i8* %72, i8** %5
-  %73 = extractvalue { i8*, i32 } %71, 1
-  store i32 %73, i32* %6
-  call void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %expected) #2
-  br label %141
-
-; <label>:74                                      ; preds = %64
-  %75 = invoke %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* @_ZSt4cout, i8* getelementptr inbounds ([7 x i8]* @.str3, i32 0, i32 0))
-          to label %76 unwind label %70
-
-; <label>:76                                      ; preds = %74
-  %77 = invoke %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* %75, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
-          to label %78 unwind label %70
-
-; <label>:78                                      ; preds = %76
-  br label %79
-
-; <label>:79                                      ; preds = %78, %69
+; <label>:48                                      ; preds = %45, %42
   store i32 0, i32* %1
-  store i32 1, i32* %7
-  call void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %expected) #2
-  br label %139
+  store i32 1, i32* %5
+  call void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %expected) #0
+  br label %87
 
-; <label>:80                                      ; preds = %29
+; <label>:49                                      ; preds = %13
   store %struct.Node* null, %struct.Node** %c_root1, align 8
   store %struct.TreeNode* null, %struct.TreeNode** %golden_root2, align 8
-  br label %81
+  br label %50
 
-; <label>:81                                      ; preds = %103, %80
-  %82 = bitcast %"class.std::basic_ifstream"* %file to %"class.std::basic_istream"*
-  %83 = invoke %"class.std::basic_istream"* @_ZNSirsERi(%"class.std::basic_istream"* %82, i32* %num)
-          to label %84 unwind label %54
+; <label>:50                                      ; preds = %62, %49
+  %51 = bitcast %"class.std::basic_ifstream"* %file to %"class.std::basic_istream"*
+  %52 = call %"class.std::basic_istream"* @_ZNSirsERi(%"class.std::basic_istream"* %51, i32* %num)
+  %53 = bitcast %"class.std::basic_istream"* %52 to i8**
+  %54 = load i8** %53
+  %55 = getelementptr i8* %54, i64 -24
+  %56 = bitcast i8* %55 to i64*
+  %57 = load i64* %56
+  %58 = bitcast %"class.std::basic_istream"* %52 to i8*
+  %59 = getelementptr inbounds i8* %58, i64 %57
+  %60 = bitcast i8* %59 to %"class.std::basic_ios"*
+  %61 = call zeroext i1 @_ZNKSt9basic_iosIcSt11char_traitsIcEEcvbEv(%"class.std::basic_ios"* %60)
+  br i1 %61, label %62, label %69
 
-; <label>:84                                      ; preds = %81
-  %85 = bitcast %"class.std::basic_istream"* %83 to i8**
-  %86 = load i8** %85
-  %87 = getelementptr i8* %86, i64 -24
-  %88 = bitcast i8* %87 to i64*
-  %89 = load i64* %88
-  %90 = bitcast %"class.std::basic_istream"* %83 to i8*
-  %91 = getelementptr inbounds i8* %90, i64 %89
-  %92 = bitcast i8* %91 to %"class.std::basic_ios"*
-  %93 = invoke zeroext i1 @_ZNKSt9basic_iosIcSt11char_traitsIcEEcvbEv(%"class.std::basic_ios"* %92)
-          to label %94 unwind label %54
+; <label>:62                                      ; preds = %50
+  %63 = load %struct.Node** %c_root1, align 8
+  %64 = load i32* %num, align 4
+  %65 = call %struct.Node* @_Z7insertCP4Nodei(%struct.Node* %63, i32 %64)
+  store %struct.Node* %65, %struct.Node** %c_root1, align 8
+  %66 = load %struct.TreeNode** %golden_root2, align 8
+  %67 = load i32* %num, align 4
+  %68 = call %struct.TreeNode* @_Z12insertGoldenP8TreeNodei(%struct.TreeNode* %66, i32 %67)
+  store %struct.TreeNode* %68, %struct.TreeNode** %golden_root2, align 8
+  br label %50
 
-; <label>:94                                      ; preds = %84
-  br i1 %93, label %95, label %104
+; <label>:69                                      ; preds = %50
+  call void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE5closeEv(%"class.std::basic_ifstream"* %file)
+  call void @_ZNSt6vectorIiSaIiEE5clearEv(%"class.std::vector"* @global_result) #0
+  %70 = load %struct.Node** %c_root1, align 8
+  call void @_Z9postOrderP4Node(%struct.Node* %70)
+  call void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %expected3) #0
+  %71 = load %struct.TreeNode** %golden_root2, align 8
+  call void @_Z15goldenPostorderP8TreeNodeRSt6vectorIiSaIiEE(%struct.TreeNode* %71, %"class.std::vector"* %expected3)
+  %72 = call zeroext i1 @_ZSteqIiSaIiEEbRKSt6vectorIT_T0_ES6_(%"class.std::vector"* @global_result, %"class.std::vector"* %expected3)
+  br i1 %72, label %73, label %76
 
-; <label>:95                                      ; preds = %94
-  %96 = load %struct.Node** %c_root1, align 8
-  %97 = load i32* %num, align 4
-  %98 = invoke %struct.Node* @_Z7insertCP4Nodei(%struct.Node* %96, i32 %97)
-          to label %99 unwind label %54
+; <label>:73                                      ; preds = %69
+  %74 = call %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* @_ZSt4cout, i8* getelementptr inbounds ([20 x i8]* @.str2, i32 0, i32 0))
+  %75 = call %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* %74, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
+  br label %86
 
-; <label>:99                                      ; preds = %95
-  store %struct.Node* %98, %struct.Node** %c_root1, align 8
-  %100 = load %struct.TreeNode** %golden_root2, align 8
-  %101 = load i32* %num, align 4
-  %102 = invoke %struct.TreeNode* @_Z12insertGoldenP8TreeNodei(%struct.TreeNode* %100, i32 %101)
-          to label %103 unwind label %54
+; <label>:76                                      ; preds = %69
+  %77 = call %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* @_ZSt4cout, i8* getelementptr inbounds ([7 x i8]* @.str3, i32 0, i32 0))
+  %78 = call %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* %77, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
+  %79 = call %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* @_ZSt4cout, i8* getelementptr inbounds ([16 x i8]* @.str4, i32 0, i32 0))
+  %80 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %expected3) #0
+  %81 = call %"class.std::basic_ostream"* @_ZNSolsEm(%"class.std::basic_ostream"* %79, i64 %80)
+  %82 = call %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* %81, i8* getelementptr inbounds ([7 x i8]* @.str5, i32 0, i32 0))
+  %83 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* @global_result) #0
+  %84 = call %"class.std::basic_ostream"* @_ZNSolsEm(%"class.std::basic_ostream"* %82, i64 %83)
+  %85 = call %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* %84, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
+  br label %86
 
-; <label>:103                                     ; preds = %99
-  store %struct.TreeNode* %102, %struct.TreeNode** %golden_root2, align 8
-  br label %81
-
-; <label>:104                                     ; preds = %94
-  invoke void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE5closeEv(%"class.std::basic_ifstream"* %file)
-          to label %105 unwind label %54
-
-; <label>:105                                     ; preds = %104
-  call void @_ZNSt6vectorIiSaIiEE5clearEv(%"class.std::vector"* @global_result) #2
-  %106 = load %struct.Node** %c_root1, align 8
-  invoke void @_Z9postOrderP4Node(%struct.Node* %106)
-          to label %107 unwind label %54
-
-; <label>:107                                     ; preds = %105
-  call void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %expected3) #2
-  %108 = load %struct.TreeNode** %golden_root2, align 8
-  invoke void @_Z15goldenPostorderP8TreeNodeRSt6vectorIiSaIiEE(%struct.TreeNode* %108, %"class.std::vector"* %expected3)
-          to label %109 unwind label %117
-
-; <label>:109                                     ; preds = %107
-  %110 = invoke zeroext i1 @_ZSteqIiSaIiEEbRKSt6vectorIT_T0_ES6_(%"class.std::vector"* @global_result, %"class.std::vector"* %expected3)
-          to label %111 unwind label %117
-
-; <label>:111                                     ; preds = %109
-  br i1 %110, label %112, label %121
-
-; <label>:112                                     ; preds = %111
-  %113 = invoke %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* @_ZSt4cout, i8* getelementptr inbounds ([20 x i8]* @.str2, i32 0, i32 0))
-          to label %114 unwind label %117
-
-; <label>:114                                     ; preds = %112
-  %115 = invoke %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* %113, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
-          to label %116 unwind label %117
-
-; <label>:116                                     ; preds = %114
-  br label %138
-
-; <label>:117                                     ; preds = %135, %132, %130, %127, %125, %123, %121, %114, %112, %109, %107
-  %118 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %119 = extractvalue { i8*, i32 } %118, 0
-  store i8* %119, i8** %5
-  %120 = extractvalue { i8*, i32 } %118, 1
-  store i32 %120, i32* %6
-  call void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %expected3) #2
-  br label %141
-
-; <label>:121                                     ; preds = %111
-  %122 = invoke %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* @_ZSt4cout, i8* getelementptr inbounds ([7 x i8]* @.str3, i32 0, i32 0))
-          to label %123 unwind label %117
-
-; <label>:123                                     ; preds = %121
-  %124 = invoke %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* %122, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
-          to label %125 unwind label %117
-
-; <label>:125                                     ; preds = %123
-  %126 = invoke %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* @_ZSt4cout, i8* getelementptr inbounds ([16 x i8]* @.str4, i32 0, i32 0))
-          to label %127 unwind label %117
-
-; <label>:127                                     ; preds = %125
-  %128 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %expected3) #2
-  %129 = invoke %"class.std::basic_ostream"* @_ZNSolsEm(%"class.std::basic_ostream"* %126, i64 %128)
-          to label %130 unwind label %117
-
-; <label>:130                                     ; preds = %127
-  %131 = invoke %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* %129, i8* getelementptr inbounds ([7 x i8]* @.str5, i32 0, i32 0))
-          to label %132 unwind label %117
-
-; <label>:132                                     ; preds = %130
-  %133 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* @global_result) #2
-  %134 = invoke %"class.std::basic_ostream"* @_ZNSolsEm(%"class.std::basic_ostream"* %131, i64 %133)
-          to label %135 unwind label %117
-
-; <label>:135                                     ; preds = %132
-  %136 = invoke %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* %134, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
-          to label %137 unwind label %117
-
-; <label>:137                                     ; preds = %135
-  br label %138
-
-; <label>:138                                     ; preds = %137, %116
+; <label>:86                                      ; preds = %76, %73
   store i32 0, i32* %1
-  store i32 1, i32* %7
-  call void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %expected3) #2
-  br label %139
+  store i32 1, i32* %5
+  call void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %expected3) #0
+  br label %87
 
-; <label>:139                                     ; preds = %138, %79
-  call void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev(%"class.std::basic_ifstream"* %file) #2
-  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"* %filename) #2
-  %140 = load i32* %1
-  ret i32 %140
-
-; <label>:141                                     ; preds = %117, %70, %54
-  call void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev(%"class.std::basic_ifstream"* %file) #2
-  br label %142
-
-; <label>:142                                     ; preds = %141, %21
-  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"* %filename) #2
-  br label %143
-
-; <label>:143                                     ; preds = %142, %17
-  %144 = load i8** %5
-  %145 = load i32* %6
-  %146 = insertvalue { i8*, i32 } undef, i8* %144, 0
-  %147 = insertvalue { i8*, i32 } %146, i32 %145, 1
-  resume { i8*, i32 } %147
+; <label>:87                                      ; preds = %86, %48
+  call void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev(%"class.std::basic_ifstream"* %file) #0
+  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"* %filename) #0
+  %88 = load i32* %1
+  ret i32 %88
 }
 
-declare void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EPKcRKS3_(%"class.std::__cxx11::basic_string"*, i8*, %"class.std::allocator.0"*) #0
+declare void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EPKcRKS3_(%"class.std::__cxx11::basic_string"*, i8*, %"class.std::allocator.0"*) #1
 
 ; Function Attrs: nounwind
-declare void @_ZNSaIcEC1Ev(%"class.std::allocator.0"*) #1
+declare void @_ZNSaIcEC1Ev(%"class.std::allocator.0"*) #2
 
 ; Function Attrs: nounwind
-declare void @_ZNSaIcED1Ev(%"class.std::allocator.0"*) #1
+declare void @_ZNSaIcED1Ev(%"class.std::allocator.0"*) #2
 
-declare %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEaSEPKc(%"class.std::__cxx11::basic_string"*, i8*) #0
+declare %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEaSEPKc(%"class.std::__cxx11::basic_string"*, i8*) #1
 
-declare void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEEC1EPKcSt13_Ios_Openmode(%"class.std::basic_ifstream"*, i8*, i32) #0
-
-; Function Attrs: nounwind
-declare i8* @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv(%"class.std::__cxx11::basic_string"*) #1
-
-declare zeroext i1 @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE7is_openEv(%"class.std::basic_ifstream"*) #0
+declare void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEEC1EPKcSt13_Ios_Openmode(%"class.std::basic_ifstream"*, i8*, i32) #1
 
 ; Function Attrs: nounwind
-declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #2
+declare i8* @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv(%"class.std::__cxx11::basic_string"*) #2
+
+declare zeroext i1 @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE7is_openEv(%"class.std::basic_ifstream"*) #1
+
+; Function Attrs: nounwind
+declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #0
 
 ; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt6vectorIiSaIiEE5clearEv(%"class.std::vector"* %this) #3 align 2 {
@@ -794,12 +583,12 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE5clearEv(%"class.std::vector"* %th
   %4 = getelementptr inbounds %"struct.std::_Vector_base"* %3, i32 0, i32 0
   %5 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %4, i32 0, i32 0
   %6 = load i32** %5, align 8
-  call void @_ZNSt6vectorIiSaIiEE15_M_erase_at_endEPi(%"class.std::vector"* %2, i32* %6) #2
+  call void @_ZNSt6vectorIiSaIiEE15_M_erase_at_endEPi(%"class.std::vector"* %2, i32* %6) #0
   ret void
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr zeroext i1 @_ZSteqIiSaIiEEbRKSt6vectorIT_T0_ES6_(%"class.std::vector"* %__x, %"class.std::vector"* %__y) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr zeroext i1 @_ZSteqIiSaIiEEbRKSt6vectorIT_T0_ES6_(%"class.std::vector"* %__x, %"class.std::vector"* %__y) #5 {
   %1 = alloca %"class.std::vector"*, align 8
   %2 = alloca %"class.std::vector"*, align 8
   %3 = alloca %"class.__gnu_cxx::__normal_iterator", align 8
@@ -808,23 +597,23 @@ define linkonce_odr zeroext i1 @_ZSteqIiSaIiEEbRKSt6vectorIT_T0_ES6_(%"class.std
   store %"class.std::vector"* %__x, %"class.std::vector"** %1, align 8
   store %"class.std::vector"* %__y, %"class.std::vector"** %2, align 8
   %6 = load %"class.std::vector"** %1, align 8
-  %7 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %6) #2
+  %7 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %6) #0
   %8 = load %"class.std::vector"** %2, align 8
-  %9 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %8) #2
+  %9 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %8) #0
   %10 = icmp eq i64 %7, %9
   br i1 %10, label %11, label %28
 
 ; <label>:11                                      ; preds = %0
   %12 = load %"class.std::vector"** %1, align 8
-  %13 = call i32* @_ZNKSt6vectorIiSaIiEE5beginEv(%"class.std::vector"* %12) #2
+  %13 = call i32* @_ZNKSt6vectorIiSaIiEE5beginEv(%"class.std::vector"* %12) #0
   %14 = getelementptr %"class.__gnu_cxx::__normal_iterator"* %3, i32 0, i32 0
   store i32* %13, i32** %14
   %15 = load %"class.std::vector"** %1, align 8
-  %16 = call i32* @_ZNKSt6vectorIiSaIiEE3endEv(%"class.std::vector"* %15) #2
+  %16 = call i32* @_ZNKSt6vectorIiSaIiEE3endEv(%"class.std::vector"* %15) #0
   %17 = getelementptr %"class.__gnu_cxx::__normal_iterator"* %4, i32 0, i32 0
   store i32* %16, i32** %17
   %18 = load %"class.std::vector"** %2, align 8
-  %19 = call i32* @_ZNKSt6vectorIiSaIiEE5beginEv(%"class.std::vector"* %18) #2
+  %19 = call i32* @_ZNKSt6vectorIiSaIiEE5beginEv(%"class.std::vector"* %18) #0
   %20 = getelementptr %"class.__gnu_cxx::__normal_iterator"* %5, i32 0, i32 0
   store i32* %19, i32** %20
   %21 = getelementptr %"class.__gnu_cxx::__normal_iterator"* %3, i32 0, i32 0
@@ -841,19 +630,19 @@ define linkonce_odr zeroext i1 @_ZSteqIiSaIiEEbRKSt6vectorIT_T0_ES6_(%"class.std
   ret i1 %29
 }
 
-declare %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"*, i8*) #0
+declare %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"*, i8*) #1
 
-declare %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"*, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)*) #0
+declare %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"*, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)*) #1
 
-declare %"class.std::basic_ostream"* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_(%"class.std::basic_ostream"*) #0
+declare %"class.std::basic_ostream"* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_(%"class.std::basic_ostream"*) #1
 
-declare %"class.std::basic_istream"* @_ZNSirsERi(%"class.std::basic_istream"*, i32*) #0
+declare %"class.std::basic_istream"* @_ZNSirsERi(%"class.std::basic_istream"*, i32*) #1
 
-declare zeroext i1 @_ZNKSt9basic_iosIcSt11char_traitsIcEEcvbEv(%"class.std::basic_ios"*) #0
+declare zeroext i1 @_ZNKSt9basic_iosIcSt11char_traitsIcEEcvbEv(%"class.std::basic_ios"*) #1
 
-declare void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE5closeEv(%"class.std::basic_ifstream"*) #0
+declare void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE5closeEv(%"class.std::basic_ifstream"*) #1
 
-declare %"class.std::basic_ostream"* @_ZNSolsEm(%"class.std::basic_ostream"*, i64) #0
+declare %"class.std::basic_ostream"* @_ZNSolsEm(%"class.std::basic_ostream"*, i64) #1
 
 ; Function Attrs: nounwind uwtable
 define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %this) #3 align 2 {
@@ -876,13 +665,13 @@ define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %thi
 }
 
 ; Function Attrs: nounwind
-declare void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev(%"class.std::basic_ifstream"*) #1
+declare void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev(%"class.std::basic_ifstream"*) #2
 
 ; Function Attrs: nounwind
-declare void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"*) #1
+declare void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"*) #2
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr zeroext i1 @_ZSt5equalIN9__gnu_cxx17__normal_iteratorIPKiSt6vectorIiSaIiEEEES7_EbT_S8_T0_(i32* %__first1.coerce, i32* %__last1.coerce, i32* %__first2.coerce) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr zeroext i1 @_ZSt5equalIN9__gnu_cxx17__normal_iteratorIPKiSt6vectorIiSaIiEEEES7_EbT_S8_T0_(i32* %__first1.coerce, i32* %__last1.coerce, i32* %__first2.coerce) #5 {
   %__first1 = alloca %"class.__gnu_cxx::__normal_iterator", align 8
   %__last1 = alloca %"class.__gnu_cxx::__normal_iterator", align 8
   %__first2 = alloca %"class.__gnu_cxx::__normal_iterator", align 8
@@ -929,7 +718,7 @@ define linkonce_odr i32* @_ZNKSt6vectorIiSaIiEE5beginEv(%"class.std::vector"* %t
   %7 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %6, i32 0, i32 0
   %8 = load i32** %7, align 8
   store i32* %8, i32** %3
-  call void @_ZN9__gnu_cxx17__normal_iteratorIPKiSt6vectorIiSaIiEEEC2ERKS2_(%"class.__gnu_cxx::__normal_iterator"* %1, i32** %3) #2
+  call void @_ZN9__gnu_cxx17__normal_iteratorIPKiSt6vectorIiSaIiEEEC2ERKS2_(%"class.__gnu_cxx::__normal_iterator"* %1, i32** %3) #0
   %9 = getelementptr %"class.__gnu_cxx::__normal_iterator"* %1, i32 0, i32 0
   %10 = load i32** %9
   ret i32* %10
@@ -947,7 +736,7 @@ define linkonce_odr i32* @_ZNKSt6vectorIiSaIiEE3endEv(%"class.std::vector"* %thi
   %7 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %6, i32 0, i32 1
   %8 = load i32** %7, align 8
   store i32* %8, i32** %3
-  call void @_ZN9__gnu_cxx17__normal_iteratorIPKiSt6vectorIiSaIiEEEC2ERKS2_(%"class.__gnu_cxx::__normal_iterator"* %1, i32** %3) #2
+  call void @_ZN9__gnu_cxx17__normal_iteratorIPKiSt6vectorIiSaIiEEEC2ERKS2_(%"class.__gnu_cxx::__normal_iterator"* %1, i32** %3) #0
   %9 = getelementptr %"class.__gnu_cxx::__normal_iterator"* %1, i32 0, i32 0
   %10 = load i32** %9
   ret i32* %10
@@ -967,8 +756,8 @@ define linkonce_odr void @_ZN9__gnu_cxx17__normal_iteratorIPKiSt6vectorIiSaIiEEE
   ret void
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr zeroext i1 @_ZSt11__equal_auxIPKiS1_EbT_S2_T0_(i32* %__first1, i32* %__last1, i32* %__first2) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr zeroext i1 @_ZSt11__equal_auxIPKiS1_EbT_S2_T0_(i32* %__first1, i32* %__last1, i32* %__first2) #5 {
   %1 = alloca i32*, align 8
   %2 = alloca i32*, align 8
   %3 = alloca i32*, align 8
@@ -984,8 +773,8 @@ define linkonce_odr zeroext i1 @_ZSt11__equal_auxIPKiS1_EbT_S2_T0_(i32* %__first
   ret i1 %7
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt12__niter_baseIN9__gnu_cxx17__normal_iteratorIPKiSt6vectorIiSaIiEEEEENSt11_Niter_baseIT_E13iterator_typeES9_(i32* %__it.coerce) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt12__niter_baseIN9__gnu_cxx17__normal_iteratorIPKiSt6vectorIiSaIiEEEEENSt11_Niter_baseIT_E13iterator_typeES9_(i32* %__it.coerce) #5 {
   %__it = alloca %"class.__gnu_cxx::__normal_iterator", align 8
   %1 = alloca %"class.__gnu_cxx::__normal_iterator", align 8
   %2 = getelementptr %"class.__gnu_cxx::__normal_iterator"* %__it, i32 0, i32 0
@@ -1004,7 +793,7 @@ define linkonce_odr i32* @_ZNSt10_Iter_baseIN9__gnu_cxx17__normal_iteratorIPKiSt
   %__it = alloca %"class.__gnu_cxx::__normal_iterator", align 8
   %1 = getelementptr %"class.__gnu_cxx::__normal_iterator"* %__it, i32 0, i32 0
   store i32* %__it.coerce, i32** %1
-  %2 = call i32** @_ZNK9__gnu_cxx17__normal_iteratorIPKiSt6vectorIiSaIiEEE4baseEv(%"class.__gnu_cxx::__normal_iterator"* %__it) #2
+  %2 = call i32** @_ZNK9__gnu_cxx17__normal_iteratorIPKiSt6vectorIiSaIiEEE4baseEv(%"class.__gnu_cxx::__normal_iterator"* %__it) #0
   %3 = load i32** %2
   ret i32* %3
 }
@@ -1046,7 +835,7 @@ define linkonce_odr zeroext i1 @_ZNSt7__equalILb1EE5equalIiEEbPKT_S4_S4_(i32* %_
   %17 = bitcast i32* %16 to i8*
   %18 = load i64* %__len, align 8
   %19 = mul i64 4, %18
-  %20 = call i32 @memcmp(i8* %15, i8* %17, i64 %19) #2
+  %20 = call i32 @memcmp(i8* %15, i8* %17, i64 %19) #0
   %21 = icmp ne i32 %20, 0
   %22 = xor i1 %21, true
   store i1 %22, i1* %1
@@ -1062,7 +851,7 @@ define linkonce_odr zeroext i1 @_ZNSt7__equalILb1EE5equalIiEEbPKT_S4_S4_(i32* %_
 }
 
 ; Function Attrs: nounwind
-declare i32 @memcmp(i8*, i8*, i64) #1
+declare i32 @memcmp(i8*, i8*, i64) #2
 
 ; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt6vectorIiSaIiEE15_M_erase_at_endEPi(%"class.std::vector"* %this, i32* %__pos) #3 align 2 {
@@ -1077,28 +866,18 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE15_M_erase_at_endEPi(%"class.std::
   %7 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %6, i32 0, i32 1
   %8 = load i32** %7, align 8
   %9 = bitcast %"class.std::vector"* %3 to %"struct.std::_Vector_base"*
-  %10 = call %"class.std::allocator"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %9) #2
-  invoke void @_ZSt8_DestroyIPiiEvT_S1_RSaIT0_E(i32* %4, i32* %8, %"class.std::allocator"* %10)
-          to label %11 unwind label %16
-
-; <label>:11                                      ; preds = %0
-  %12 = load i32** %2, align 8
-  %13 = bitcast %"class.std::vector"* %3 to %"struct.std::_Vector_base"*
-  %14 = getelementptr inbounds %"struct.std::_Vector_base"* %13, i32 0, i32 0
-  %15 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %14, i32 0, i32 1
-  store i32* %12, i32** %15, align 8
+  %10 = call %"class.std::allocator"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %9) #0
+  call void @_ZSt8_DestroyIPiiEvT_S1_RSaIT0_E(i32* %4, i32* %8, %"class.std::allocator"* %10)
+  %11 = load i32** %2, align 8
+  %12 = bitcast %"class.std::vector"* %3 to %"struct.std::_Vector_base"*
+  %13 = getelementptr inbounds %"struct.std::_Vector_base"* %12, i32 0, i32 0
+  %14 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %13, i32 0, i32 1
+  store i32* %11, i32** %14, align 8
   ret void
-
-; <label>:16                                      ; preds = %0
-  %17 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %18 = extractvalue { i8*, i32 } %17, 0
-  call void @__clang_call_terminate(i8* %18) #11
-  unreachable
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr void @_ZSt8_DestroyIPiiEvT_S1_RSaIT0_E(i32* %__first, i32* %__last, %"class.std::allocator"*) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr void @_ZSt8_DestroyIPiiEvT_S1_RSaIT0_E(i32* %__first, i32* %__last, %"class.std::allocator"*) #5 {
   %2 = alloca i32*, align 8
   %3 = alloca i32*, align 8
   %4 = alloca %"class.std::allocator"*, align 8
@@ -1121,19 +900,8 @@ define linkonce_odr %"class.std::allocator"* @_ZNSt12_Vector_baseIiSaIiEE19_M_ge
   ret %"class.std::allocator"* %4
 }
 
-; Function Attrs: noinline noreturn nounwind
-define linkonce_odr hidden void @__clang_call_terminate(i8*) #8 {
-  %2 = call i8* @__cxa_begin_catch(i8* %0) #2
-  call void @_ZSt9terminatev() #11
-  unreachable
-}
-
-declare i8* @__cxa_begin_catch(i8*)
-
-declare void @_ZSt9terminatev()
-
-; Function Attrs: inlinehint uwtable
-define linkonce_odr void @_ZSt8_DestroyIPiEvT_S1_(i32* %__first, i32* %__last) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr void @_ZSt8_DestroyIPiEvT_S1_(i32* %__first, i32* %__last) #5 {
   %1 = alloca i32*, align 8
   %2 = alloca i32*, align 8
   store i32* %__first, i32** %1, align 8
@@ -1153,8 +921,8 @@ define linkonce_odr void @_ZNSt12_Destroy_auxILb1EE9__destroyIPiEEvT_S3_(i32*, i
   ret void
 }
 
-; Function Attrs: uwtable
-define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEvRS0_PT_DpOT0_(%"class.std::allocator"* %__a, i32* %__p, i32* %__args) #4 align 2 {
+; Function Attrs: nounwind uwtable
+define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEvRS0_PT_DpOT0_(%"class.std::allocator"* %__a, i32* %__p, i32* %__args) #3 align 2 {
   %1 = alloca %"class.std::allocator"*, align 8
   %2 = alloca i32*, align 8
   %3 = alloca i32*, align 8
@@ -1165,13 +933,13 @@ define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEvRS0_
   %5 = bitcast %"class.std::allocator"* %4 to %"class.__gnu_cxx::new_allocator"*
   %6 = load i32** %2, align 8
   %7 = load i32** %3, align 8
-  %8 = call i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* %7) #2
+  %8 = call i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* %7) #0
   call void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJRKiEEEvPT_DpOT0_(%"class.__gnu_cxx::new_allocator"* %5, i32* %6, i32* %8)
   ret void
 }
 
-; Function Attrs: uwtable
-define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJRKiEEEvDpOT_(%"class.std::vector"* %this, i32* %__args) #4 align 2 {
+; Function Attrs: nounwind uwtable
+define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJRKiEEEvDpOT_(%"class.std::vector"* %this, i32* %__args) #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
   %2 = alloca i32*, align 8
   %__len = alloca i64, align 8
@@ -1192,10 +960,10 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJRKiEEEvDpOT
   %10 = getelementptr inbounds %"struct.std::_Vector_base"* %9, i32 0, i32 0
   %11 = bitcast %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %10 to %"class.std::allocator"*
   %12 = load i32** %__new_start, align 8
-  %13 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %3) #2
+  %13 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %3) #0
   %14 = getelementptr inbounds i32* %12, i64 %13
   %15 = load i32** %2, align 8
-  %16 = call i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* %15) #2
+  %16 = call i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* %15) #0
   call void @_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEvRS0_PT_DpOT0_(%"class.std::allocator"* %11, i32* %14, i32* %16)
   store i32* null, i32** %__new_finish, align 8
   %17 = bitcast %"class.std::vector"* %3 to %"struct.std::_Vector_base"*
@@ -1208,7 +976,7 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJRKiEEEvDpOT
   %24 = load i32** %23, align 8
   %25 = load i32** %__new_start, align 8
   %26 = bitcast %"class.std::vector"* %3 to %"struct.std::_Vector_base"*
-  %27 = call %"class.std::allocator"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %26) #2
+  %27 = call %"class.std::allocator"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %26) #0
   %28 = call i32* @_ZSt34__uninitialized_move_if_noexcept_aIPiS0_SaIiEET0_T_S3_S2_RT1_(i32* %20, i32* %24, i32* %25, %"class.std::allocator"* %27)
   store i32* %28, i32** %__new_finish, align 8
   %29 = load i32** %__new_finish, align 8
@@ -1223,7 +991,7 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJRKiEEEvDpOT
   %37 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %36, i32 0, i32 1
   %38 = load i32** %37, align 8
   %39 = bitcast %"class.std::vector"* %3 to %"struct.std::_Vector_base"*
-  %40 = call %"class.std::allocator"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %39) #2
+  %40 = call %"class.std::allocator"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %39) #0
   call void @_ZSt8_DestroyIPiiEvT_S1_RSaIT0_E(i32* %34, i32* %38, %"class.std::allocator"* %40)
   %41 = bitcast %"class.std::vector"* %3 to %"struct.std::_Vector_base"*
   %42 = bitcast %"class.std::vector"* %3 to %"struct.std::_Vector_base"*
@@ -1263,8 +1031,8 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJRKiEEEvDpOT
   ret void
 }
 
-; Function Attrs: uwtable
-define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE12_M_check_lenEmPKc(%"class.std::vector"* %this, i64 %__n, i8* %__s) #4 align 2 {
+; Function Attrs: nounwind uwtable
+define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE12_M_check_lenEmPKc(%"class.std::vector"* %this, i64 %__n, i8* %__s) #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
   %2 = alloca i64, align 8
   %3 = alloca i8*, align 8
@@ -1274,8 +1042,8 @@ define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE12_M_check_lenEmPKc(%"class.std::v
   store i64 %__n, i64* %2, align 8
   store i8* %__s, i8** %3, align 8
   %5 = load %"class.std::vector"** %1
-  %6 = call i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %5) #2
-  %7 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #2
+  %6 = call i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %5) #0
+  %7 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #0
   %8 = sub i64 %6, %7
   %9 = load i64* %2, align 8
   %10 = icmp ult i64 %8, %9
@@ -1283,30 +1051,30 @@ define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE12_M_check_lenEmPKc(%"class.std::v
 
 ; <label>:11                                      ; preds = %0
   %12 = load i8** %3, align 8
-  call void @_ZSt20__throw_length_errorPKc(i8* %12) #14
+  call void @_ZSt20__throw_length_errorPKc(i8* %12) #9
   unreachable
 
 ; <label>:13                                      ; preds = %0
-  %14 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #2
-  %15 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #2
+  %14 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #0
+  %15 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #0
   store i64 %15, i64* %4
   %16 = call i64* @_ZSt3maxImERKT_S2_S2_(i64* %4, i64* %2)
   %17 = load i64* %16
   %18 = add i64 %14, %17
   store i64 %18, i64* %__len, align 8
   %19 = load i64* %__len, align 8
-  %20 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #2
+  %20 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #0
   %21 = icmp ult i64 %19, %20
   br i1 %21, label %26, label %22
 
 ; <label>:22                                      ; preds = %13
   %23 = load i64* %__len, align 8
-  %24 = call i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %5) #2
+  %24 = call i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %5) #0
   %25 = icmp ugt i64 %23, %24
   br i1 %25, label %26, label %28
 
 ; <label>:26                                      ; preds = %22, %13
-  %27 = call i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %5) #2
+  %27 = call i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %5) #0
   br label %30
 
 ; <label>:28                                      ; preds = %22
@@ -1318,8 +1086,8 @@ define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE12_M_check_lenEmPKc(%"class.std::v
   ret i64 %31
 }
 
-; Function Attrs: uwtable
-define linkonce_odr i32* @_ZNSt12_Vector_baseIiSaIiEE11_M_allocateEm(%"struct.std::_Vector_base"* %this, i64 %__n) #4 align 2 {
+; Function Attrs: nounwind uwtable
+define linkonce_odr i32* @_ZNSt12_Vector_baseIiSaIiEE11_M_allocateEm(%"struct.std::_Vector_base"* %this, i64 %__n) #3 align 2 {
   %1 = alloca %"struct.std::_Vector_base"*, align 8
   %2 = alloca i64, align 8
   store %"struct.std::_Vector_base"* %this, %"struct.std::_Vector_base"** %1, align 8
@@ -1352,8 +1120,8 @@ define linkonce_odr i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(
   ret i32* %2
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt34__uninitialized_move_if_noexcept_aIPiS0_SaIiEET0_T_S3_S2_RT1_(i32* %__first, i32* %__last, i32* %__result, %"class.std::allocator"* %__alloc) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt34__uninitialized_move_if_noexcept_aIPiS0_SaIiEET0_T_S3_S2_RT1_(i32* %__first, i32* %__last, i32* %__result, %"class.std::allocator"* %__alloc) #5 {
   %1 = alloca i32*, align 8
   %2 = alloca i32*, align 8
   %3 = alloca i32*, align 8
@@ -1382,8 +1150,8 @@ define linkonce_odr i32* @_ZSt34__uninitialized_move_if_noexcept_aIPiS0_SaIiEET0
   ret i32* %19
 }
 
-; Function Attrs: uwtable
-define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE13_M_deallocateEPim(%"struct.std::_Vector_base"* %this, i32* %__p, i64 %__n) #4 align 2 {
+; Function Attrs: nounwind uwtable
+define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE13_M_deallocateEPim(%"struct.std::_Vector_base"* %this, i32* %__p, i64 %__n) #3 align 2 {
   %1 = alloca %"struct.std::_Vector_base"*, align 8
   %2 = alloca i32*, align 8
   %3 = alloca i64, align 8
@@ -1407,8 +1175,8 @@ define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE13_M_deallocateEPim(%"struc
   ret void
 }
 
-; Function Attrs: uwtable
-define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE10deallocateERS0_Pim(%"class.std::allocator"* %__a, i32* %__p, i64 %__n) #4 align 2 {
+; Function Attrs: nounwind uwtable
+define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE10deallocateERS0_Pim(%"class.std::allocator"* %__a, i32* %__p, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::allocator"*, align 8
   %2 = alloca i32*, align 8
   %3 = alloca i64, align 8
@@ -1434,12 +1202,15 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE10deallocateEPim(%"clas
   %5 = load %"class.__gnu_cxx::new_allocator"** %2
   %6 = load i32** %3, align 8
   %7 = bitcast i32* %6 to i8*
-  call void @_ZdlPv(i8* %7) #2
+  call void @_ZdlPv(i8* %7) #0
   ret void
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt22__uninitialized_copy_aISt13move_iteratorIPiES1_iET0_T_S4_S3_RSaIT1_E(i32* %__first.coerce, i32* %__last.coerce, i32* %__result, %"class.std::allocator"*) #7 {
+; Function Attrs: nobuiltin nounwind
+declare void @_ZdlPv(i8*) #6
+
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt22__uninitialized_copy_aISt13move_iteratorIPiES1_iET0_T_S4_S3_RSaIT1_E(i32* %__first.coerce, i32* %__last.coerce, i32* %__result, %"class.std::allocator"*) #5 {
   %__first = alloca %"class.std::move_iterator", align 8
   %__last = alloca %"class.std::move_iterator", align 8
   %2 = alloca i32*, align 8
@@ -1467,8 +1238,8 @@ define linkonce_odr i32* @_ZSt22__uninitialized_copy_aISt13move_iteratorIPiES1_i
   ret i32* %17
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt32__make_move_if_noexcept_iteratorIPiSt13move_iteratorIS0_EET0_T_(i32* %__i) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt32__make_move_if_noexcept_iteratorIPiSt13move_iteratorIS0_EET0_T_(i32* %__i) #5 {
   %1 = alloca %"class.std::move_iterator", align 8
   %2 = alloca i32*, align 8
   store i32* %__i, i32** %2, align 8
@@ -1492,8 +1263,8 @@ define linkonce_odr void @_ZNSt13move_iteratorIPiEC2ES0_(%"class.std::move_itera
   ret void
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt18uninitialized_copyISt13move_iteratorIPiES1_ET0_T_S4_S3_(i32* %__first.coerce, i32* %__last.coerce, i32* %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt18uninitialized_copyISt13move_iteratorIPiES1_ET0_T_S4_S3_(i32* %__first.coerce, i32* %__last.coerce, i32* %__result) #5 {
   %__first = alloca %"class.std::move_iterator", align 8
   %__last = alloca %"class.std::move_iterator", align 8
   %1 = alloca i32*, align 8
@@ -1521,8 +1292,8 @@ define linkonce_odr i32* @_ZSt18uninitialized_copyISt13move_iteratorIPiES1_ET0_T
   ret i32* %15
 }
 
-; Function Attrs: uwtable
-define linkonce_odr i32* @_ZNSt20__uninitialized_copyILb1EE13__uninit_copyISt13move_iteratorIPiES3_EET0_T_S6_S5_(i32* %__first.coerce, i32* %__last.coerce, i32* %__result) #4 align 2 {
+; Function Attrs: nounwind uwtable
+define linkonce_odr i32* @_ZNSt20__uninitialized_copyILb1EE13__uninit_copyISt13move_iteratorIPiES3_EET0_T_S6_S5_(i32* %__first.coerce, i32* %__last.coerce, i32* %__result) #3 align 2 {
   %__first = alloca %"class.std::move_iterator", align 8
   %__last = alloca %"class.std::move_iterator", align 8
   %1 = alloca i32*, align 8
@@ -1548,8 +1319,8 @@ define linkonce_odr i32* @_ZNSt20__uninitialized_copyILb1EE13__uninit_copyISt13m
   ret i32* %15
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt4copyISt13move_iteratorIPiES1_ET0_T_S4_S3_(i32* %__first.coerce, i32* %__last.coerce, i32* %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt4copyISt13move_iteratorIPiES1_ET0_T_S4_S3_(i32* %__first.coerce, i32* %__last.coerce, i32* %__result) #5 {
   %__first = alloca %"class.std::move_iterator", align 8
   %__last = alloca %"class.std::move_iterator", align 8
   %1 = alloca i32*, align 8
@@ -1577,8 +1348,8 @@ define linkonce_odr i32* @_ZSt4copyISt13move_iteratorIPiES1_ET0_T_S4_S3_(i32* %_
   ret i32* %17
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt14__copy_move_a2ILb1EPiS0_ET1_T0_S2_S1_(i32* %__first, i32* %__last, i32* %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt14__copy_move_a2ILb1EPiS0_ET1_T0_S2_S1_(i32* %__first, i32* %__last, i32* %__result) #5 {
   %1 = alloca i32*, align 8
   %2 = alloca i32*, align 8
   %3 = alloca i32*, align 8
@@ -1595,8 +1366,8 @@ define linkonce_odr i32* @_ZSt14__copy_move_a2ILb1EPiS0_ET1_T0_S2_S1_(i32* %__fi
   ret i32* %10
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt12__miter_baseISt13move_iteratorIPiEENSt11_Miter_baseIT_E13iterator_typeES4_(i32* %__it.coerce) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt12__miter_baseISt13move_iteratorIPiEENSt11_Miter_baseIT_E13iterator_typeES4_(i32* %__it.coerce) #5 {
   %__it = alloca %"class.std::move_iterator", align 8
   %1 = alloca %"class.std::move_iterator", align 8
   %2 = getelementptr %"class.std::move_iterator"* %__it, i32 0, i32 0
@@ -1610,8 +1381,8 @@ define linkonce_odr i32* @_ZSt12__miter_baseISt13move_iteratorIPiEENSt11_Miter_b
   ret i32* %7
 }
 
-; Function Attrs: uwtable
-define linkonce_odr i32* @_ZNSt10_Iter_baseISt13move_iteratorIPiELb1EE7_S_baseES2_(i32* %__it.coerce) #4 align 2 {
+; Function Attrs: nounwind uwtable
+define linkonce_odr i32* @_ZNSt10_Iter_baseISt13move_iteratorIPiELb1EE7_S_baseES2_(i32* %__it.coerce) #3 align 2 {
   %__it = alloca %"class.std::move_iterator", align 8
   %1 = getelementptr %"class.std::move_iterator"* %__it, i32 0, i32 0
   store i32* %__it.coerce, i32** %1
@@ -1629,8 +1400,8 @@ define linkonce_odr i32* @_ZNKSt13move_iteratorIPiE4baseEv(%"class.std::move_ite
   ret i32* %4
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt13__copy_move_aILb1EPiS0_ET1_T0_S2_S1_(i32* %__first, i32* %__last, i32* %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt13__copy_move_aILb1EPiS0_ET1_T0_S2_S1_(i32* %__first, i32* %__last, i32* %__result) #5 {
   %1 = alloca i32*, align 8
   %2 = alloca i32*, align 8
   %3 = alloca i32*, align 8
@@ -1646,8 +1417,8 @@ define linkonce_odr i32* @_ZSt13__copy_move_aILb1EPiS0_ET1_T0_S2_S1_(i32* %__fir
   ret i32* %7
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt12__niter_baseIPiENSt11_Niter_baseIT_E13iterator_typeES2_(i32* %__it) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt12__niter_baseIPiENSt11_Niter_baseIT_E13iterator_typeES2_(i32* %__it) #5 {
   %1 = alloca i32*, align 8
   store i32* %__it, i32** %1, align 8
   %2 = load i32** %1, align 8
@@ -1701,10 +1472,10 @@ define linkonce_odr i32* @_ZNSt11__copy_moveILb1ELb1ESt26random_access_iterator_
 }
 
 ; Function Attrs: nounwind
-declare void @llvm.memmove.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #2
+declare void @llvm.memmove.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #0
 
-; Function Attrs: uwtable
-define linkonce_odr i32* @_ZNSt16allocator_traitsISaIiEE8allocateERS0_m(%"class.std::allocator"* %__a, i64 %__n) #4 align 2 {
+; Function Attrs: nounwind uwtable
+define linkonce_odr i32* @_ZNSt16allocator_traitsISaIiEE8allocateERS0_m(%"class.std::allocator"* %__a, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::allocator"*, align 8
   %2 = alloca i64, align 8
   store %"class.std::allocator"* %__a, %"class.std::allocator"** %1, align 8
@@ -1716,8 +1487,8 @@ define linkonce_odr i32* @_ZNSt16allocator_traitsISaIiEE8allocateERS0_m(%"class.
   ret i32* %6
 }
 
-; Function Attrs: uwtable
-define linkonce_odr i32* @_ZN9__gnu_cxx13new_allocatorIiE8allocateEmPKv(%"class.__gnu_cxx::new_allocator"* %this, i64 %__n, i8*) #4 align 2 {
+; Function Attrs: nounwind uwtable
+define linkonce_odr i32* @_ZN9__gnu_cxx13new_allocatorIiE8allocateEmPKv(%"class.__gnu_cxx::new_allocator"* %this, i64 %__n, i8*) #3 align 2 {
   %2 = alloca %"class.__gnu_cxx::new_allocator"*, align 8
   %3 = alloca i64, align 8
   %4 = alloca i8*, align 8
@@ -1726,12 +1497,12 @@ define linkonce_odr i32* @_ZN9__gnu_cxx13new_allocatorIiE8allocateEmPKv(%"class.
   store i8* %0, i8** %4, align 8
   %5 = load %"class.__gnu_cxx::new_allocator"** %2
   %6 = load i64* %3, align 8
-  %7 = call i64 @_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv(%"class.__gnu_cxx::new_allocator"* %5) #2
+  %7 = call i64 @_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv(%"class.__gnu_cxx::new_allocator"* %5) #0
   %8 = icmp ugt i64 %6, %7
   br i1 %8, label %9, label %10
 
 ; <label>:9                                       ; preds = %1
-  call void @_ZSt17__throw_bad_allocv() #14
+  call void @_ZSt17__throw_bad_allocv() #9
   unreachable
 
 ; <label>:10                                      ; preds = %1
@@ -1751,7 +1522,7 @@ define linkonce_odr i64 @_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv(%"class.__g
 }
 
 ; Function Attrs: noreturn
-declare void @_ZSt17__throw_bad_allocv() #9
+declare void @_ZSt17__throw_bad_allocv() #7
 
 ; Function Attrs: nounwind uwtable
 define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %this) #3 align 2 {
@@ -1759,13 +1530,13 @@ define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* 
   store %"class.std::vector"* %this, %"class.std::vector"** %1, align 8
   %2 = load %"class.std::vector"** %1
   %3 = bitcast %"class.std::vector"* %2 to %"struct.std::_Vector_base"*
-  %4 = call %"class.std::allocator"* @_ZNKSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %3) #2
-  %5 = call i64 @_ZNSt16allocator_traitsISaIiEE8max_sizeERKS0_(%"class.std::allocator"* %4) #2
+  %4 = call %"class.std::allocator"* @_ZNKSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %3) #0
+  %5 = call i64 @_ZNSt16allocator_traitsISaIiEE8max_sizeERKS0_(%"class.std::allocator"* %4) #0
   ret i64 %5
 }
 
 ; Function Attrs: noreturn
-declare void @_ZSt20__throw_length_errorPKc(i8*) #9
+declare void @_ZSt20__throw_length_errorPKc(i8*) #7
 
 ; Function Attrs: nounwind uwtable
 define linkonce_odr i64* @_ZSt3maxImERKT_S2_S2_(i64* %__a, i64* %__b) #3 {
@@ -1802,7 +1573,7 @@ define linkonce_odr i64 @_ZNSt16allocator_traitsISaIiEE8max_sizeERKS0_(%"class.s
   store %"class.std::allocator"* %__a, %"class.std::allocator"** %1, align 8
   %2 = load %"class.std::allocator"** %1, align 8
   %3 = bitcast %"class.std::allocator"* %2 to %"class.__gnu_cxx::new_allocator"*
-  %4 = call i64 @_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv(%"class.__gnu_cxx::new_allocator"* %3) #2
+  %4 = call i64 @_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv(%"class.__gnu_cxx::new_allocator"* %3) #0
   ret i64 %4
 }
 
@@ -1833,7 +1604,7 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJRKiEEEvPT_
 ; <label>:8                                       ; preds = %0
   %9 = bitcast i8* %6 to i32*
   %10 = load i32** %3, align 8
-  %11 = call i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* %10) #2
+  %11 = call i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* %10) #0
   %12 = load i32* %11
   store i32 %12, i32* %9, align 4
   br label %13
@@ -1846,55 +1617,34 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJRKiEEEvPT_
 ; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEED2Ev(%"struct.std::_Vector_base"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"struct.std::_Vector_base"*, align 8
-  %2 = alloca i8*
-  %3 = alloca i32
   store %"struct.std::_Vector_base"* %this, %"struct.std::_Vector_base"** %1, align 8
-  %4 = load %"struct.std::_Vector_base"** %1
-  %5 = getelementptr inbounds %"struct.std::_Vector_base"* %4, i32 0, i32 0
-  %6 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %5, i32 0, i32 0
-  %7 = load i32** %6, align 8
-  %8 = getelementptr inbounds %"struct.std::_Vector_base"* %4, i32 0, i32 0
-  %9 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %8, i32 0, i32 2
-  %10 = load i32** %9, align 8
-  %11 = getelementptr inbounds %"struct.std::_Vector_base"* %4, i32 0, i32 0
-  %12 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %11, i32 0, i32 0
-  %13 = load i32** %12, align 8
-  %14 = ptrtoint i32* %10 to i64
-  %15 = ptrtoint i32* %13 to i64
-  %16 = sub i64 %14, %15
-  %17 = sdiv exact i64 %16, 4
-  invoke void @_ZNSt12_Vector_baseIiSaIiEE13_M_deallocateEPim(%"struct.std::_Vector_base"* %4, i32* %7, i64 %17)
-          to label %18 unwind label %20
-
-; <label>:18                                      ; preds = %0
-  %19 = getelementptr inbounds %"struct.std::_Vector_base"* %4, i32 0, i32 0
-  call void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implD2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %19) #2
+  %2 = load %"struct.std::_Vector_base"** %1
+  %3 = getelementptr inbounds %"struct.std::_Vector_base"* %2, i32 0, i32 0
+  %4 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %3, i32 0, i32 0
+  %5 = load i32** %4, align 8
+  %6 = getelementptr inbounds %"struct.std::_Vector_base"* %2, i32 0, i32 0
+  %7 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %6, i32 0, i32 2
+  %8 = load i32** %7, align 8
+  %9 = getelementptr inbounds %"struct.std::_Vector_base"* %2, i32 0, i32 0
+  %10 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %9, i32 0, i32 0
+  %11 = load i32** %10, align 8
+  %12 = ptrtoint i32* %8 to i64
+  %13 = ptrtoint i32* %11 to i64
+  %14 = sub i64 %12, %13
+  %15 = sdiv exact i64 %14, 4
+  call void @_ZNSt12_Vector_baseIiSaIiEE13_M_deallocateEPim(%"struct.std::_Vector_base"* %2, i32* %5, i64 %15)
+  %16 = getelementptr inbounds %"struct.std::_Vector_base"* %2, i32 0, i32 0
+  call void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implD2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %16) #0
   ret void
-
-; <label>:20                                      ; preds = %0
-  %21 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %22 = extractvalue { i8*, i32 } %21, 0
-  store i8* %22, i8** %2
-  %23 = extractvalue { i8*, i32 } %21, 1
-  store i32 %23, i32* %3
-  %24 = getelementptr inbounds %"struct.std::_Vector_base"* %4, i32 0, i32 0
-  call void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implD2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %24) #2
-  br label %25
-
-; <label>:25                                      ; preds = %20
-  %26 = load i8** %2
-  call void @__clang_call_terminate(i8* %26) #11
-  unreachable
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implD2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this) unnamed_addr #10 align 2 {
+define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implD2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this) unnamed_addr #5 align 2 {
   %1 = alloca %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"*, align 8
   store %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this, %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"** %1, align 8
   %2 = load %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"** %1
   %3 = bitcast %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %2 to %"class.std::allocator"*
-  call void @_ZNSaIiED2Ev(%"class.std::allocator"* %3) #2
+  call void @_ZNSaIiED2Ev(%"class.std::allocator"* %3) #0
   ret void
 }
 
@@ -1904,7 +1654,7 @@ define linkonce_odr void @_ZNSaIiED2Ev(%"class.std::allocator"* %this) unnamed_a
   store %"class.std::allocator"* %this, %"class.std::allocator"** %1, align 8
   %2 = load %"class.std::allocator"** %1
   %3 = bitcast %"class.std::allocator"* %2 to %"class.__gnu_cxx::new_allocator"*
-  call void @_ZN9__gnu_cxx13new_allocatorIiED2Ev(%"class.__gnu_cxx::new_allocator"* %3) #2
+  call void @_ZN9__gnu_cxx13new_allocatorIiED2Ev(%"class.__gnu_cxx::new_allocator"* %3) #0
   ret void
 }
 
@@ -1916,8 +1666,8 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiED2Ev(%"class.__gnu_cxx:
   ret void
 }
 
-; Function Attrs: uwtable
-define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEEC2Ev(%"struct.std::_Vector_base"* %this) unnamed_addr #4 align 2 {
+; Function Attrs: nounwind uwtable
+define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEEC2Ev(%"struct.std::_Vector_base"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"struct.std::_Vector_base"*, align 8
   store %"struct.std::_Vector_base"* %this, %"struct.std::_Vector_base"** %1, align 8
   %2 = load %"struct.std::_Vector_base"** %1
@@ -1932,7 +1682,7 @@ define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implC2Ev(%"struct
   store %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this, %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"** %1, align 8
   %2 = load %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"** %1
   %3 = bitcast %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %2 to %"class.std::allocator"*
-  call void @_ZNSaIiEC2Ev(%"class.std::allocator"* %3) #2
+  call void @_ZNSaIiEC2Ev(%"class.std::allocator"* %3) #0
   %4 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %2, i32 0, i32 0
   store i32* null, i32** %4, align 8
   %5 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %2, i32 0, i32 1
@@ -1948,7 +1698,7 @@ define linkonce_odr void @_ZNSaIiEC2Ev(%"class.std::allocator"* %this) unnamed_a
   store %"class.std::allocator"* %this, %"class.std::allocator"** %1, align 8
   %2 = load %"class.std::allocator"** %1
   %3 = bitcast %"class.std::allocator"* %2 to %"class.__gnu_cxx::new_allocator"*
-  call void @_ZN9__gnu_cxx13new_allocatorIiEC2Ev(%"class.__gnu_cxx::new_allocator"* %3) #2
+  call void @_ZN9__gnu_cxx13new_allocatorIiEC2Ev(%"class.__gnu_cxx::new_allocator"* %3) #0
   ret void
 }
 
@@ -1960,27 +1710,23 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiEC2Ev(%"class.__gnu_cxx:
   ret void
 }
 
-define internal void @_GLOBAL__I_a() section ".text.startup" {
+; Function Attrs: nounwind
+define internal void @_GLOBAL__I_a() #0 section ".text.startup" {
   call void @__cxx_global_var_init()
   call void @__cxx_global_var_init1()
   ret void
 }
 
-attributes #0 = { "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #1 = { nounwind "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #2 = { nounwind }
+attributes #0 = { nounwind }
+attributes #1 = { "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #3 = { nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #4 = { uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #5 = { nobuiltin "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nobuiltin "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #5 = { inlinehint nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #6 = { nobuiltin nounwind "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #7 = { inlinehint uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #8 = { noinline noreturn nounwind }
-attributes #9 = { noreturn "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #10 = { inlinehint nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #11 = { noreturn nounwind }
-attributes #12 = { builtin }
-attributes #13 = { builtin nounwind }
-attributes #14 = { noreturn }
+attributes #7 = { noreturn "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #8 = { builtin }
+attributes #9 = { noreturn }
 
 !llvm.ident = !{!0}
 

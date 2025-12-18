@@ -72,106 +72,85 @@ target triple = "x86_64-unknown-linux-gnu"
 @.str2 = private unnamed_addr constant [28 x i8] c"vector::_M_emplace_back_aux\00", align 1
 @llvm.global_ctors = appending global [1 x { i32, void ()* }] [{ i32, void ()* } { i32 65535, void ()* @_GLOBAL__I_a }]
 
-define internal void @__cxx_global_var_init() section ".text.startup" {
+; Function Attrs: nounwind
+define internal void @__cxx_global_var_init() #0 section ".text.startup" {
   call void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"* @_ZStL8__ioinit)
-  %1 = call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::ios_base::Init"*)* @_ZNSt8ios_base4InitD1Ev to void (i8*)*), i8* getelementptr inbounds (%"class.std::ios_base::Init"* @_ZStL8__ioinit, i32 0, i32 0), i8* @__dso_handle) #2
+  %1 = call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::ios_base::Init"*)* @_ZNSt8ios_base4InitD1Ev to void (i8*)*), i8* getelementptr inbounds (%"class.std::ios_base::Init"* @_ZStL8__ioinit, i32 0, i32 0), i8* @__dso_handle) #0
   ret void
 }
 
-declare void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"*) #0
+declare void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"*) #1
 
 ; Function Attrs: nounwind
-declare void @_ZNSt8ios_base4InitD1Ev(%"class.std::ios_base::Init"*) #1
+declare void @_ZNSt8ios_base4InitD1Ev(%"class.std::ios_base::Init"*) #2
 
 ; Function Attrs: nounwind
-declare i32 @__cxa_atexit(void (i8*)*, i8*, i8*) #2
+declare i32 @__cxa_atexit(void (i8*)*, i8*, i8*) #0
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define %struct.TreeNode* @_Z6insertP8TreeNodei(%struct.TreeNode* %root, i32 %val) #3 {
   %1 = alloca %struct.TreeNode*, align 8
   %2 = alloca %struct.TreeNode*, align 8
   %3 = alloca i32, align 4
-  %4 = alloca i8*
-  %5 = alloca i32
   store %struct.TreeNode* %root, %struct.TreeNode** %2, align 8
   store i32 %val, i32* %3, align 4
-  %6 = load %struct.TreeNode** %2, align 8
-  %7 = icmp ne %struct.TreeNode* %6, null
-  br i1 %7, label %17, label %8
+  %4 = load %struct.TreeNode** %2, align 8
+  %5 = icmp ne %struct.TreeNode* %4, null
+  br i1 %5, label %10, label %6
 
-; <label>:8                                       ; preds = %0
-  %9 = call noalias i8* @_Znwm(i64 24) #11
-  %10 = bitcast i8* %9 to %struct.TreeNode*
+; <label>:6                                       ; preds = %0
+  %7 = call noalias i8* @_Znwm(i64 24) #8
+  %8 = bitcast i8* %7 to %struct.TreeNode*
+  %9 = load i32* %3, align 4
+  call void @_ZN8TreeNodeC2Ei(%struct.TreeNode* %8, i32 %9)
+  store %struct.TreeNode* %8, %struct.TreeNode** %1
+  br label %34
+
+; <label>:10                                      ; preds = %0
   %11 = load i32* %3, align 4
-  invoke void @_ZN8TreeNodeC2Ei(%struct.TreeNode* %10, i32 %11)
-          to label %12 unwind label %13
+  %12 = load %struct.TreeNode** %2, align 8
+  %13 = getelementptr inbounds %struct.TreeNode* %12, i32 0, i32 0
+  %14 = load i32* %13, align 4
+  %15 = icmp slt i32 %11, %14
+  br i1 %15, label %16, label %24
 
-; <label>:12                                      ; preds = %8
-  store %struct.TreeNode* %10, %struct.TreeNode** %1
-  br label %41
+; <label>:16                                      ; preds = %10
+  %17 = load %struct.TreeNode** %2, align 8
+  %18 = getelementptr inbounds %struct.TreeNode* %17, i32 0, i32 1
+  %19 = load %struct.TreeNode** %18, align 8
+  %20 = load i32* %3, align 4
+  %21 = call %struct.TreeNode* @_Z6insertP8TreeNodei(%struct.TreeNode* %19, i32 %20)
+  %22 = load %struct.TreeNode** %2, align 8
+  %23 = getelementptr inbounds %struct.TreeNode* %22, i32 0, i32 1
+  store %struct.TreeNode* %21, %struct.TreeNode** %23, align 8
+  br label %32
 
-; <label>:13                                      ; preds = %8
-  %14 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %15 = extractvalue { i8*, i32 } %14, 0
-  store i8* %15, i8** %4
-  %16 = extractvalue { i8*, i32 } %14, 1
-  store i32 %16, i32* %5
-  call void @_ZdlPv(i8* %9) #12
-  br label %43
+; <label>:24                                      ; preds = %10
+  %25 = load %struct.TreeNode** %2, align 8
+  %26 = getelementptr inbounds %struct.TreeNode* %25, i32 0, i32 2
+  %27 = load %struct.TreeNode** %26, align 8
+  %28 = load i32* %3, align 4
+  %29 = call %struct.TreeNode* @_Z6insertP8TreeNodei(%struct.TreeNode* %27, i32 %28)
+  %30 = load %struct.TreeNode** %2, align 8
+  %31 = getelementptr inbounds %struct.TreeNode* %30, i32 0, i32 2
+  store %struct.TreeNode* %29, %struct.TreeNode** %31, align 8
+  br label %32
 
-; <label>:17                                      ; preds = %0
-  %18 = load i32* %3, align 4
-  %19 = load %struct.TreeNode** %2, align 8
-  %20 = getelementptr inbounds %struct.TreeNode* %19, i32 0, i32 0
-  %21 = load i32* %20, align 4
-  %22 = icmp slt i32 %18, %21
-  br i1 %22, label %23, label %31
+; <label>:32                                      ; preds = %24, %16
+  %33 = load %struct.TreeNode** %2, align 8
+  store %struct.TreeNode* %33, %struct.TreeNode** %1
+  br label %34
 
-; <label>:23                                      ; preds = %17
-  %24 = load %struct.TreeNode** %2, align 8
-  %25 = getelementptr inbounds %struct.TreeNode* %24, i32 0, i32 1
-  %26 = load %struct.TreeNode** %25, align 8
-  %27 = load i32* %3, align 4
-  %28 = call %struct.TreeNode* @_Z6insertP8TreeNodei(%struct.TreeNode* %26, i32 %27)
-  %29 = load %struct.TreeNode** %2, align 8
-  %30 = getelementptr inbounds %struct.TreeNode* %29, i32 0, i32 1
-  store %struct.TreeNode* %28, %struct.TreeNode** %30, align 8
-  br label %39
-
-; <label>:31                                      ; preds = %17
-  %32 = load %struct.TreeNode** %2, align 8
-  %33 = getelementptr inbounds %struct.TreeNode* %32, i32 0, i32 2
-  %34 = load %struct.TreeNode** %33, align 8
-  %35 = load i32* %3, align 4
-  %36 = call %struct.TreeNode* @_Z6insertP8TreeNodei(%struct.TreeNode* %34, i32 %35)
-  %37 = load %struct.TreeNode** %2, align 8
-  %38 = getelementptr inbounds %struct.TreeNode* %37, i32 0, i32 2
-  store %struct.TreeNode* %36, %struct.TreeNode** %38, align 8
-  br label %39
-
-; <label>:39                                      ; preds = %31, %23
-  %40 = load %struct.TreeNode** %2, align 8
-  store %struct.TreeNode* %40, %struct.TreeNode** %1
-  br label %41
-
-; <label>:41                                      ; preds = %39, %12
-  %42 = load %struct.TreeNode** %1
-  ret %struct.TreeNode* %42
-
-; <label>:43                                      ; preds = %13
-  %44 = load i8** %4
-  %45 = load i32* %5
-  %46 = insertvalue { i8*, i32 } undef, i8* %44, 0
-  %47 = insertvalue { i8*, i32 } %46, i32 %45, 1
-  resume { i8*, i32 } %47
+; <label>:34                                      ; preds = %32, %6
+  %35 = load %struct.TreeNode** %1
+  ret %struct.TreeNode* %35
 }
 
 ; Function Attrs: nobuiltin
 declare noalias i8* @_Znwm(i64) #4
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN8TreeNodeC2Ei(%struct.TreeNode* %this, i32 %x) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZN8TreeNodeC2Ei(%struct.TreeNode* %this, i32 %x) unnamed_addr #3 align 2 {
   %1 = alloca %struct.TreeNode*, align 8
   %2 = alloca i32, align 4
   store %struct.TreeNode* %this, %struct.TreeNode** %1, align 8
@@ -187,318 +166,184 @@ define linkonce_odr void @_ZN8TreeNodeC2Ei(%struct.TreeNode* %this, i32 %x) unna
   ret void
 }
 
-declare i32 @__gxx_personality_v0(...)
-
-; Function Attrs: nobuiltin nounwind
-declare void @_ZdlPv(i8*) #6
-
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define i32 @main(i32 %argc, i8** %argv) #3 {
   %1 = alloca i32, align 4
   %2 = alloca i32, align 4
   %3 = alloca i8**, align 8
   %filename = alloca %"class.std::__cxx11::basic_string", align 8
   %4 = alloca %"class.std::allocator", align 1
-  %5 = alloca i8*
-  %6 = alloca i32
   %file = alloca %"class.std::basic_ifstream", align 8
   %num = alloca i32, align 4
   %root = alloca %struct.TreeNode*, align 8
   %f = alloca %"class.std::vector", align 8
+  %5 = alloca i32, align 4
+  %6 = alloca i32, align 4
   %7 = alloca i32, align 4
   %8 = alloca i32, align 4
   %9 = alloca i32, align 4
-  %10 = alloca i32, align 4
-  %11 = alloca i32, align 4
   %i = alloca i64, align 8
   %sol = alloca %class.Solution, align 1
   %result = alloca %"class.std::vector", align 8
   %i1 = alloca i64, align 8
-  %12 = alloca i32
+  %10 = alloca i32
   store i32 0, i32* %1
   store i32 %argc, i32* %2, align 4
   store i8** %argv, i8*** %3, align 8
-  call void @_ZNSaIcEC1Ev(%"class.std::allocator"* %4) #2
-  invoke void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EPKcRKS3_(%"class.std::__cxx11::basic_string"* %filename, i8* getelementptr inbounds ([12 x i8]* @.str, i32 0, i32 0), %"class.std::allocator"* %4)
-          to label %13 unwind label %22
+  call void @_ZNSaIcEC1Ev(%"class.std::allocator"* %4) #0
+  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EPKcRKS3_(%"class.std::__cxx11::basic_string"* %filename, i8* getelementptr inbounds ([12 x i8]* @.str, i32 0, i32 0), %"class.std::allocator"* %4)
+  call void @_ZNSaIcED1Ev(%"class.std::allocator"* %4) #0
+  %11 = load i32* %2, align 4
+  %12 = icmp sgt i32 %11, 1
+  br i1 %12, label %13, label %18
 
 ; <label>:13                                      ; preds = %0
-  call void @_ZNSaIcED1Ev(%"class.std::allocator"* %4) #2
-  %14 = load i32* %2, align 4
-  %15 = icmp sgt i32 %14, 1
-  br i1 %15, label %16, label %30
+  %14 = load i8*** %3, align 8
+  %15 = getelementptr inbounds i8** %14, i64 1
+  %16 = load i8** %15, align 8
+  %17 = call %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEaSEPKc(%"class.std::__cxx11::basic_string"* %filename, i8* %16)
+  br label %18
 
-; <label>:16                                      ; preds = %13
-  %17 = load i8*** %3, align 8
-  %18 = getelementptr inbounds i8** %17, i64 1
-  %19 = load i8** %18, align 8
-  %20 = invoke %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEaSEPKc(%"class.std::__cxx11::basic_string"* %filename, i8* %19)
-          to label %21 unwind label %26
-
-; <label>:21                                      ; preds = %16
-  br label %30
-
-; <label>:22                                      ; preds = %0
-  %23 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %24 = extractvalue { i8*, i32 } %23, 0
-  store i8* %24, i8** %5
-  %25 = extractvalue { i8*, i32 } %23, 1
-  store i32 %25, i32* %6
-  call void @_ZNSaIcED1Ev(%"class.std::allocator"* %4) #2
-  br label %114
-
-; <label>:26                                      ; preds = %30, %16
-  %27 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %28 = extractvalue { i8*, i32 } %27, 0
-  store i8* %28, i8** %5
-  %29 = extractvalue { i8*, i32 } %27, 1
-  store i32 %29, i32* %6
-  br label %113
-
-; <label>:30                                      ; preds = %21, %13
-  %31 = call i8* @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv(%"class.std::__cxx11::basic_string"* %filename) #2
-  invoke void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEEC1EPKcSt13_Ios_Openmode(%"class.std::basic_ifstream"* %file, i8* %31, i32 8)
-          to label %32 unwind label %26
-
-; <label>:32                                      ; preds = %30
+; <label>:18                                      ; preds = %13, %0
+  %19 = call i8* @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv(%"class.std::__cxx11::basic_string"* %filename) #0
+  call void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEEC1EPKcSt13_Ios_Openmode(%"class.std::basic_ifstream"* %file, i8* %19, i32 8)
   store %struct.TreeNode* null, %struct.TreeNode** %root, align 8
-  %33 = invoke zeroext i1 @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE7is_openEv(%"class.std::basic_ifstream"* %file)
-          to label %34 unwind label %55
+  %20 = call zeroext i1 @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE7is_openEv(%"class.std::basic_ifstream"* %file)
+  br i1 %20, label %36, label %21
 
-; <label>:34                                      ; preds = %32
-  br i1 %33, label %64, label %35
-
-; <label>:35                                      ; preds = %34
-  call void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %f) #2
-  store i32 1, i32* %7
-  invoke void @_ZNSt6vectorIiSaIiEE9push_backEOi(%"class.std::vector"* %f, i32* %7)
-          to label %36 unwind label %59
-
-; <label>:36                                      ; preds = %35
-  store i32 2, i32* %8
-  invoke void @_ZNSt6vectorIiSaIiEE9push_backEOi(%"class.std::vector"* %f, i32* %8)
-          to label %37 unwind label %59
-
-; <label>:37                                      ; preds = %36
-  store i32 3, i32* %9
-  invoke void @_ZNSt6vectorIiSaIiEE9push_backEOi(%"class.std::vector"* %f, i32* %9)
-          to label %38 unwind label %59
-
-; <label>:38                                      ; preds = %37
-  store i32 4, i32* %10
-  invoke void @_ZNSt6vectorIiSaIiEE9push_backEOi(%"class.std::vector"* %f, i32* %10)
-          to label %39 unwind label %59
-
-; <label>:39                                      ; preds = %38
-  store i32 5, i32* %11
-  invoke void @_ZNSt6vectorIiSaIiEE9push_backEOi(%"class.std::vector"* %f, i32* %11)
-          to label %40 unwind label %59
-
-; <label>:40                                      ; preds = %39
+; <label>:21                                      ; preds = %18
+  call void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %f) #0
+  store i32 1, i32* %5
+  call void @_ZNSt6vectorIiSaIiEE9push_backEOi(%"class.std::vector"* %f, i32* %5)
+  store i32 2, i32* %6
+  call void @_ZNSt6vectorIiSaIiEE9push_backEOi(%"class.std::vector"* %f, i32* %6)
+  store i32 3, i32* %7
+  call void @_ZNSt6vectorIiSaIiEE9push_backEOi(%"class.std::vector"* %f, i32* %7)
+  store i32 4, i32* %8
+  call void @_ZNSt6vectorIiSaIiEE9push_backEOi(%"class.std::vector"* %f, i32* %8)
+  store i32 5, i32* %9
+  call void @_ZNSt6vectorIiSaIiEE9push_backEOi(%"class.std::vector"* %f, i32* %9)
   store i64 0, i64* %i, align 8
-  br label %41
+  br label %22
 
-; <label>:41                                      ; preds = %52, %40
-  %42 = load i64* %i, align 8
-  %43 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %f) #2
-  %44 = icmp ult i64 %42, %43
-  br i1 %44, label %45, label %63
+; <label>:22                                      ; preds = %32, %21
+  %23 = load i64* %i, align 8
+  %24 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %f) #0
+  %25 = icmp ult i64 %23, %24
+  br i1 %25, label %26, label %35
 
-; <label>:45                                      ; preds = %41
-  %46 = load %struct.TreeNode** %root, align 8
-  %47 = load i64* %i, align 8
-  %48 = call i32* @_ZNSt6vectorIiSaIiEEixEm(%"class.std::vector"* %f, i64 %47) #2
-  %49 = load i32* %48
-  %50 = invoke %struct.TreeNode* @_Z6insertP8TreeNodei(%struct.TreeNode* %46, i32 %49)
-          to label %51 unwind label %59
+; <label>:26                                      ; preds = %22
+  %27 = load %struct.TreeNode** %root, align 8
+  %28 = load i64* %i, align 8
+  %29 = call i32* @_ZNSt6vectorIiSaIiEEixEm(%"class.std::vector"* %f, i64 %28) #0
+  %30 = load i32* %29
+  %31 = call %struct.TreeNode* @_Z6insertP8TreeNodei(%struct.TreeNode* %27, i32 %30)
+  store %struct.TreeNode* %31, %struct.TreeNode** %root, align 8
+  br label %32
 
-; <label>:51                                      ; preds = %45
-  store %struct.TreeNode* %50, %struct.TreeNode** %root, align 8
-  br label %52
+; <label>:32                                      ; preds = %26
+  %33 = load i64* %i, align 8
+  %34 = add i64 %33, 1
+  store i64 %34, i64* %i, align 8
+  br label %22
 
-; <label>:52                                      ; preds = %51
-  %53 = load i64* %i, align 8
-  %54 = add i64 %53, 1
-  store i64 %54, i64* %i, align 8
-  br label %41
+; <label>:35                                      ; preds = %22
+  call void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %f) #0
+  br label %54
 
-; <label>:55                                      ; preds = %86, %84, %79, %68, %65, %32
-  %56 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %57 = extractvalue { i8*, i32 } %56, 0
-  store i8* %57, i8** %5
-  %58 = extractvalue { i8*, i32 } %56, 1
-  store i32 %58, i32* %6
-  br label %112
+; <label>:36                                      ; preds = %18
+  br label %37
 
-; <label>:59                                      ; preds = %45, %39, %38, %37, %36, %35
-  %60 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %61 = extractvalue { i8*, i32 } %60, 0
-  store i8* %61, i8** %5
-  %62 = extractvalue { i8*, i32 } %60, 1
-  store i32 %62, i32* %6
-  call void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %f) #2
-  br label %112
+; <label>:37                                      ; preds = %49, %36
+  %38 = bitcast %"class.std::basic_ifstream"* %file to %"class.std::basic_istream"*
+  %39 = call %"class.std::basic_istream"* @_ZNSirsERi(%"class.std::basic_istream"* %38, i32* %num)
+  %40 = bitcast %"class.std::basic_istream"* %39 to i8**
+  %41 = load i8** %40
+  %42 = getelementptr i8* %41, i64 -24
+  %43 = bitcast i8* %42 to i64*
+  %44 = load i64* %43
+  %45 = bitcast %"class.std::basic_istream"* %39 to i8*
+  %46 = getelementptr inbounds i8* %45, i64 %44
+  %47 = bitcast i8* %46 to %"class.std::basic_ios"*
+  %48 = call zeroext i1 @_ZNKSt9basic_iosIcSt11char_traitsIcEEcvbEv(%"class.std::basic_ios"* %47)
+  br i1 %48, label %49, label %53
 
-; <label>:63                                      ; preds = %41
-  call void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %f) #2
-  br label %86
+; <label>:49                                      ; preds = %37
+  %50 = load %struct.TreeNode** %root, align 8
+  %51 = load i32* %num, align 4
+  %52 = call %struct.TreeNode* @_Z6insertP8TreeNodei(%struct.TreeNode* %50, i32 %51)
+  store %struct.TreeNode* %52, %struct.TreeNode** %root, align 8
+  br label %37
 
-; <label>:64                                      ; preds = %34
-  br label %65
+; <label>:53                                      ; preds = %37
+  call void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE5closeEv(%"class.std::basic_ifstream"* %file)
+  br label %54
 
-; <label>:65                                      ; preds = %83, %64
-  %66 = bitcast %"class.std::basic_ifstream"* %file to %"class.std::basic_istream"*
-  %67 = invoke %"class.std::basic_istream"* @_ZNSirsERi(%"class.std::basic_istream"* %66, i32* %num)
-          to label %68 unwind label %55
-
-; <label>:68                                      ; preds = %65
-  %69 = bitcast %"class.std::basic_istream"* %67 to i8**
-  %70 = load i8** %69
-  %71 = getelementptr i8* %70, i64 -24
-  %72 = bitcast i8* %71 to i64*
-  %73 = load i64* %72
-  %74 = bitcast %"class.std::basic_istream"* %67 to i8*
-  %75 = getelementptr inbounds i8* %74, i64 %73
-  %76 = bitcast i8* %75 to %"class.std::basic_ios"*
-  %77 = invoke zeroext i1 @_ZNKSt9basic_iosIcSt11char_traitsIcEEcvbEv(%"class.std::basic_ios"* %76)
-          to label %78 unwind label %55
-
-; <label>:78                                      ; preds = %68
-  br i1 %77, label %79, label %84
-
-; <label>:79                                      ; preds = %78
-  %80 = load %struct.TreeNode** %root, align 8
-  %81 = load i32* %num, align 4
-  %82 = invoke %struct.TreeNode* @_Z6insertP8TreeNodei(%struct.TreeNode* %80, i32 %81)
-          to label %83 unwind label %55
-
-; <label>:83                                      ; preds = %79
-  store %struct.TreeNode* %82, %struct.TreeNode** %root, align 8
-  br label %65
-
-; <label>:84                                      ; preds = %78
-  invoke void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE5closeEv(%"class.std::basic_ifstream"* %file)
-          to label %85 unwind label %55
-
-; <label>:85                                      ; preds = %84
-  br label %86
-
-; <label>:86                                      ; preds = %85, %63
-  %87 = load %struct.TreeNode** %root, align 8
-  invoke void @_ZN8Solution18postorderTraversalEP8TreeNode(%"class.std::vector"* sret %result, %class.Solution* %sol, %struct.TreeNode* %87)
-          to label %88 unwind label %55
-
-; <label>:88                                      ; preds = %86
+; <label>:54                                      ; preds = %53, %35
+  %55 = load %struct.TreeNode** %root, align 8
+  call void @_ZN8Solution18postorderTraversalEP8TreeNode(%"class.std::vector"* sret %result, %class.Solution* %sol, %struct.TreeNode* %55)
   store i64 0, i64* %i1, align 8
-  br label %89
+  br label %56
 
-; <label>:89                                      ; preds = %101, %88
-  %90 = load i64* %i1, align 8
-  %91 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %result) #2
-  %92 = icmp ult i64 %90, %91
-  br i1 %92, label %93, label %108
+; <label>:56                                      ; preds = %66, %54
+  %57 = load i64* %i1, align 8
+  %58 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %result) #0
+  %59 = icmp ult i64 %57, %58
+  br i1 %59, label %60, label %69
 
-; <label>:93                                      ; preds = %89
-  %94 = load i64* %i1, align 8
-  %95 = call i32* @_ZNSt6vectorIiSaIiEEixEm(%"class.std::vector"* %result, i64 %94) #2
-  %96 = load i32* %95
-  %97 = invoke %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* @_ZSt4cout, i32 %96)
-          to label %98 unwind label %104
+; <label>:60                                      ; preds = %56
+  %61 = load i64* %i1, align 8
+  %62 = call i32* @_ZNSt6vectorIiSaIiEEixEm(%"class.std::vector"* %result, i64 %61) #0
+  %63 = load i32* %62
+  %64 = call %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* @_ZSt4cout, i32 %63)
+  %65 = call %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* %64, i8* getelementptr inbounds ([2 x i8]* @.str1, i32 0, i32 0))
+  br label %66
 
-; <label>:98                                      ; preds = %93
-  %99 = invoke %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* %97, i8* getelementptr inbounds ([2 x i8]* @.str1, i32 0, i32 0))
-          to label %100 unwind label %104
+; <label>:66                                      ; preds = %60
+  %67 = load i64* %i1, align 8
+  %68 = add i64 %67, 1
+  store i64 %68, i64* %i1, align 8
+  br label %56
 
-; <label>:100                                     ; preds = %98
-  br label %101
-
-; <label>:101                                     ; preds = %100
-  %102 = load i64* %i1, align 8
-  %103 = add i64 %102, 1
-  store i64 %103, i64* %i1, align 8
-  br label %89
-
-; <label>:104                                     ; preds = %108, %98, %93
-  %105 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %106 = extractvalue { i8*, i32 } %105, 0
-  store i8* %106, i8** %5
-  %107 = extractvalue { i8*, i32 } %105, 1
-  store i32 %107, i32* %6
-  call void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %result) #2
-  br label %112
-
-; <label>:108                                     ; preds = %89
-  %109 = invoke %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* @_ZSt4cout, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
-          to label %110 unwind label %104
-
-; <label>:110                                     ; preds = %108
+; <label>:69                                      ; preds = %56
+  %70 = call %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* @_ZSt4cout, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
   store i32 0, i32* %1
-  store i32 1, i32* %12
-  call void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %result) #2
-  call void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev(%"class.std::basic_ifstream"* %file) #2
-  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"* %filename) #2
-  %111 = load i32* %1
-  ret i32 %111
-
-; <label>:112                                     ; preds = %104, %59, %55
-  call void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev(%"class.std::basic_ifstream"* %file) #2
-  br label %113
-
-; <label>:113                                     ; preds = %112, %26
-  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"* %filename) #2
-  br label %114
-
-; <label>:114                                     ; preds = %113, %22
-  %115 = load i8** %5
-  %116 = load i32* %6
-  %117 = insertvalue { i8*, i32 } undef, i8* %115, 0
-  %118 = insertvalue { i8*, i32 } %117, i32 %116, 1
-  resume { i8*, i32 } %118
+  store i32 1, i32* %10
+  call void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %result) #0
+  call void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev(%"class.std::basic_ifstream"* %file) #0
+  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"* %filename) #0
+  %71 = load i32* %1
+  ret i32 %71
 }
 
-declare void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EPKcRKS3_(%"class.std::__cxx11::basic_string"*, i8*, %"class.std::allocator"*) #0
+declare void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EPKcRKS3_(%"class.std::__cxx11::basic_string"*, i8*, %"class.std::allocator"*) #1
 
 ; Function Attrs: nounwind
-declare void @_ZNSaIcEC1Ev(%"class.std::allocator"*) #1
+declare void @_ZNSaIcEC1Ev(%"class.std::allocator"*) #2
 
 ; Function Attrs: nounwind
-declare void @_ZNSaIcED1Ev(%"class.std::allocator"*) #1
+declare void @_ZNSaIcED1Ev(%"class.std::allocator"*) #2
 
-declare %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEaSEPKc(%"class.std::__cxx11::basic_string"*, i8*) #0
+declare %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEaSEPKc(%"class.std::__cxx11::basic_string"*, i8*) #1
 
-declare void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEEC1EPKcSt13_Ios_Openmode(%"class.std::basic_ifstream"*, i8*, i32) #0
+declare void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEEC1EPKcSt13_Ios_Openmode(%"class.std::basic_ifstream"*, i8*, i32) #1
 
 ; Function Attrs: nounwind
-declare i8* @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv(%"class.std::__cxx11::basic_string"*) #1
+declare i8* @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv(%"class.std::__cxx11::basic_string"*) #2
 
-declare zeroext i1 @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE7is_openEv(%"class.std::basic_ifstream"*) #0
+declare zeroext i1 @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE7is_openEv(%"class.std::basic_ifstream"*) #1
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
   store %"class.std::vector"* %this, %"class.std::vector"** %1, align 8
   %2 = load %"class.std::vector"** %1
   %3 = bitcast %"class.std::vector"* %2 to %"struct.std::_Vector_base"*
-  invoke void @_ZNSt12_Vector_baseIiSaIiEEC2Ev(%"struct.std::_Vector_base"* %3)
-          to label %4 unwind label %5
-
-; <label>:4                                       ; preds = %0
+  call void @_ZNSt12_Vector_baseIiSaIiEEC2Ev(%"struct.std::_Vector_base"* %3)
   ret void
-
-; <label>:5                                       ; preds = %0
-  %6 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %7 = extractvalue { i8*, i32 } %6, 0
-  call void @__clang_call_terminate(i8* %7) #13
-  unreachable
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt6vectorIiSaIiEE9push_backEOi(%"class.std::vector"* %this, i32* %__x) #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
   %2 = alloca i32*, align 8
@@ -506,13 +351,13 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE9push_backEOi(%"class.std::vector"
   store i32* %__x, i32** %2, align 8
   %3 = load %"class.std::vector"** %1
   %4 = load i32** %2, align 8
-  %5 = call i32* @_ZSt4moveIRiEONSt16remove_referenceIT_E4typeEOS2_(i32* %4) #2
+  %5 = call i32* @_ZSt4moveIRiEONSt16remove_referenceIT_E4typeEOS2_(i32* %4) #0
   call void @_ZNSt6vectorIiSaIiEE12emplace_backIJiEEEvDpOT_(%"class.std::vector"* %3, i32* %5)
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %this) #5 align 2 {
+define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %this) #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
   store %"class.std::vector"* %this, %"class.std::vector"** %1, align 8
   %2 = load %"class.std::vector"** %1
@@ -532,7 +377,7 @@ define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %thi
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i32* @_ZNSt6vectorIiSaIiEEixEm(%"class.std::vector"* %this, i64 %__n) #5 align 2 {
+define linkonce_odr i32* @_ZNSt6vectorIiSaIiEEixEm(%"class.std::vector"* %this, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
   %2 = alloca i64, align 8
   store %"class.std::vector"* %this, %"class.std::vector"** %1, align 8
@@ -548,240 +393,134 @@ define linkonce_odr i32* @_ZNSt6vectorIiSaIiEEixEm(%"class.std::vector"* %this, 
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
-  %2 = alloca i8*
-  %3 = alloca i32
   store %"class.std::vector"* %this, %"class.std::vector"** %1, align 8
-  %4 = load %"class.std::vector"** %1
-  %5 = bitcast %"class.std::vector"* %4 to %"struct.std::_Vector_base"*
-  %6 = getelementptr inbounds %"struct.std::_Vector_base"* %5, i32 0, i32 0
-  %7 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %6, i32 0, i32 0
-  %8 = load i32** %7, align 8
-  %9 = bitcast %"class.std::vector"* %4 to %"struct.std::_Vector_base"*
-  %10 = getelementptr inbounds %"struct.std::_Vector_base"* %9, i32 0, i32 0
-  %11 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %10, i32 0, i32 1
-  %12 = load i32** %11, align 8
-  %13 = bitcast %"class.std::vector"* %4 to %"struct.std::_Vector_base"*
-  %14 = call %"class.std::allocator.1"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %13) #2
-  invoke void @_ZSt8_DestroyIPiiEvT_S1_RSaIT0_E(i32* %8, i32* %12, %"class.std::allocator.1"* %14)
-          to label %15 unwind label %17
-
-; <label>:15                                      ; preds = %0
-  %16 = bitcast %"class.std::vector"* %4 to %"struct.std::_Vector_base"*
-  call void @_ZNSt12_Vector_baseIiSaIiEED2Ev(%"struct.std::_Vector_base"* %16) #2
+  %2 = load %"class.std::vector"** %1
+  %3 = bitcast %"class.std::vector"* %2 to %"struct.std::_Vector_base"*
+  %4 = getelementptr inbounds %"struct.std::_Vector_base"* %3, i32 0, i32 0
+  %5 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %4, i32 0, i32 0
+  %6 = load i32** %5, align 8
+  %7 = bitcast %"class.std::vector"* %2 to %"struct.std::_Vector_base"*
+  %8 = getelementptr inbounds %"struct.std::_Vector_base"* %7, i32 0, i32 0
+  %9 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %8, i32 0, i32 1
+  %10 = load i32** %9, align 8
+  %11 = bitcast %"class.std::vector"* %2 to %"struct.std::_Vector_base"*
+  %12 = call %"class.std::allocator.1"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %11) #0
+  call void @_ZSt8_DestroyIPiiEvT_S1_RSaIT0_E(i32* %6, i32* %10, %"class.std::allocator.1"* %12)
+  %13 = bitcast %"class.std::vector"* %2 to %"struct.std::_Vector_base"*
+  call void @_ZNSt12_Vector_baseIiSaIiEED2Ev(%"struct.std::_Vector_base"* %13) #0
   ret void
-
-; <label>:17                                      ; preds = %0
-  %18 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %19 = extractvalue { i8*, i32 } %18, 0
-  store i8* %19, i8** %2
-  %20 = extractvalue { i8*, i32 } %18, 1
-  store i32 %20, i32* %3
-  %21 = bitcast %"class.std::vector"* %4 to %"struct.std::_Vector_base"*
-  call void @_ZNSt12_Vector_baseIiSaIiEED2Ev(%"struct.std::_Vector_base"* %21) #2
-  br label %22
-
-; <label>:22                                      ; preds = %17
-  %23 = load i8** %2
-  call void @__clang_call_terminate(i8* %23) #13
-  unreachable
 }
 
-declare %"class.std::basic_istream"* @_ZNSirsERi(%"class.std::basic_istream"*, i32*) #0
+declare %"class.std::basic_istream"* @_ZNSirsERi(%"class.std::basic_istream"*, i32*) #1
 
-declare zeroext i1 @_ZNKSt9basic_iosIcSt11char_traitsIcEEcvbEv(%"class.std::basic_ios"*) #0
+declare zeroext i1 @_ZNKSt9basic_iosIcSt11char_traitsIcEEcvbEv(%"class.std::basic_ios"*) #1
 
-declare void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE5closeEv(%"class.std::basic_ifstream"*) #0
+declare void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEE5closeEv(%"class.std::basic_ifstream"*) #1
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZN8Solution18postorderTraversalEP8TreeNode(%"class.std::vector"* noalias sret %agg.result, %class.Solution* %this, %struct.TreeNode* %root) #3 align 2 {
   %1 = alloca %class.Solution*, align 8
   %2 = alloca %struct.TreeNode*, align 8
   %d = alloca %"class.std::deque", align 8
   %s = alloca %"class.std::stack", align 8
   %3 = alloca %"class.std::deque.4", align 8
-  %4 = alloca i8*
-  %5 = alloca i32
   %node = alloca %struct.TreeNode*, align 8
-  %6 = alloca %"struct.std::_Deque_iterator", align 8
-  %7 = alloca %"struct.std::_Deque_iterator", align 8
-  %8 = alloca %"class.std::allocator.1", align 1
-  %9 = alloca i32
+  %4 = alloca %"struct.std::_Deque_iterator", align 8
+  %5 = alloca %"struct.std::_Deque_iterator", align 8
+  %6 = alloca %"class.std::allocator.1", align 1
+  %7 = alloca i32
   store %class.Solution* %this, %class.Solution** %1, align 8
   store %struct.TreeNode* %root, %struct.TreeNode** %2, align 8
-  %10 = load %class.Solution** %1
-  %11 = load %struct.TreeNode** %2, align 8
-  %12 = icmp eq %struct.TreeNode* %11, null
-  br i1 %12, label %13, label %14
+  %8 = load %class.Solution** %1
+  %9 = load %struct.TreeNode** %2, align 8
+  %10 = icmp eq %struct.TreeNode* %9, null
+  br i1 %10, label %11, label %12
 
-; <label>:13                                      ; preds = %0
-  call void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %agg.result) #2
-  br label %68
+; <label>:11                                      ; preds = %0
+  call void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %agg.result) #0
+  br label %38
 
-; <label>:14                                      ; preds = %0
+; <label>:12                                      ; preds = %0
   call void @_ZNSt5dequeIiSaIiEEC2Ev(%"class.std::deque"* %d)
-  invoke void @_ZNSt5dequeIP8TreeNodeSaIS1_EEC2Ev(%"class.std::deque.4"* %3)
-          to label %15 unwind label %38
+  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EEC2Ev(%"class.std::deque.4"* %3)
+  call void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEEC2EOS4_(%"class.std::stack"* %s, %"class.std::deque.4"* %3)
+  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EED2Ev(%"class.std::deque.4"* %3) #0
+  call void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE4pushERKS1_(%"class.std::stack"* %s, %struct.TreeNode** %2)
+  br label %13
 
-; <label>:15                                      ; preds = %14
-  invoke void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEEC2EOS4_(%"class.std::stack"* %s, %"class.std::deque.4"* %3)
-          to label %16 unwind label %42
+; <label>:13                                      ; preds = %36, %12
+  %14 = call zeroext i1 @_ZNKSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE5emptyEv(%"class.std::stack"* %s)
+  %15 = xor i1 %14, true
+  br i1 %15, label %16, label %37
 
-; <label>:16                                      ; preds = %15
-  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EED2Ev(%"class.std::deque.4"* %3) #2
-  invoke void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE4pushERKS1_(%"class.std::stack"* %s, %struct.TreeNode** %2)
-          to label %17 unwind label %46
+; <label>:16                                      ; preds = %13
+  %17 = call %struct.TreeNode** @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE3topEv(%"class.std::stack"* %s)
+  %18 = load %struct.TreeNode** %17
+  store %struct.TreeNode* %18, %struct.TreeNode** %node, align 8
+  call void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE3popEv(%"class.std::stack"* %s)
+  %19 = load %struct.TreeNode** %node, align 8
+  %20 = getelementptr inbounds %struct.TreeNode* %19, i32 0, i32 0
+  call void @_ZNSt5dequeIiSaIiEE10push_frontERKi(%"class.std::deque"* %d, i32* %20)
+  %21 = load %struct.TreeNode** %node, align 8
+  %22 = getelementptr inbounds %struct.TreeNode* %21, i32 0, i32 1
+  %23 = load %struct.TreeNode** %22, align 8
+  %24 = icmp ne %struct.TreeNode* %23, null
+  br i1 %24, label %25, label %28
 
-; <label>:17                                      ; preds = %16
-  br label %18
+; <label>:25                                      ; preds = %16
+  %26 = load %struct.TreeNode** %node, align 8
+  %27 = getelementptr inbounds %struct.TreeNode* %26, i32 0, i32 1
+  call void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE4pushERKS1_(%"class.std::stack"* %s, %struct.TreeNode** %27)
+  br label %28
 
-; <label>:18                                      ; preds = %59, %17
-  %19 = invoke zeroext i1 @_ZNKSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE5emptyEv(%"class.std::stack"* %s)
-          to label %20 unwind label %46
+; <label>:28                                      ; preds = %25, %16
+  %29 = load %struct.TreeNode** %node, align 8
+  %30 = getelementptr inbounds %struct.TreeNode* %29, i32 0, i32 2
+  %31 = load %struct.TreeNode** %30, align 8
+  %32 = icmp ne %struct.TreeNode* %31, null
+  br i1 %32, label %33, label %36
 
-; <label>:20                                      ; preds = %18
-  %21 = xor i1 %19, true
-  br i1 %21, label %22, label %60
+; <label>:33                                      ; preds = %28
+  %34 = load %struct.TreeNode** %node, align 8
+  %35 = getelementptr inbounds %struct.TreeNode* %34, i32 0, i32 2
+  call void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE4pushERKS1_(%"class.std::stack"* %s, %struct.TreeNode** %35)
+  br label %36
 
-; <label>:22                                      ; preds = %20
-  %23 = invoke %struct.TreeNode** @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE3topEv(%"class.std::stack"* %s)
-          to label %24 unwind label %46
+; <label>:36                                      ; preds = %33, %28
+  br label %13
 
-; <label>:24                                      ; preds = %22
-  %25 = load %struct.TreeNode** %23
-  store %struct.TreeNode* %25, %struct.TreeNode** %node, align 8
-  invoke void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE3popEv(%"class.std::stack"* %s)
-          to label %26 unwind label %46
+; <label>:37                                      ; preds = %13
+  call void @_ZNSt5dequeIiSaIiEE5beginEv(%"struct.std::_Deque_iterator"* sret %4, %"class.std::deque"* %d) #0
+  call void @_ZNSt5dequeIiSaIiEE3endEv(%"struct.std::_Deque_iterator"* sret %5, %"class.std::deque"* %d) #0
+  call void @_ZNSaIiEC2Ev(%"class.std::allocator.1"* %6) #0
+  call void @_ZNSt6vectorIiSaIiEEC2ISt15_Deque_iteratorIiRiPiEvEET_S7_RKS0_(%"class.std::vector"* %agg.result, %"struct.std::_Deque_iterator"* %4, %"struct.std::_Deque_iterator"* %5, %"class.std::allocator.1"* %6)
+  call void @_ZNSaIiED2Ev(%"class.std::allocator.1"* %6) #0
+  store i32 1, i32* %7
+  call void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEED2Ev(%"class.std::stack"* %s) #0
+  call void @_ZNSt5dequeIiSaIiEED2Ev(%"class.std::deque"* %d) #0
+  br label %38
 
-; <label>:26                                      ; preds = %24
-  %27 = load %struct.TreeNode** %node, align 8
-  %28 = getelementptr inbounds %struct.TreeNode* %27, i32 0, i32 0
-  invoke void @_ZNSt5dequeIiSaIiEE10push_frontERKi(%"class.std::deque"* %d, i32* %28)
-          to label %29 unwind label %46
-
-; <label>:29                                      ; preds = %26
-  %30 = load %struct.TreeNode** %node, align 8
-  %31 = getelementptr inbounds %struct.TreeNode* %30, i32 0, i32 1
-  %32 = load %struct.TreeNode** %31, align 8
-  %33 = icmp ne %struct.TreeNode* %32, null
-  br i1 %33, label %34, label %50
-
-; <label>:34                                      ; preds = %29
-  %35 = load %struct.TreeNode** %node, align 8
-  %36 = getelementptr inbounds %struct.TreeNode* %35, i32 0, i32 1
-  invoke void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE4pushERKS1_(%"class.std::stack"* %s, %struct.TreeNode** %36)
-          to label %37 unwind label %46
-
-; <label>:37                                      ; preds = %34
-  br label %50
-
-; <label>:38                                      ; preds = %14
-  %39 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %40 = extractvalue { i8*, i32 } %39, 0
-  store i8* %40, i8** %4
-  %41 = extractvalue { i8*, i32 } %39, 1
-  store i32 %41, i32* %5
-  br label %67
-
-; <label>:42                                      ; preds = %15
-  %43 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %44 = extractvalue { i8*, i32 } %43, 0
-  store i8* %44, i8** %4
-  %45 = extractvalue { i8*, i32 } %43, 1
-  store i32 %45, i32* %5
-  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EED2Ev(%"class.std::deque.4"* %3) #2
-  br label %67
-
-; <label>:46                                      ; preds = %55, %34, %26, %24, %22, %18, %16
-  %47 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %48 = extractvalue { i8*, i32 } %47, 0
-  store i8* %48, i8** %4
-  %49 = extractvalue { i8*, i32 } %47, 1
-  store i32 %49, i32* %5
-  br label %66
-
-; <label>:50                                      ; preds = %37, %29
-  %51 = load %struct.TreeNode** %node, align 8
-  %52 = getelementptr inbounds %struct.TreeNode* %51, i32 0, i32 2
-  %53 = load %struct.TreeNode** %52, align 8
-  %54 = icmp ne %struct.TreeNode* %53, null
-  br i1 %54, label %55, label %59
-
-; <label>:55                                      ; preds = %50
-  %56 = load %struct.TreeNode** %node, align 8
-  %57 = getelementptr inbounds %struct.TreeNode* %56, i32 0, i32 2
-  invoke void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE4pushERKS1_(%"class.std::stack"* %s, %struct.TreeNode** %57)
-          to label %58 unwind label %46
-
-; <label>:58                                      ; preds = %55
-  br label %59
-
-; <label>:59                                      ; preds = %58, %50
-  br label %18
-
-; <label>:60                                      ; preds = %20
-  call void @_ZNSt5dequeIiSaIiEE5beginEv(%"struct.std::_Deque_iterator"* sret %6, %"class.std::deque"* %d) #2
-  call void @_ZNSt5dequeIiSaIiEE3endEv(%"struct.std::_Deque_iterator"* sret %7, %"class.std::deque"* %d) #2
-  call void @_ZNSaIiEC2Ev(%"class.std::allocator.1"* %8) #2
-  invoke void @_ZNSt6vectorIiSaIiEEC2ISt15_Deque_iteratorIiRiPiEvEET_S7_RKS0_(%"class.std::vector"* %agg.result, %"struct.std::_Deque_iterator"* %6, %"struct.std::_Deque_iterator"* %7, %"class.std::allocator.1"* %8)
-          to label %61 unwind label %62
-
-; <label>:61                                      ; preds = %60
-  call void @_ZNSaIiED2Ev(%"class.std::allocator.1"* %8) #2
-  store i32 1, i32* %9
-  call void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEED2Ev(%"class.std::stack"* %s) #2
-  call void @_ZNSt5dequeIiSaIiEED2Ev(%"class.std::deque"* %d) #2
-  br label %68
-
-; <label>:62                                      ; preds = %60
-  %63 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %64 = extractvalue { i8*, i32 } %63, 0
-  store i8* %64, i8** %4
-  %65 = extractvalue { i8*, i32 } %63, 1
-  store i32 %65, i32* %5
-  call void @_ZNSaIiED2Ev(%"class.std::allocator.1"* %8) #2
-  br label %66
-
-; <label>:66                                      ; preds = %62, %46
-  call void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEED2Ev(%"class.std::stack"* %s) #2
-  br label %67
-
-; <label>:67                                      ; preds = %66, %42, %38
-  call void @_ZNSt5dequeIiSaIiEED2Ev(%"class.std::deque"* %d) #2
-  br label %69
-
-; <label>:68                                      ; preds = %61, %13
+; <label>:38                                      ; preds = %37, %11
   ret void
-
-; <label>:69                                      ; preds = %67
-  %70 = load i8** %4
-  %71 = load i32* %5
-  %72 = insertvalue { i8*, i32 } undef, i8* %70, 0
-  %73 = insertvalue { i8*, i32 } %72, i32 %71, 1
-  resume { i8*, i32 } %73
 }
 
-declare %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"*, i8*) #0
+declare %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"*, i8*) #1
 
-declare %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"*, i32) #0
+declare %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"*, i32) #1
 
-declare %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"*, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)*) #0
+declare %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"*, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)*) #1
 
-declare %"class.std::basic_ostream"* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_(%"class.std::basic_ostream"*) #0
-
-; Function Attrs: nounwind
-declare void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev(%"class.std::basic_ifstream"*) #1
+declare %"class.std::basic_ostream"* @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_(%"class.std::basic_ostream"*) #1
 
 ; Function Attrs: nounwind
-declare void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"*) #1
+declare void @_ZNSt14basic_ifstreamIcSt11char_traitsIcEED1Ev(%"class.std::basic_ifstream"*) #2
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind
+declare void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"*) #2
+
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt6vectorIiSaIiEE12emplace_backIJiEEEvDpOT_(%"class.std::vector"* %this, i32* %__args) #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
   %2 = alloca i32*, align 8
@@ -808,7 +547,7 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE12emplace_backIJiEEEvDpOT_(%"class
   %19 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %18, i32 0, i32 1
   %20 = load i32** %19, align 8
   %21 = load i32** %2, align 8
-  %22 = call i32* @_ZSt7forwardIiEOT_RNSt16remove_referenceIS0_E4typeE(i32* %21) #2
+  %22 = call i32* @_ZSt7forwardIiEOT_RNSt16remove_referenceIS0_E4typeE(i32* %21) #0
   call void @_ZNSt16allocator_traitsISaIiEE9constructIiJiEEEvRS0_PT_DpOT0_(%"class.std::allocator.1"* %16, i32* %20, i32* %22)
   %23 = bitcast %"class.std::vector"* %3 to %"struct.std::_Vector_base"*
   %24 = getelementptr inbounds %"struct.std::_Vector_base"* %23, i32 0, i32 0
@@ -820,7 +559,7 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE12emplace_backIJiEEEvDpOT_(%"class
 
 ; <label>:28                                      ; preds = %0
   %29 = load i32** %2, align 8
-  %30 = call i32* @_ZSt7forwardIiEOT_RNSt16remove_referenceIS0_E4typeE(i32* %29) #2
+  %30 = call i32* @_ZSt7forwardIiEOT_RNSt16remove_referenceIS0_E4typeE(i32* %29) #0
   call void @_ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJiEEEvDpOT_(%"class.std::vector"* %3, i32* %30)
   br label %31
 
@@ -829,14 +568,14 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE12emplace_backIJiEEEvDpOT_(%"class
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i32* @_ZSt4moveIRiEONSt16remove_referenceIT_E4typeEOS2_(i32* %__t) #5 {
+define linkonce_odr i32* @_ZSt4moveIRiEONSt16remove_referenceIT_E4typeEOS2_(i32* %__t) #3 {
   %1 = alloca i32*, align 8
   store i32* %__t, i32** %1, align 8
   %2 = load i32** %1, align 8
   ret i32* %2
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE9constructIiJiEEEvRS0_PT_DpOT0_(%"class.std::allocator.1"* %__a, i32* %__p, i32* %__args) #3 align 2 {
   %1 = alloca %"class.std::allocator.1"*, align 8
   %2 = alloca i32*, align 8
@@ -848,20 +587,20 @@ define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE9constructIiJiEEEvRS0_PT
   %5 = bitcast %"class.std::allocator.1"* %4 to %"class.__gnu_cxx::new_allocator.2"*
   %6 = load i32** %2, align 8
   %7 = load i32** %3, align 8
-  %8 = call i32* @_ZSt7forwardIiEOT_RNSt16remove_referenceIS0_E4typeE(i32* %7) #2
+  %8 = call i32* @_ZSt7forwardIiEOT_RNSt16remove_referenceIS0_E4typeE(i32* %7) #0
   call void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJiEEEvPT_DpOT0_(%"class.__gnu_cxx::new_allocator.2"* %5, i32* %6, i32* %8)
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i32* @_ZSt7forwardIiEOT_RNSt16remove_referenceIS0_E4typeE(i32* %__t) #5 {
+define linkonce_odr i32* @_ZSt7forwardIiEOT_RNSt16remove_referenceIS0_E4typeE(i32* %__t) #3 {
   %1 = alloca i32*, align 8
   store i32* %__t, i32** %1, align 8
   %2 = load i32** %1, align 8
   ret i32* %2
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJiEEEvDpOT_(%"class.std::vector"* %this, i32* %__args) #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
   %2 = alloca i32*, align 8
@@ -883,10 +622,10 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJiEEEvDpOT_(
   %10 = getelementptr inbounds %"struct.std::_Vector_base"* %9, i32 0, i32 0
   %11 = bitcast %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %10 to %"class.std::allocator.1"*
   %12 = load i32** %__new_start, align 8
-  %13 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %3) #2
+  %13 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %3) #0
   %14 = getelementptr inbounds i32* %12, i64 %13
   %15 = load i32** %2, align 8
-  %16 = call i32* @_ZSt7forwardIiEOT_RNSt16remove_referenceIS0_E4typeE(i32* %15) #2
+  %16 = call i32* @_ZSt7forwardIiEOT_RNSt16remove_referenceIS0_E4typeE(i32* %15) #0
   call void @_ZNSt16allocator_traitsISaIiEE9constructIiJiEEEvRS0_PT_DpOT0_(%"class.std::allocator.1"* %11, i32* %14, i32* %16)
   store i32* null, i32** %__new_finish, align 8
   %17 = bitcast %"class.std::vector"* %3 to %"struct.std::_Vector_base"*
@@ -899,7 +638,7 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJiEEEvDpOT_(
   %24 = load i32** %23, align 8
   %25 = load i32** %__new_start, align 8
   %26 = bitcast %"class.std::vector"* %3 to %"struct.std::_Vector_base"*
-  %27 = call %"class.std::allocator.1"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %26) #2
+  %27 = call %"class.std::allocator.1"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %26) #0
   %28 = call i32* @_ZSt34__uninitialized_move_if_noexcept_aIPiS0_SaIiEET0_T_S3_S2_RT1_(i32* %20, i32* %24, i32* %25, %"class.std::allocator.1"* %27)
   store i32* %28, i32** %__new_finish, align 8
   %29 = load i32** %__new_finish, align 8
@@ -914,7 +653,7 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJiEEEvDpOT_(
   %37 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %36, i32 0, i32 1
   %38 = load i32** %37, align 8
   %39 = bitcast %"class.std::vector"* %3 to %"struct.std::_Vector_base"*
-  %40 = call %"class.std::allocator.1"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %39) #2
+  %40 = call %"class.std::allocator.1"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %39) #0
   call void @_ZSt8_DestroyIPiiEvT_S1_RSaIT0_E(i32* %34, i32* %38, %"class.std::allocator.1"* %40)
   %41 = bitcast %"class.std::vector"* %3 to %"struct.std::_Vector_base"*
   %42 = bitcast %"class.std::vector"* %3 to %"struct.std::_Vector_base"*
@@ -954,7 +693,7 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJiEEEvDpOT_(
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE12_M_check_lenEmPKc(%"class.std::vector"* %this, i64 %__n, i8* %__s) #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
   %2 = alloca i64, align 8
@@ -965,8 +704,8 @@ define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE12_M_check_lenEmPKc(%"class.std::v
   store i64 %__n, i64* %2, align 8
   store i8* %__s, i8** %3, align 8
   %5 = load %"class.std::vector"** %1
-  %6 = call i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %5) #2
-  %7 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #2
+  %6 = call i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %5) #0
+  %7 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #0
   %8 = sub i64 %6, %7
   %9 = load i64* %2, align 8
   %10 = icmp ult i64 %8, %9
@@ -974,30 +713,30 @@ define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE12_M_check_lenEmPKc(%"class.std::v
 
 ; <label>:11                                      ; preds = %0
   %12 = load i8** %3, align 8
-  call void @_ZSt20__throw_length_errorPKc(i8* %12) #14
+  call void @_ZSt20__throw_length_errorPKc(i8* %12) #9
   unreachable
 
 ; <label>:13                                      ; preds = %0
-  %14 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #2
-  %15 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #2
+  %14 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #0
+  %15 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #0
   store i64 %15, i64* %4
   %16 = call i64* @_ZSt3maxImERKT_S2_S2_(i64* %4, i64* %2)
   %17 = load i64* %16
   %18 = add i64 %14, %17
   store i64 %18, i64* %__len, align 8
   %19 = load i64* %__len, align 8
-  %20 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #2
+  %20 = call i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %5) #0
   %21 = icmp ult i64 %19, %20
   br i1 %21, label %26, label %22
 
 ; <label>:22                                      ; preds = %13
   %23 = load i64* %__len, align 8
-  %24 = call i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %5) #2
+  %24 = call i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %5) #0
   %25 = icmp ugt i64 %23, %24
   br i1 %25, label %26, label %28
 
 ; <label>:26                                      ; preds = %22, %13
-  %27 = call i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %5) #2
+  %27 = call i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %5) #0
   br label %30
 
 ; <label>:28                                      ; preds = %22
@@ -1009,7 +748,7 @@ define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE12_M_check_lenEmPKc(%"class.std::v
   ret i64 %31
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr i32* @_ZNSt12_Vector_baseIiSaIiEE11_M_allocateEm(%"struct.std::_Vector_base"* %this, i64 %__n) #3 align 2 {
   %1 = alloca %"struct.std::_Vector_base"*, align 8
   %2 = alloca i64, align 8
@@ -1035,8 +774,8 @@ define linkonce_odr i32* @_ZNSt12_Vector_baseIiSaIiEE11_M_allocateEm(%"struct.st
   ret i32* %13
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt34__uninitialized_move_if_noexcept_aIPiS0_SaIiEET0_T_S3_S2_RT1_(i32* %__first, i32* %__last, i32* %__result, %"class.std::allocator.1"* %__alloc) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt34__uninitialized_move_if_noexcept_aIPiS0_SaIiEET0_T_S3_S2_RT1_(i32* %__first, i32* %__last, i32* %__result, %"class.std::allocator.1"* %__alloc) #5 {
   %1 = alloca i32*, align 8
   %2 = alloca i32*, align 8
   %3 = alloca i32*, align 8
@@ -1066,7 +805,7 @@ define linkonce_odr i32* @_ZSt34__uninitialized_move_if_noexcept_aIPiS0_SaIiEET0
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %"class.std::allocator.1"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %this) #5 align 2 {
+define linkonce_odr %"class.std::allocator.1"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %this) #3 align 2 {
   %1 = alloca %"struct.std::_Vector_base"*, align 8
   store %"struct.std::_Vector_base"* %this, %"struct.std::_Vector_base"** %1, align 8
   %2 = load %"struct.std::_Vector_base"** %1
@@ -1075,8 +814,8 @@ define linkonce_odr %"class.std::allocator.1"* @_ZNSt12_Vector_baseIiSaIiEE19_M_
   ret %"class.std::allocator.1"* %4
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr void @_ZSt8_DestroyIPiiEvT_S1_RSaIT0_E(i32* %__first, i32* %__last, %"class.std::allocator.1"*) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr void @_ZSt8_DestroyIPiiEvT_S1_RSaIT0_E(i32* %__first, i32* %__last, %"class.std::allocator.1"*) #5 {
   %2 = alloca i32*, align 8
   %3 = alloca i32*, align 8
   %4 = alloca %"class.std::allocator.1"*, align 8
@@ -1089,7 +828,7 @@ define linkonce_odr void @_ZSt8_DestroyIPiiEvT_S1_RSaIT0_E(i32* %__first, i32* %
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE13_M_deallocateEPim(%"struct.std::_Vector_base"* %this, i32* %__p, i64 %__n) #3 align 2 {
   %1 = alloca %"struct.std::_Vector_base"*, align 8
   %2 = alloca i32*, align 8
@@ -1114,7 +853,7 @@ define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE13_M_deallocateEPim(%"struc
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE10deallocateERS0_Pim(%"class.std::allocator.1"* %__a, i32* %__p, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::allocator.1"*, align 8
   %2 = alloca i32*, align 8
@@ -1131,7 +870,7 @@ define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE10deallocateERS0_Pim(%"c
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE10deallocateEPim(%"class.__gnu_cxx::new_allocator.2"* %this, i32* %__p, i64) #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE10deallocateEPim(%"class.__gnu_cxx::new_allocator.2"* %this, i32* %__p, i64) #3 align 2 {
   %2 = alloca %"class.__gnu_cxx::new_allocator.2"*, align 8
   %3 = alloca i32*, align 8
   %4 = alloca i64, align 8
@@ -1141,12 +880,15 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE10deallocateEPim(%"clas
   %5 = load %"class.__gnu_cxx::new_allocator.2"** %2
   %6 = load i32** %3, align 8
   %7 = bitcast i32* %6 to i8*
-  call void @_ZdlPv(i8* %7) #2
+  call void @_ZdlPv(i8* %7) #0
   ret void
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr void @_ZSt8_DestroyIPiEvT_S1_(i32* %__first, i32* %__last) #7 {
+; Function Attrs: nobuiltin nounwind
+declare void @_ZdlPv(i8*) #6
+
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr void @_ZSt8_DestroyIPiEvT_S1_(i32* %__first, i32* %__last) #5 {
   %1 = alloca i32*, align 8
   %2 = alloca i32*, align 8
   store i32* %__first, i32** %1, align 8
@@ -1158,7 +900,7 @@ define linkonce_odr void @_ZSt8_DestroyIPiEvT_S1_(i32* %__first, i32* %__last) #
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt12_Destroy_auxILb1EE9__destroyIPiEEvT_S3_(i32*, i32*) #5 align 2 {
+define linkonce_odr void @_ZNSt12_Destroy_auxILb1EE9__destroyIPiEEvT_S3_(i32*, i32*) #3 align 2 {
   %3 = alloca i32*, align 8
   %4 = alloca i32*, align 8
   store i32* %0, i32** %3, align 8
@@ -1166,8 +908,8 @@ define linkonce_odr void @_ZNSt12_Destroy_auxILb1EE9__destroyIPiEEvT_S3_(i32*, i
   ret void
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt22__uninitialized_copy_aISt13move_iteratorIPiES1_iET0_T_S4_S3_RSaIT1_E(i32* %__first.coerce, i32* %__last.coerce, i32* %__result, %"class.std::allocator.1"*) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt22__uninitialized_copy_aISt13move_iteratorIPiES1_iET0_T_S4_S3_RSaIT1_E(i32* %__first.coerce, i32* %__last.coerce, i32* %__result, %"class.std::allocator.1"*) #5 {
   %__first = alloca %"class.std::move_iterator", align 8
   %__last = alloca %"class.std::move_iterator", align 8
   %2 = alloca i32*, align 8
@@ -1195,8 +937,8 @@ define linkonce_odr i32* @_ZSt22__uninitialized_copy_aISt13move_iteratorIPiES1_i
   ret i32* %17
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt32__make_move_if_noexcept_iteratorIPiSt13move_iteratorIS0_EET0_T_(i32* %__i) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt32__make_move_if_noexcept_iteratorIPiSt13move_iteratorIS0_EET0_T_(i32* %__i) #5 {
   %1 = alloca %"class.std::move_iterator", align 8
   %2 = alloca i32*, align 8
   store i32* %__i, i32** %2, align 8
@@ -1208,7 +950,7 @@ define linkonce_odr i32* @_ZSt32__make_move_if_noexcept_iteratorIPiSt13move_iter
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt13move_iteratorIPiEC2ES0_(%"class.std::move_iterator"* %this, i32* %__i) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt13move_iteratorIPiEC2ES0_(%"class.std::move_iterator"* %this, i32* %__i) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::move_iterator"*, align 8
   %2 = alloca i32*, align 8
   store %"class.std::move_iterator"* %this, %"class.std::move_iterator"** %1, align 8
@@ -1220,8 +962,8 @@ define linkonce_odr void @_ZNSt13move_iteratorIPiEC2ES0_(%"class.std::move_itera
   ret void
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt18uninitialized_copyISt13move_iteratorIPiES1_ET0_T_S4_S3_(i32* %__first.coerce, i32* %__last.coerce, i32* %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt18uninitialized_copyISt13move_iteratorIPiES1_ET0_T_S4_S3_(i32* %__first.coerce, i32* %__last.coerce, i32* %__result) #5 {
   %__first = alloca %"class.std::move_iterator", align 8
   %__last = alloca %"class.std::move_iterator", align 8
   %1 = alloca i32*, align 8
@@ -1250,9 +992,9 @@ define linkonce_odr i32* @_ZSt18uninitialized_copyISt13move_iteratorIPiES1_ET0_T
 }
 
 ; Function Attrs: nounwind
-declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #2
+declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #0
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr i32* @_ZNSt20__uninitialized_copyILb1EE13__uninit_copyISt13move_iteratorIPiES3_EET0_T_S6_S5_(i32* %__first.coerce, i32* %__last.coerce, i32* %__result) #3 align 2 {
   %__first = alloca %"class.std::move_iterator", align 8
   %__last = alloca %"class.std::move_iterator", align 8
@@ -1279,8 +1021,8 @@ define linkonce_odr i32* @_ZNSt20__uninitialized_copyILb1EE13__uninit_copyISt13m
   ret i32* %15
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt4copyISt13move_iteratorIPiES1_ET0_T_S4_S3_(i32* %__first.coerce, i32* %__last.coerce, i32* %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt4copyISt13move_iteratorIPiES1_ET0_T_S4_S3_(i32* %__first.coerce, i32* %__last.coerce, i32* %__result) #5 {
   %__first = alloca %"class.std::move_iterator", align 8
   %__last = alloca %"class.std::move_iterator", align 8
   %1 = alloca i32*, align 8
@@ -1308,8 +1050,8 @@ define linkonce_odr i32* @_ZSt4copyISt13move_iteratorIPiES1_ET0_T_S4_S3_(i32* %_
   ret i32* %17
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt14__copy_move_a2ILb1EPiS0_ET1_T0_S2_S1_(i32* %__first, i32* %__last, i32* %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt14__copy_move_a2ILb1EPiS0_ET1_T0_S2_S1_(i32* %__first, i32* %__last, i32* %__result) #5 {
   %1 = alloca i32*, align 8
   %2 = alloca i32*, align 8
   %3 = alloca i32*, align 8
@@ -1326,8 +1068,8 @@ define linkonce_odr i32* @_ZSt14__copy_move_a2ILb1EPiS0_ET1_T0_S2_S1_(i32* %__fi
   ret i32* %10
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt12__miter_baseISt13move_iteratorIPiEENSt11_Miter_baseIT_E13iterator_typeES4_(i32* %__it.coerce) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt12__miter_baseISt13move_iteratorIPiEENSt11_Miter_baseIT_E13iterator_typeES4_(i32* %__it.coerce) #5 {
   %__it = alloca %"class.std::move_iterator", align 8
   %1 = alloca %"class.std::move_iterator", align 8
   %2 = getelementptr %"class.std::move_iterator"* %__it, i32 0, i32 0
@@ -1341,7 +1083,7 @@ define linkonce_odr i32* @_ZSt12__miter_baseISt13move_iteratorIPiEENSt11_Miter_b
   ret i32* %7
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr i32* @_ZNSt10_Iter_baseISt13move_iteratorIPiELb1EE7_S_baseES2_(i32* %__it.coerce) #3 align 2 {
   %__it = alloca %"class.std::move_iterator", align 8
   %1 = getelementptr %"class.std::move_iterator"* %__it, i32 0, i32 0
@@ -1351,7 +1093,7 @@ define linkonce_odr i32* @_ZNSt10_Iter_baseISt13move_iteratorIPiELb1EE7_S_baseES
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i32* @_ZNKSt13move_iteratorIPiE4baseEv(%"class.std::move_iterator"* %this) #5 align 2 {
+define linkonce_odr i32* @_ZNKSt13move_iteratorIPiE4baseEv(%"class.std::move_iterator"* %this) #3 align 2 {
   %1 = alloca %"class.std::move_iterator"*, align 8
   store %"class.std::move_iterator"* %this, %"class.std::move_iterator"** %1, align 8
   %2 = load %"class.std::move_iterator"** %1
@@ -1360,8 +1102,8 @@ define linkonce_odr i32* @_ZNKSt13move_iteratorIPiE4baseEv(%"class.std::move_ite
   ret i32* %4
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt13__copy_move_aILb1EPiS0_ET1_T0_S2_S1_(i32* %__first, i32* %__last, i32* %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt13__copy_move_aILb1EPiS0_ET1_T0_S2_S1_(i32* %__first, i32* %__last, i32* %__result) #5 {
   %1 = alloca i32*, align 8
   %2 = alloca i32*, align 8
   %3 = alloca i32*, align 8
@@ -1377,8 +1119,8 @@ define linkonce_odr i32* @_ZSt13__copy_move_aILb1EPiS0_ET1_T0_S2_S1_(i32* %__fir
   ret i32* %7
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt12__niter_baseIPiENSt11_Niter_baseIT_E13iterator_typeES2_(i32* %__it) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt12__niter_baseIPiENSt11_Niter_baseIT_E13iterator_typeES2_(i32* %__it) #5 {
   %1 = alloca i32*, align 8
   store i32* %__it, i32** %1, align 8
   %2 = load i32** %1, align 8
@@ -1387,7 +1129,7 @@ define linkonce_odr i32* @_ZSt12__niter_baseIPiENSt11_Niter_baseIT_E13iterator_t
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i32* @_ZNSt10_Iter_baseIPiLb0EE7_S_baseES0_(i32* %__it) #5 align 2 {
+define linkonce_odr i32* @_ZNSt10_Iter_baseIPiLb0EE7_S_baseES0_(i32* %__it) #3 align 2 {
   %1 = alloca i32*, align 8
   store i32* %__it, i32** %1, align 8
   %2 = load i32** %1, align 8
@@ -1395,7 +1137,7 @@ define linkonce_odr i32* @_ZNSt10_Iter_baseIPiLb0EE7_S_baseES0_(i32* %__it) #5 a
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i32* @_ZNSt11__copy_moveILb1ELb1ESt26random_access_iterator_tagE8__copy_mIiEEPT_PKS3_S6_S4_(i32* %__first, i32* %__last, i32* %__result) #5 align 2 {
+define linkonce_odr i32* @_ZNSt11__copy_moveILb1ELb1ESt26random_access_iterator_tagE8__copy_mIiEEPT_PKS3_S6_S4_(i32* %__first, i32* %__last, i32* %__result) #3 align 2 {
   %1 = alloca i32*, align 8
   %2 = alloca i32*, align 8
   %3 = alloca i32*, align 8
@@ -1432,9 +1174,9 @@ define linkonce_odr i32* @_ZNSt11__copy_moveILb1ELb1ESt26random_access_iterator_
 }
 
 ; Function Attrs: nounwind
-declare void @llvm.memmove.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #2
+declare void @llvm.memmove.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #0
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr i32* @_ZNSt16allocator_traitsISaIiEE8allocateERS0_m(%"class.std::allocator.1"* %__a, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::allocator.1"*, align 8
   %2 = alloca i64, align 8
@@ -1447,7 +1189,7 @@ define linkonce_odr i32* @_ZNSt16allocator_traitsISaIiEE8allocateERS0_m(%"class.
   ret i32* %6
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr i32* @_ZN9__gnu_cxx13new_allocatorIiE8allocateEmPKv(%"class.__gnu_cxx::new_allocator.2"* %this, i64 %__n, i8*) #3 align 2 {
   %2 = alloca %"class.__gnu_cxx::new_allocator.2"*, align 8
   %3 = alloca i64, align 8
@@ -1457,12 +1199,12 @@ define linkonce_odr i32* @_ZN9__gnu_cxx13new_allocatorIiE8allocateEmPKv(%"class.
   store i8* %0, i8** %4, align 8
   %5 = load %"class.__gnu_cxx::new_allocator.2"** %2
   %6 = load i64* %3, align 8
-  %7 = call i64 @_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv(%"class.__gnu_cxx::new_allocator.2"* %5) #2
+  %7 = call i64 @_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv(%"class.__gnu_cxx::new_allocator.2"* %5) #0
   %8 = icmp ugt i64 %6, %7
   br i1 %8, label %9, label %10
 
 ; <label>:9                                       ; preds = %1
-  call void @_ZSt17__throw_bad_allocv() #14
+  call void @_ZSt17__throw_bad_allocv() #9
   unreachable
 
 ; <label>:10                                      ; preds = %1
@@ -1474,7 +1216,7 @@ define linkonce_odr i32* @_ZN9__gnu_cxx13new_allocatorIiE8allocateEmPKv(%"class.
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i64 @_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv(%"class.__gnu_cxx::new_allocator.2"* %this) #5 align 2 {
+define linkonce_odr i64 @_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv(%"class.__gnu_cxx::new_allocator.2"* %this) #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.2"*, align 8
   store %"class.__gnu_cxx::new_allocator.2"* %this, %"class.__gnu_cxx::new_allocator.2"** %1, align 8
   %2 = load %"class.__gnu_cxx::new_allocator.2"** %1
@@ -1482,24 +1224,24 @@ define linkonce_odr i64 @_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv(%"class.__g
 }
 
 ; Function Attrs: noreturn
-declare void @_ZSt17__throw_bad_allocv() #8
+declare void @_ZSt17__throw_bad_allocv() #7
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %this) #5 align 2 {
+define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %this) #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
   store %"class.std::vector"* %this, %"class.std::vector"** %1, align 8
   %2 = load %"class.std::vector"** %1
   %3 = bitcast %"class.std::vector"* %2 to %"struct.std::_Vector_base"*
-  %4 = call %"class.std::allocator.1"* @_ZNKSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %3) #2
-  %5 = call i64 @_ZNSt16allocator_traitsISaIiEE8max_sizeERKS0_(%"class.std::allocator.1"* %4) #2
+  %4 = call %"class.std::allocator.1"* @_ZNKSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %3) #0
+  %5 = call i64 @_ZNSt16allocator_traitsISaIiEE8max_sizeERKS0_(%"class.std::allocator.1"* %4) #0
   ret i64 %5
 }
 
 ; Function Attrs: noreturn
-declare void @_ZSt20__throw_length_errorPKc(i8*) #8
+declare void @_ZSt20__throw_length_errorPKc(i8*) #7
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr i64* @_ZSt3maxImERKT_S2_S2_(i64* %__a, i64* %__b) #9 {
+define linkonce_odr i64* @_ZSt3maxImERKT_S2_S2_(i64* %__a, i64* %__b) #5 {
   %1 = alloca i64*, align 8
   %2 = alloca i64*, align 8
   %3 = alloca i64*, align 8
@@ -1528,17 +1270,17 @@ define linkonce_odr i64* @_ZSt3maxImERKT_S2_S2_(i64* %__a, i64* %__b) #9 {
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i64 @_ZNSt16allocator_traitsISaIiEE8max_sizeERKS0_(%"class.std::allocator.1"* %__a) #5 align 2 {
+define linkonce_odr i64 @_ZNSt16allocator_traitsISaIiEE8max_sizeERKS0_(%"class.std::allocator.1"* %__a) #3 align 2 {
   %1 = alloca %"class.std::allocator.1"*, align 8
   store %"class.std::allocator.1"* %__a, %"class.std::allocator.1"** %1, align 8
   %2 = load %"class.std::allocator.1"** %1, align 8
   %3 = bitcast %"class.std::allocator.1"* %2 to %"class.__gnu_cxx::new_allocator.2"*
-  %4 = call i64 @_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv(%"class.__gnu_cxx::new_allocator.2"* %3) #2
+  %4 = call i64 @_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv(%"class.__gnu_cxx::new_allocator.2"* %3) #0
   ret i64 %4
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %"class.std::allocator.1"* @_ZNKSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %this) #5 align 2 {
+define linkonce_odr %"class.std::allocator.1"* @_ZNKSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %this) #3 align 2 {
   %1 = alloca %"struct.std::_Vector_base"*, align 8
   store %"struct.std::_Vector_base"* %this, %"struct.std::_Vector_base"** %1, align 8
   %2 = load %"struct.std::_Vector_base"** %1
@@ -1548,7 +1290,7 @@ define linkonce_odr %"class.std::allocator.1"* @_ZNKSt12_Vector_baseIiSaIiEE19_M
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJiEEEvPT_DpOT0_(%"class.__gnu_cxx::new_allocator.2"* %this, i32* %__p, i32* %__args) #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJiEEEvPT_DpOT0_(%"class.__gnu_cxx::new_allocator.2"* %this, i32* %__p, i32* %__args) #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.2"*, align 8
   %2 = alloca i32*, align 8
   %3 = alloca i32*, align 8
@@ -1564,7 +1306,7 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJiEEEvPT_Dp
 ; <label>:8                                       ; preds = %0
   %9 = bitcast i8* %6 to i32*
   %10 = load i32** %3, align 8
-  %11 = call i32* @_ZSt7forwardIiEOT_RNSt16remove_referenceIS0_E4typeE(i32* %10) #2
+  %11 = call i32* @_ZSt7forwardIiEOT_RNSt16remove_referenceIS0_E4typeE(i32* %10) #0
   %12 = load i32* %11
   store i32 %12, i32* %9, align 4
   br label %13
@@ -1575,80 +1317,48 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJiEEEvPT_Dp
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEED2Ev(%"struct.std::_Vector_base"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEED2Ev(%"struct.std::_Vector_base"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"struct.std::_Vector_base"*, align 8
-  %2 = alloca i8*
-  %3 = alloca i32
   store %"struct.std::_Vector_base"* %this, %"struct.std::_Vector_base"** %1, align 8
-  %4 = load %"struct.std::_Vector_base"** %1
-  %5 = getelementptr inbounds %"struct.std::_Vector_base"* %4, i32 0, i32 0
-  %6 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %5, i32 0, i32 0
-  %7 = load i32** %6, align 8
-  %8 = getelementptr inbounds %"struct.std::_Vector_base"* %4, i32 0, i32 0
-  %9 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %8, i32 0, i32 2
-  %10 = load i32** %9, align 8
-  %11 = getelementptr inbounds %"struct.std::_Vector_base"* %4, i32 0, i32 0
-  %12 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %11, i32 0, i32 0
-  %13 = load i32** %12, align 8
-  %14 = ptrtoint i32* %10 to i64
-  %15 = ptrtoint i32* %13 to i64
-  %16 = sub i64 %14, %15
-  %17 = sdiv exact i64 %16, 4
-  invoke void @_ZNSt12_Vector_baseIiSaIiEE13_M_deallocateEPim(%"struct.std::_Vector_base"* %4, i32* %7, i64 %17)
-          to label %18 unwind label %20
-
-; <label>:18                                      ; preds = %0
-  %19 = getelementptr inbounds %"struct.std::_Vector_base"* %4, i32 0, i32 0
-  call void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implD2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %19) #2
+  %2 = load %"struct.std::_Vector_base"** %1
+  %3 = getelementptr inbounds %"struct.std::_Vector_base"* %2, i32 0, i32 0
+  %4 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %3, i32 0, i32 0
+  %5 = load i32** %4, align 8
+  %6 = getelementptr inbounds %"struct.std::_Vector_base"* %2, i32 0, i32 0
+  %7 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %6, i32 0, i32 2
+  %8 = load i32** %7, align 8
+  %9 = getelementptr inbounds %"struct.std::_Vector_base"* %2, i32 0, i32 0
+  %10 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %9, i32 0, i32 0
+  %11 = load i32** %10, align 8
+  %12 = ptrtoint i32* %8 to i64
+  %13 = ptrtoint i32* %11 to i64
+  %14 = sub i64 %12, %13
+  %15 = sdiv exact i64 %14, 4
+  call void @_ZNSt12_Vector_baseIiSaIiEE13_M_deallocateEPim(%"struct.std::_Vector_base"* %2, i32* %5, i64 %15)
+  %16 = getelementptr inbounds %"struct.std::_Vector_base"* %2, i32 0, i32 0
+  call void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implD2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %16) #0
   ret void
-
-; <label>:20                                      ; preds = %0
-  %21 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %22 = extractvalue { i8*, i32 } %21, 0
-  store i8* %22, i8** %2
-  %23 = extractvalue { i8*, i32 } %21, 1
-  store i32 %23, i32* %3
-  %24 = getelementptr inbounds %"struct.std::_Vector_base"* %4, i32 0, i32 0
-  call void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implD2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %24) #2
-  br label %25
-
-; <label>:25                                      ; preds = %20
-  %26 = load i8** %2
-  call void @__clang_call_terminate(i8* %26) #13
-  unreachable
 }
-
-; Function Attrs: noinline noreturn nounwind
-define linkonce_odr hidden void @__clang_call_terminate(i8*) #10 {
-  %2 = call i8* @__cxa_begin_catch(i8* %0) #2
-  call void @_ZSt9terminatev() #13
-  unreachable
-}
-
-declare i8* @__cxa_begin_catch(i8*)
-
-declare void @_ZSt9terminatev()
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implD2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this) unnamed_addr #9 align 2 {
+define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implD2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this) unnamed_addr #5 align 2 {
   %1 = alloca %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"*, align 8
   store %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this, %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"** %1, align 8
   %2 = load %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"** %1
   %3 = bitcast %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %2 to %"class.std::allocator.1"*
-  call void @_ZNSaIiED2Ev(%"class.std::allocator.1"* %3) #2
+  call void @_ZNSaIiED2Ev(%"class.std::allocator.1"* %3) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiED2Ev(%"class.__gnu_cxx::new_allocator.2"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiED2Ev(%"class.__gnu_cxx::new_allocator.2"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.2"*, align 8
   store %"class.__gnu_cxx::new_allocator.2"* %this, %"class.__gnu_cxx::new_allocator.2"** %1, align 8
   %2 = load %"class.__gnu_cxx::new_allocator.2"** %1
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEEC2Ev(%"struct.std::_Vector_base"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"struct.std::_Vector_base"*, align 8
   store %"struct.std::_Vector_base"* %this, %"struct.std::_Vector_base"** %1, align 8
@@ -1659,12 +1369,12 @@ define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEEC2Ev(%"struct.std::_Vector_
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implC2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implC2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"*, align 8
   store %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this, %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"** %1, align 8
   %2 = load %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"** %1
   %3 = bitcast %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %2 to %"class.std::allocator.1"*
-  call void @_ZNSaIiEC2Ev(%"class.std::allocator.1"* %3) #2
+  call void @_ZNSaIiEC2Ev(%"class.std::allocator.1"* %3) #0
   %4 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %2, i32 0, i32 0
   store i32* null, i32** %4, align 8
   %5 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %2, i32 0, i32 1
@@ -1675,14 +1385,14 @@ define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implC2Ev(%"struct
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiEC2Ev(%"class.__gnu_cxx::new_allocator.2"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiEC2Ev(%"class.__gnu_cxx::new_allocator.2"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.2"*, align 8
   store %"class.__gnu_cxx::new_allocator.2"* %this, %"class.__gnu_cxx::new_allocator.2"** %1, align 8
   %2 = load %"class.__gnu_cxx::new_allocator.2"** %1
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt5dequeIiSaIiEEC2Ev(%"class.std::deque"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::deque"*, align 8
   store %"class.std::deque"* %this, %"class.std::deque"** %1, align 8
@@ -1692,7 +1402,7 @@ define linkonce_odr void @_ZNSt5dequeIiSaIiEEC2Ev(%"class.std::deque"* %this) un
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEEC2EOS4_(%"class.std::stack"* %this, %"class.std::deque.4"* %__c) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::stack"*, align 8
   %2 = alloca %"class.std::deque.4"*, align 8
@@ -1701,12 +1411,12 @@ define linkonce_odr void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEEC2EOS4_(%"c
   %3 = load %"class.std::stack"** %1
   %4 = getelementptr inbounds %"class.std::stack"* %3, i32 0, i32 0
   %5 = load %"class.std::deque.4"** %2, align 8
-  %6 = call %"class.std::deque.4"* @_ZSt4moveIRSt5dequeIP8TreeNodeSaIS2_EEEONSt16remove_referenceIT_E4typeEOS7_(%"class.std::deque.4"* %5) #2
+  %6 = call %"class.std::deque.4"* @_ZSt4moveIRSt5dequeIP8TreeNodeSaIS2_EEEONSt16remove_referenceIT_E4typeEOS7_(%"class.std::deque.4"* %5) #0
   call void @_ZNSt5dequeIP8TreeNodeSaIS1_EEC2EOS3_(%"class.std::deque.4"* %4, %"class.std::deque.4"* %6)
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EEC2Ev(%"class.std::deque.4"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::deque.4"*, align 8
   store %"class.std::deque.4"* %this, %"class.std::deque.4"** %1, align 8
@@ -1717,44 +1427,23 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EEC2Ev(%"class.std::deque.
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EED2Ev(%"class.std::deque.4"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EED2Ev(%"class.std::deque.4"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::deque.4"*, align 8
   %2 = alloca %"struct.std::_Deque_iterator.9", align 8
   %3 = alloca %"struct.std::_Deque_iterator.9", align 8
-  %4 = alloca i8*
-  %5 = alloca i32
   store %"class.std::deque.4"* %this, %"class.std::deque.4"** %1, align 8
-  %6 = load %"class.std::deque.4"** %1
-  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EE5beginEv(%"struct.std::_Deque_iterator.9"* sret %2, %"class.std::deque.4"* %6) #2
-  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EE3endEv(%"struct.std::_Deque_iterator.9"* sret %3, %"class.std::deque.4"* %6) #2
-  %7 = bitcast %"class.std::deque.4"* %6 to %"class.std::_Deque_base.5"*
-  %8 = call %"class.std::allocator.6"* @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base.5"* %7) #2
-  invoke void @_ZNSt5dequeIP8TreeNodeSaIS1_EE15_M_destroy_dataESt15_Deque_iteratorIS1_RS1_PS1_ES7_RKS2_(%"class.std::deque.4"* %6, %"struct.std::_Deque_iterator.9"* %2, %"struct.std::_Deque_iterator.9"* %3, %"class.std::allocator.6"* %8)
-          to label %9 unwind label %11
-
-; <label>:9                                       ; preds = %0
-  %10 = bitcast %"class.std::deque.4"* %6 to %"class.std::_Deque_base.5"*
-  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EED2Ev(%"class.std::_Deque_base.5"* %10) #2
+  %4 = load %"class.std::deque.4"** %1
+  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EE5beginEv(%"struct.std::_Deque_iterator.9"* sret %2, %"class.std::deque.4"* %4) #0
+  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EE3endEv(%"struct.std::_Deque_iterator.9"* sret %3, %"class.std::deque.4"* %4) #0
+  %5 = bitcast %"class.std::deque.4"* %4 to %"class.std::_Deque_base.5"*
+  %6 = call %"class.std::allocator.6"* @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base.5"* %5) #0
+  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EE15_M_destroy_dataESt15_Deque_iteratorIS1_RS1_PS1_ES7_RKS2_(%"class.std::deque.4"* %4, %"struct.std::_Deque_iterator.9"* %2, %"struct.std::_Deque_iterator.9"* %3, %"class.std::allocator.6"* %6)
+  %7 = bitcast %"class.std::deque.4"* %4 to %"class.std::_Deque_base.5"*
+  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EED2Ev(%"class.std::_Deque_base.5"* %7) #0
   ret void
-
-; <label>:11                                      ; preds = %0
-  %12 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %13 = extractvalue { i8*, i32 } %12, 0
-  store i8* %13, i8** %4
-  %14 = extractvalue { i8*, i32 } %12, 1
-  store i32 %14, i32* %5
-  %15 = bitcast %"class.std::deque.4"* %6 to %"class.std::_Deque_base.5"*
-  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EED2Ev(%"class.std::_Deque_base.5"* %15) #2
-  br label %16
-
-; <label>:16                                      ; preds = %11
-  %17 = load i8** %4
-  call void @__clang_call_terminate(i8* %17) #13
-  unreachable
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE4pushERKS1_(%"class.std::stack"* %this, %struct.TreeNode** %__x) #3 align 2 {
   %1 = alloca %"class.std::stack"*, align 8
   %2 = alloca %struct.TreeNode**, align 8
@@ -1768,36 +1457,36 @@ define linkonce_odr void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE4pushERKS1_
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr zeroext i1 @_ZNKSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE5emptyEv(%"class.std::stack"* %this) #5 align 2 {
+define linkonce_odr zeroext i1 @_ZNKSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE5emptyEv(%"class.std::stack"* %this) #3 align 2 {
   %1 = alloca %"class.std::stack"*, align 8
   store %"class.std::stack"* %this, %"class.std::stack"** %1, align 8
   %2 = load %"class.std::stack"** %1
   %3 = getelementptr inbounds %"class.std::stack"* %2, i32 0, i32 0
-  %4 = call zeroext i1 @_ZNKSt5dequeIP8TreeNodeSaIS1_EE5emptyEv(%"class.std::deque.4"* %3) #2
+  %4 = call zeroext i1 @_ZNKSt5dequeIP8TreeNodeSaIS1_EE5emptyEv(%"class.std::deque.4"* %3) #0
   ret i1 %4
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %struct.TreeNode** @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE3topEv(%"class.std::stack"* %this) #5 align 2 {
+define linkonce_odr %struct.TreeNode** @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE3topEv(%"class.std::stack"* %this) #3 align 2 {
   %1 = alloca %"class.std::stack"*, align 8
   store %"class.std::stack"* %this, %"class.std::stack"** %1, align 8
   %2 = load %"class.std::stack"** %1
   %3 = getelementptr inbounds %"class.std::stack"* %2, i32 0, i32 0
-  %4 = call %struct.TreeNode** @_ZNSt5dequeIP8TreeNodeSaIS1_EE4backEv(%"class.std::deque.4"* %3) #2
+  %4 = call %struct.TreeNode** @_ZNSt5dequeIP8TreeNodeSaIS1_EE4backEv(%"class.std::deque.4"* %3) #0
   ret %struct.TreeNode** %4
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE3popEv(%"class.std::stack"* %this) #5 align 2 {
+define linkonce_odr void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEE3popEv(%"class.std::stack"* %this) #3 align 2 {
   %1 = alloca %"class.std::stack"*, align 8
   store %"class.std::stack"* %this, %"class.std::stack"** %1, align 8
   %2 = load %"class.std::stack"** %1
   %3 = getelementptr inbounds %"class.std::stack"* %2, i32 0, i32 0
-  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EE8pop_backEv(%"class.std::deque.4"* %3) #2
+  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EE8pop_backEv(%"class.std::deque.4"* %3) #0
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt5dequeIiSaIiEE10push_frontERKi(%"class.std::deque"* %this, i32* %__x) #3 align 2 {
   %1 = alloca %"class.std::deque"*, align 8
   %2 = alloca i32*, align 8
@@ -1847,142 +1536,98 @@ define linkonce_odr void @_ZNSt5dequeIiSaIiEE10push_frontERKi(%"class.std::deque
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt6vectorIiSaIiEEC2ISt15_Deque_iteratorIiRiPiEvEET_S7_RKS0_(%"class.std::vector"* %this, %"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, %"class.std::allocator.1"* %__a) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
   %2 = alloca %"class.std::allocator.1"*, align 8
   %3 = alloca %"struct.std::_Deque_iterator", align 8
   %4 = alloca %"struct.std::_Deque_iterator", align 8
   %5 = alloca %"struct.std::__false_type", align 1
-  %6 = alloca i8*
-  %7 = alloca i32
   store %"class.std::vector"* %this, %"class.std::vector"** %1, align 8
   store %"class.std::allocator.1"* %__a, %"class.std::allocator.1"** %2, align 8
-  %8 = load %"class.std::vector"** %1
-  %9 = bitcast %"class.std::vector"* %8 to %"struct.std::_Vector_base"*
-  %10 = load %"class.std::allocator.1"** %2, align 8
-  call void @_ZNSt12_Vector_baseIiSaIiEEC2ERKS0_(%"struct.std::_Vector_base"* %9, %"class.std::allocator.1"* %10) #2
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__first) #2
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %4, %"struct.std::_Deque_iterator"* %__last) #2
-  invoke void @_ZNSt6vectorIiSaIiEE22_M_initialize_dispatchISt15_Deque_iteratorIiRiPiEEEvT_S7_St12__false_type(%"class.std::vector"* %8, %"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %4)
-          to label %11 unwind label %12
-
-; <label>:11                                      ; preds = %0
+  %6 = load %"class.std::vector"** %1
+  %7 = bitcast %"class.std::vector"* %6 to %"struct.std::_Vector_base"*
+  %8 = load %"class.std::allocator.1"** %2, align 8
+  call void @_ZNSt12_Vector_baseIiSaIiEEC2ERKS0_(%"struct.std::_Vector_base"* %7, %"class.std::allocator.1"* %8) #0
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__first) #0
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %4, %"struct.std::_Deque_iterator"* %__last) #0
+  call void @_ZNSt6vectorIiSaIiEE22_M_initialize_dispatchISt15_Deque_iteratorIiRiPiEEEvT_S7_St12__false_type(%"class.std::vector"* %6, %"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %4)
   ret void
-
-; <label>:12                                      ; preds = %0
-  %13 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %14 = extractvalue { i8*, i32 } %13, 0
-  store i8* %14, i8** %6
-  %15 = extractvalue { i8*, i32 } %13, 1
-  store i32 %15, i32* %7
-  %16 = bitcast %"class.std::vector"* %8 to %"struct.std::_Vector_base"*
-  call void @_ZNSt12_Vector_baseIiSaIiEED2Ev(%"struct.std::_Vector_base"* %16) #2
-  br label %17
-
-; <label>:17                                      ; preds = %12
-  %18 = load i8** %6
-  %19 = load i32* %7
-  %20 = insertvalue { i8*, i32 } undef, i8* %18, 0
-  %21 = insertvalue { i8*, i32 } %20, i32 %19, 1
-  resume { i8*, i32 } %21
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt5dequeIiSaIiEE5beginEv(%"struct.std::_Deque_iterator"* noalias sret %agg.result, %"class.std::deque"* %this) #5 align 2 {
+define linkonce_odr void @_ZNSt5dequeIiSaIiEE5beginEv(%"struct.std::_Deque_iterator"* noalias sret %agg.result, %"class.std::deque"* %this) #3 align 2 {
   %1 = alloca %"class.std::deque"*, align 8
   store %"class.std::deque"* %this, %"class.std::deque"** %1, align 8
   %2 = load %"class.std::deque"** %1
   %3 = bitcast %"class.std::deque"* %2 to %"class.std::_Deque_base"*
   %4 = getelementptr inbounds %"class.std::_Deque_base"* %3, i32 0, i32 0
   %5 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %4, i32 0, i32 2
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %agg.result, %"struct.std::_Deque_iterator"* %5) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %agg.result, %"struct.std::_Deque_iterator"* %5) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt5dequeIiSaIiEE3endEv(%"struct.std::_Deque_iterator"* noalias sret %agg.result, %"class.std::deque"* %this) #5 align 2 {
+define linkonce_odr void @_ZNSt5dequeIiSaIiEE3endEv(%"struct.std::_Deque_iterator"* noalias sret %agg.result, %"class.std::deque"* %this) #3 align 2 {
   %1 = alloca %"class.std::deque"*, align 8
   store %"class.std::deque"* %this, %"class.std::deque"** %1, align 8
   %2 = load %"class.std::deque"** %1
   %3 = bitcast %"class.std::deque"* %2 to %"class.std::_Deque_base"*
   %4 = getelementptr inbounds %"class.std::_Deque_base"* %3, i32 0, i32 0
   %5 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %4, i32 0, i32 3
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %agg.result, %"struct.std::_Deque_iterator"* %5) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %agg.result, %"struct.std::_Deque_iterator"* %5) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSaIiEC2Ev(%"class.std::allocator.1"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSaIiEC2Ev(%"class.std::allocator.1"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::allocator.1"*, align 8
   store %"class.std::allocator.1"* %this, %"class.std::allocator.1"** %1, align 8
   %2 = load %"class.std::allocator.1"** %1
   %3 = bitcast %"class.std::allocator.1"* %2 to %"class.__gnu_cxx::new_allocator.2"*
-  call void @_ZN9__gnu_cxx13new_allocatorIiEC2Ev(%"class.__gnu_cxx::new_allocator.2"* %3) #2
+  call void @_ZN9__gnu_cxx13new_allocatorIiEC2Ev(%"class.__gnu_cxx::new_allocator.2"* %3) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSaIiED2Ev(%"class.std::allocator.1"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSaIiED2Ev(%"class.std::allocator.1"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::allocator.1"*, align 8
   store %"class.std::allocator.1"* %this, %"class.std::allocator.1"** %1, align 8
   %2 = load %"class.std::allocator.1"** %1
   %3 = bitcast %"class.std::allocator.1"* %2 to %"class.__gnu_cxx::new_allocator.2"*
-  call void @_ZN9__gnu_cxx13new_allocatorIiED2Ev(%"class.__gnu_cxx::new_allocator.2"* %3) #2
+  call void @_ZN9__gnu_cxx13new_allocatorIiED2Ev(%"class.__gnu_cxx::new_allocator.2"* %3) #0
   ret void
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEED2Ev(%"class.std::stack"* %this) unnamed_addr #9 align 2 {
+define linkonce_odr void @_ZNSt5stackIP8TreeNodeSt5dequeIS1_SaIS1_EEED2Ev(%"class.std::stack"* %this) unnamed_addr #5 align 2 {
   %1 = alloca %"class.std::stack"*, align 8
   store %"class.std::stack"* %this, %"class.std::stack"** %1, align 8
   %2 = load %"class.std::stack"** %1
   %3 = getelementptr inbounds %"class.std::stack"* %2, i32 0, i32 0
-  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EED2Ev(%"class.std::deque.4"* %3) #2
+  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EED2Ev(%"class.std::deque.4"* %3) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt5dequeIiSaIiEED2Ev(%"class.std::deque"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt5dequeIiSaIiEED2Ev(%"class.std::deque"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::deque"*, align 8
   %2 = alloca %"struct.std::_Deque_iterator", align 8
   %3 = alloca %"struct.std::_Deque_iterator", align 8
-  %4 = alloca i8*
-  %5 = alloca i32
   store %"class.std::deque"* %this, %"class.std::deque"** %1, align 8
-  %6 = load %"class.std::deque"** %1
-  call void @_ZNSt5dequeIiSaIiEE5beginEv(%"struct.std::_Deque_iterator"* sret %2, %"class.std::deque"* %6) #2
-  call void @_ZNSt5dequeIiSaIiEE3endEv(%"struct.std::_Deque_iterator"* sret %3, %"class.std::deque"* %6) #2
-  %7 = bitcast %"class.std::deque"* %6 to %"class.std::_Deque_base"*
-  %8 = call %"class.std::allocator.1"* @_ZNSt11_Deque_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base"* %7) #2
-  invoke void @_ZNSt5dequeIiSaIiEE15_M_destroy_dataESt15_Deque_iteratorIiRiPiES5_RKS0_(%"class.std::deque"* %6, %"struct.std::_Deque_iterator"* %2, %"struct.std::_Deque_iterator"* %3, %"class.std::allocator.1"* %8)
-          to label %9 unwind label %11
-
-; <label>:9                                       ; preds = %0
-  %10 = bitcast %"class.std::deque"* %6 to %"class.std::_Deque_base"*
-  call void @_ZNSt11_Deque_baseIiSaIiEED2Ev(%"class.std::_Deque_base"* %10) #2
+  %4 = load %"class.std::deque"** %1
+  call void @_ZNSt5dequeIiSaIiEE5beginEv(%"struct.std::_Deque_iterator"* sret %2, %"class.std::deque"* %4) #0
+  call void @_ZNSt5dequeIiSaIiEE3endEv(%"struct.std::_Deque_iterator"* sret %3, %"class.std::deque"* %4) #0
+  %5 = bitcast %"class.std::deque"* %4 to %"class.std::_Deque_base"*
+  %6 = call %"class.std::allocator.1"* @_ZNSt11_Deque_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base"* %5) #0
+  call void @_ZNSt5dequeIiSaIiEE15_M_destroy_dataESt15_Deque_iteratorIiRiPiES5_RKS0_(%"class.std::deque"* %4, %"struct.std::_Deque_iterator"* %2, %"struct.std::_Deque_iterator"* %3, %"class.std::allocator.1"* %6)
+  %7 = bitcast %"class.std::deque"* %4 to %"class.std::_Deque_base"*
+  call void @_ZNSt11_Deque_baseIiSaIiEED2Ev(%"class.std::_Deque_base"* %7) #0
   ret void
-
-; <label>:11                                      ; preds = %0
-  %12 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %13 = extractvalue { i8*, i32 } %12, 0
-  store i8* %13, i8** %4
-  %14 = extractvalue { i8*, i32 } %12, 1
-  store i32 %14, i32* %5
-  %15 = bitcast %"class.std::deque"* %6 to %"class.std::_Deque_base"*
-  call void @_ZNSt11_Deque_baseIiSaIiEED2Ev(%"class.std::_Deque_base"* %15) #2
-  br label %16
-
-; <label>:16                                      ; preds = %11
-  %17 = load i8** %4
-  call void @__clang_call_terminate(i8* %17) #13
-  unreachable
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt5dequeIiSaIiEE15_M_destroy_dataESt15_Deque_iteratorIiRiPiES5_RKS0_(%"class.std::deque"* %this, %"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, %"class.std::allocator.1"*) #5 align 2 {
+define linkonce_odr void @_ZNSt5dequeIiSaIiEE15_M_destroy_dataESt15_Deque_iteratorIiRiPiES5_RKS0_(%"class.std::deque"* %this, %"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, %"class.std::allocator.1"*) #3 align 2 {
   %2 = alloca %"class.std::deque"*, align 8
   %3 = alloca %"class.std::allocator.1"*, align 8
   store %"class.std::deque"* %this, %"class.std::deque"** %2, align 8
@@ -1992,7 +1637,7 @@ define linkonce_odr void @_ZNSt5dequeIiSaIiEE15_M_destroy_dataESt15_Deque_iterat
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %"class.std::allocator.1"* @_ZNSt11_Deque_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base"* %this) #5 align 2 {
+define linkonce_odr %"class.std::allocator.1"* @_ZNSt11_Deque_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base"* %this) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base"*, align 8
   store %"class.std::_Deque_base"* %this, %"class.std::_Deque_base"** %1, align 8
   %2 = load %"class.std::_Deque_base"** %1
@@ -2002,7 +1647,7 @@ define linkonce_odr %"class.std::allocator.1"* @_ZNSt11_Deque_baseIiSaIiEE19_M_g
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEED2Ev(%"class.std::_Deque_base"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEED2Ev(%"class.std::_Deque_base"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::_Deque_base"*, align 8
   store %"class.std::_Deque_base"* %this, %"class.std::_Deque_base"** %1, align 8
   %2 = load %"class.std::_Deque_base"** %1
@@ -2022,24 +1667,24 @@ define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEED2Ev(%"class.std::_Deque_bas
   %14 = getelementptr inbounds %"struct.std::_Deque_iterator"* %13, i32 0, i32 3
   %15 = load i32*** %14, align 8
   %16 = getelementptr inbounds i32** %15, i64 1
-  call void @_ZNSt11_Deque_baseIiSaIiEE16_M_destroy_nodesEPPiS3_(%"class.std::_Deque_base"* %2, i32** %11, i32** %16) #2
+  call void @_ZNSt11_Deque_baseIiSaIiEE16_M_destroy_nodesEPPiS3_(%"class.std::_Deque_base"* %2, i32** %11, i32** %16) #0
   %17 = getelementptr inbounds %"class.std::_Deque_base"* %2, i32 0, i32 0
   %18 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %17, i32 0, i32 0
   %19 = load i32*** %18, align 8
   %20 = getelementptr inbounds %"class.std::_Deque_base"* %2, i32 0, i32 0
   %21 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %20, i32 0, i32 1
   %22 = load i64* %21, align 8
-  call void @_ZNSt11_Deque_baseIiSaIiEE17_M_deallocate_mapEPPim(%"class.std::_Deque_base"* %2, i32** %19, i64 %22) #2
+  call void @_ZNSt11_Deque_baseIiSaIiEE17_M_deallocate_mapEPPim(%"class.std::_Deque_base"* %2, i32** %19, i64 %22) #0
   br label %23
 
 ; <label>:23                                      ; preds = %7, %0
   %24 = getelementptr inbounds %"class.std::_Deque_base"* %2, i32 0, i32 0
-  call void @_ZNSt11_Deque_baseIiSaIiEE11_Deque_implD2Ev(%"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %24) #2
+  call void @_ZNSt11_Deque_baseIiSaIiEE11_Deque_implD2Ev(%"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %24) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE16_M_destroy_nodesEPPiS3_(%"class.std::_Deque_base"* %this, i32** %__nstart, i32** %__nfinish) #5 align 2 {
+define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE16_M_destroy_nodesEPPiS3_(%"class.std::_Deque_base"* %this, i32** %__nstart, i32** %__nfinish) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base"*, align 8
   %2 = alloca i32**, align 8
   %3 = alloca i32**, align 8
@@ -2061,7 +1706,7 @@ define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE16_M_destroy_nodesEPPiS3_(%"
 ; <label>:10                                      ; preds = %6
   %11 = load i32*** %__n, align 8
   %12 = load i32** %11, align 8
-  call void @_ZNSt11_Deque_baseIiSaIiEE18_M_deallocate_nodeEPi(%"class.std::_Deque_base"* %4, i32* %12) #2
+  call void @_ZNSt11_Deque_baseIiSaIiEE18_M_deallocate_nodeEPi(%"class.std::_Deque_base"* %4, i32* %12) #0
   br label %13
 
 ; <label>:13                                      ; preds = %10
@@ -2075,64 +1720,44 @@ define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE16_M_destroy_nodesEPPiS3_(%"
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE17_M_deallocate_mapEPPim(%"class.std::_Deque_base"* %this, i32** %__p, i64 %__n) #5 align 2 {
+define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE17_M_deallocate_mapEPPim(%"class.std::_Deque_base"* %this, i32** %__p, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base"*, align 8
   %2 = alloca i32**, align 8
   %3 = alloca i64, align 8
   %__map_alloc = alloca %"class.std::allocator.10", align 1
-  %4 = alloca i8*
-  %5 = alloca i32
   store %"class.std::_Deque_base"* %this, %"class.std::_Deque_base"** %1, align 8
   store i32** %__p, i32*** %2, align 8
   store i64 %__n, i64* %3, align 8
-  %6 = load %"class.std::_Deque_base"** %1
-  call void @_ZNKSt11_Deque_baseIiSaIiEE20_M_get_map_allocatorEv(%"class.std::allocator.10"* sret %__map_alloc, %"class.std::_Deque_base"* %6) #2
-  %7 = load i32*** %2, align 8
-  %8 = load i64* %3, align 8
-  invoke void @_ZNSt16allocator_traitsISaIPiEE10deallocateERS1_PS0_m(%"class.std::allocator.10"* %__map_alloc, i32** %7, i64 %8)
-          to label %9 unwind label %10
-
-; <label>:9                                       ; preds = %0
-  call void @_ZNSaIPiED2Ev(%"class.std::allocator.10"* %__map_alloc) #2
+  %4 = load %"class.std::_Deque_base"** %1
+  call void @_ZNKSt11_Deque_baseIiSaIiEE20_M_get_map_allocatorEv(%"class.std::allocator.10"* sret %__map_alloc, %"class.std::_Deque_base"* %4) #0
+  %5 = load i32*** %2, align 8
+  %6 = load i64* %3, align 8
+  call void @_ZNSt16allocator_traitsISaIPiEE10deallocateERS1_PS0_m(%"class.std::allocator.10"* %__map_alloc, i32** %5, i64 %6)
+  call void @_ZNSaIPiED2Ev(%"class.std::allocator.10"* %__map_alloc) #0
   ret void
-
-; <label>:10                                      ; preds = %0
-  %11 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %12 = extractvalue { i8*, i32 } %11, 0
-  store i8* %12, i8** %4
-  %13 = extractvalue { i8*, i32 } %11, 1
-  store i32 %13, i32* %5
-  call void @_ZNSaIPiED2Ev(%"class.std::allocator.10"* %__map_alloc) #2
-  br label %14
-
-; <label>:14                                      ; preds = %10
-  %15 = load i8** %4
-  call void @__clang_call_terminate(i8* %15) #13
-  unreachable
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE11_Deque_implD2Ev(%"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %this) unnamed_addr #9 align 2 {
+define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE11_Deque_implD2Ev(%"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %this) unnamed_addr #5 align 2 {
   %1 = alloca %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"*, align 8
   store %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %this, %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"** %1, align 8
   %2 = load %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"** %1
   %3 = bitcast %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %2 to %"class.std::allocator.1"*
-  call void @_ZNSaIiED2Ev(%"class.std::allocator.1"* %3) #2
+  call void @_ZNSaIiED2Ev(%"class.std::allocator.1"* %3) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNKSt11_Deque_baseIiSaIiEE20_M_get_map_allocatorEv(%"class.std::allocator.10"* noalias sret %agg.result, %"class.std::_Deque_base"* %this) #5 align 2 {
+define linkonce_odr void @_ZNKSt11_Deque_baseIiSaIiEE20_M_get_map_allocatorEv(%"class.std::allocator.10"* noalias sret %agg.result, %"class.std::_Deque_base"* %this) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base"*, align 8
   store %"class.std::_Deque_base"* %this, %"class.std::_Deque_base"** %1, align 8
   %2 = load %"class.std::_Deque_base"** %1
-  %3 = call %"class.std::allocator.1"* @_ZNKSt11_Deque_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base"* %2) #2
-  call void @_ZNSaIPiEC2IiEERKSaIT_E(%"class.std::allocator.10"* %agg.result, %"class.std::allocator.1"* %3) #2
+  %3 = call %"class.std::allocator.1"* @_ZNKSt11_Deque_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base"* %2) #0
+  call void @_ZNSaIPiEC2IiEERKSaIT_E(%"class.std::allocator.10"* %agg.result, %"class.std::allocator.1"* %3) #0
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt16allocator_traitsISaIPiEE10deallocateERS1_PS0_m(%"class.std::allocator.10"* %__a, i32** %__p, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::allocator.10"*, align 8
   %2 = alloca i32**, align 8
@@ -2149,17 +1774,17 @@ define linkonce_odr void @_ZNSt16allocator_traitsISaIPiEE10deallocateERS1_PS0_m(
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSaIPiED2Ev(%"class.std::allocator.10"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSaIPiED2Ev(%"class.std::allocator.10"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::allocator.10"*, align 8
   store %"class.std::allocator.10"* %this, %"class.std::allocator.10"** %1, align 8
   %2 = load %"class.std::allocator.10"** %1
   %3 = bitcast %"class.std::allocator.10"* %2 to %"class.__gnu_cxx::new_allocator.11"*
-  call void @_ZN9__gnu_cxx13new_allocatorIPiED2Ev(%"class.__gnu_cxx::new_allocator.11"* %3) #2
+  call void @_ZN9__gnu_cxx13new_allocatorIPiED2Ev(%"class.__gnu_cxx::new_allocator.11"* %3) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPiED2Ev(%"class.__gnu_cxx::new_allocator.11"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPiED2Ev(%"class.__gnu_cxx::new_allocator.11"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.11"*, align 8
   store %"class.__gnu_cxx::new_allocator.11"* %this, %"class.__gnu_cxx::new_allocator.11"** %1, align 8
   %2 = load %"class.__gnu_cxx::new_allocator.11"** %1
@@ -2167,7 +1792,7 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPiED2Ev(%"class.__gnu_cxx
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPiE10deallocateEPS1_m(%"class.__gnu_cxx::new_allocator.11"* %this, i32** %__p, i64) #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPiE10deallocateEPS1_m(%"class.__gnu_cxx::new_allocator.11"* %this, i32** %__p, i64) #3 align 2 {
   %2 = alloca %"class.__gnu_cxx::new_allocator.11"*, align 8
   %3 = alloca i32**, align 8
   %4 = alloca i64, align 8
@@ -2177,24 +1802,24 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPiE10deallocateEPS1_m(%"c
   %5 = load %"class.__gnu_cxx::new_allocator.11"** %2
   %6 = load i32*** %3, align 8
   %7 = bitcast i32** %6 to i8*
-  call void @_ZdlPv(i8* %7) #2
+  call void @_ZdlPv(i8* %7) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSaIPiEC2IiEERKSaIT_E(%"class.std::allocator.10"* %this, %"class.std::allocator.1"*) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSaIPiEC2IiEERKSaIT_E(%"class.std::allocator.10"* %this, %"class.std::allocator.1"*) unnamed_addr #3 align 2 {
   %2 = alloca %"class.std::allocator.10"*, align 8
   %3 = alloca %"class.std::allocator.1"*, align 8
   store %"class.std::allocator.10"* %this, %"class.std::allocator.10"** %2, align 8
   store %"class.std::allocator.1"* %0, %"class.std::allocator.1"** %3, align 8
   %4 = load %"class.std::allocator.10"** %2
   %5 = bitcast %"class.std::allocator.10"* %4 to %"class.__gnu_cxx::new_allocator.11"*
-  call void @_ZN9__gnu_cxx13new_allocatorIPiEC2Ev(%"class.__gnu_cxx::new_allocator.11"* %5) #2
+  call void @_ZN9__gnu_cxx13new_allocatorIPiEC2Ev(%"class.__gnu_cxx::new_allocator.11"* %5) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %"class.std::allocator.1"* @_ZNKSt11_Deque_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base"* %this) #5 align 2 {
+define linkonce_odr %"class.std::allocator.1"* @_ZNKSt11_Deque_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base"* %this) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base"*, align 8
   store %"class.std::_Deque_base"* %this, %"class.std::_Deque_base"** %1, align 8
   %2 = load %"class.std::_Deque_base"** %1
@@ -2204,7 +1829,7 @@ define linkonce_odr %"class.std::allocator.1"* @_ZNKSt11_Deque_baseIiSaIiEE19_M_
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPiEC2Ev(%"class.__gnu_cxx::new_allocator.11"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPiEC2Ev(%"class.__gnu_cxx::new_allocator.11"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.11"*, align 8
   store %"class.__gnu_cxx::new_allocator.11"* %this, %"class.__gnu_cxx::new_allocator.11"** %1, align 8
   %2 = load %"class.__gnu_cxx::new_allocator.11"** %1
@@ -2212,7 +1837,7 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPiEC2Ev(%"class.__gnu_cxx
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE18_M_deallocate_nodeEPi(%"class.std::_Deque_base"* %this, i32* %__p) #5 align 2 {
+define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE18_M_deallocate_nodeEPi(%"class.std::_Deque_base"* %this, i32* %__p) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base"*, align 8
   %2 = alloca i32*, align 8
   store %"class.std::_Deque_base"* %this, %"class.std::_Deque_base"** %1, align 8
@@ -2221,26 +1846,13 @@ define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE18_M_deallocate_nodeEPi(%"cl
   %4 = getelementptr inbounds %"class.std::_Deque_base"* %3, i32 0, i32 0
   %5 = bitcast %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %4 to %"class.std::allocator.1"*
   %6 = load i32** %2, align 8
-  %7 = invoke i64 @_ZSt16__deque_buf_sizem(i64 4)
-          to label %8 unwind label %10
-
-; <label>:8                                       ; preds = %0
-  invoke void @_ZNSt16allocator_traitsISaIiEE10deallocateERS0_Pim(%"class.std::allocator.1"* %5, i32* %6, i64 %7)
-          to label %9 unwind label %10
-
-; <label>:9                                       ; preds = %8
+  %7 = call i64 @_ZSt16__deque_buf_sizem(i64 4)
+  call void @_ZNSt16allocator_traitsISaIiEE10deallocateERS0_Pim(%"class.std::allocator.1"* %5, i32* %6, i64 %7)
   ret void
-
-; <label>:10                                      ; preds = %8, %0
-  %11 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %12 = extractvalue { i8*, i32 } %11, 0
-  call void @__clang_call_terminate(i8* %12) #13
-  unreachable
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr i64 @_ZSt16__deque_buf_sizem(i64 %__size) #9 {
+define linkonce_odr i64 @_ZSt16__deque_buf_sizem(i64 %__size) #5 {
   %1 = alloca i64, align 8
   store i64 %__size, i64* %1, align 8
   %2 = load i64* %1, align 8
@@ -2261,7 +1873,7 @@ define linkonce_odr i64 @_ZSt16__deque_buf_sizem(i64 %__size) #9 {
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %this, %"struct.std::_Deque_iterator"* %__x) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %this, %"struct.std::_Deque_iterator"* %__x) unnamed_addr #3 align 2 {
   %1 = alloca %"struct.std::_Deque_iterator"*, align 8
   %2 = alloca %"struct.std::_Deque_iterator"*, align 8
   store %"struct.std::_Deque_iterator"* %this, %"struct.std::_Deque_iterator"** %1, align 8
@@ -2291,7 +1903,7 @@ define linkonce_odr void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_D
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEEC2ERKS0_(%"struct.std::_Vector_base"* %this, %"class.std::allocator.1"* %__a) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEEC2ERKS0_(%"struct.std::_Vector_base"* %this, %"class.std::allocator.1"* %__a) unnamed_addr #3 align 2 {
   %1 = alloca %"struct.std::_Vector_base"*, align 8
   %2 = alloca %"class.std::allocator.1"*, align 8
   store %"struct.std::_Vector_base"* %this, %"struct.std::_Vector_base"** %1, align 8
@@ -2299,11 +1911,11 @@ define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEEC2ERKS0_(%"struct.std::_Vec
   %3 = load %"struct.std::_Vector_base"** %1
   %4 = getelementptr inbounds %"struct.std::_Vector_base"* %3, i32 0, i32 0
   %5 = load %"class.std::allocator.1"** %2, align 8
-  call void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implC2ERKS0_(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %4, %"class.std::allocator.1"* %5) #2
+  call void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implC2ERKS0_(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %4, %"class.std::allocator.1"* %5) #0
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt6vectorIiSaIiEE22_M_initialize_dispatchISt15_Deque_iteratorIiRiPiEEEvT_S7_St12__false_type(%"class.std::vector"* %this, %"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last) #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
   %2 = alloca %"struct.std::__false_type", align 1
@@ -2313,14 +1925,14 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE22_M_initialize_dispatchISt15_Dequ
   %6 = alloca %"struct.std::random_access_iterator_tag", align 1
   store %"class.std::vector"* %this, %"class.std::vector"** %1, align 8
   %7 = load %"class.std::vector"** %1
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__first) #2
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %4, %"struct.std::_Deque_iterator"* %__last) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__first) #0
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %4, %"struct.std::_Deque_iterator"* %__last) #0
   %8 = bitcast %"struct.std::random_access_iterator_tag"* %6 to %"struct.std::forward_iterator_tag"*
   call void @_ZNSt6vectorIiSaIiEE19_M_range_initializeISt15_Deque_iteratorIiRiPiEEEvT_S7_St20forward_iterator_tag(%"class.std::vector"* %7, %"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %4)
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_range_initializeISt15_Deque_iteratorIiRiPiEEEvT_S7_St20forward_iterator_tag(%"class.std::vector"* %this, %"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last) #3 align 2 {
   %1 = alloca %"class.std::vector"*, align 8
   %2 = alloca %"struct.std::forward_iterator_tag", align 1
@@ -2331,8 +1943,8 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_range_initializeISt15_Deque_i
   %6 = alloca %"struct.std::_Deque_iterator", align 8
   store %"class.std::vector"* %this, %"class.std::vector"** %1, align 8
   %7 = load %"class.std::vector"** %1
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__first) #2
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %4, %"struct.std::_Deque_iterator"* %__last) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__first) #0
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %4, %"struct.std::_Deque_iterator"* %__last) #0
   %8 = call i64 @_ZSt8distanceISt15_Deque_iteratorIiRiPiEENSt15iterator_traitsIT_E15difference_typeES5_S5_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %4)
   store i64 %8, i64* %__n, align 8
   %9 = bitcast %"class.std::vector"* %7 to %"struct.std::_Vector_base"*
@@ -2352,14 +1964,14 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_range_initializeISt15_Deque_i
   %22 = getelementptr inbounds %"struct.std::_Vector_base"* %21, i32 0, i32 0
   %23 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %22, i32 0, i32 2
   store i32* %20, i32** %23, align 8
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %5, %"struct.std::_Deque_iterator"* %__first) #2
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %6, %"struct.std::_Deque_iterator"* %__last) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %5, %"struct.std::_Deque_iterator"* %__first) #0
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %6, %"struct.std::_Deque_iterator"* %__last) #0
   %24 = bitcast %"class.std::vector"* %7 to %"struct.std::_Vector_base"*
   %25 = getelementptr inbounds %"struct.std::_Vector_base"* %24, i32 0, i32 0
   %26 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %25, i32 0, i32 0
   %27 = load i32** %26, align 8
   %28 = bitcast %"class.std::vector"* %7 to %"struct.std::_Vector_base"*
-  %29 = call %"class.std::allocator.1"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %28) #2
+  %29 = call %"class.std::allocator.1"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %28) #0
   %30 = call i32* @_ZSt22__uninitialized_copy_aISt15_Deque_iteratorIiRiPiES2_iET0_T_S5_S4_RSaIT1_E(%"struct.std::_Deque_iterator"* %5, %"struct.std::_Deque_iterator"* %6, i32* %27, %"class.std::allocator.1"* %29)
   %31 = bitcast %"class.std::vector"* %7 to %"struct.std::_Vector_base"*
   %32 = getelementptr inbounds %"struct.std::_Vector_base"* %31, i32 0, i32 0
@@ -2368,90 +1980,90 @@ define linkonce_odr void @_ZNSt6vectorIiSaIiEE19_M_range_initializeISt15_Deque_i
   ret void
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i64 @_ZSt8distanceISt15_Deque_iteratorIiRiPiEENSt15iterator_traitsIT_E15difference_typeES5_S5_(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i64 @_ZSt8distanceISt15_Deque_iteratorIiRiPiEENSt15iterator_traitsIT_E15difference_typeES5_S5_(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last) #5 {
   %1 = alloca %"struct.std::_Deque_iterator", align 8
   %2 = alloca %"struct.std::_Deque_iterator", align 8
   %3 = alloca %"struct.std::random_access_iterator_tag", align 1
   %4 = alloca %"struct.std::random_access_iterator_tag", align 1
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %1, %"struct.std::_Deque_iterator"* %__first) #2
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %2, %"struct.std::_Deque_iterator"* %__last) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %1, %"struct.std::_Deque_iterator"* %__first) #0
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %2, %"struct.std::_Deque_iterator"* %__last) #0
   call void @_ZSt19__iterator_categoryISt15_Deque_iteratorIiRiPiEENSt15iterator_traitsIT_E17iterator_categoryERKS5_(%"struct.std::_Deque_iterator"* %__first)
   %5 = call i64 @_ZSt10__distanceISt15_Deque_iteratorIiRiPiEENSt15iterator_traitsIT_E15difference_typeES5_S5_St26random_access_iterator_tag(%"struct.std::_Deque_iterator"* %1, %"struct.std::_Deque_iterator"* %2)
   ret i64 %5
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt22__uninitialized_copy_aISt15_Deque_iteratorIiRiPiES2_iET0_T_S5_S4_RSaIT1_E(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, i32* %__result, %"class.std::allocator.1"*) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt22__uninitialized_copy_aISt15_Deque_iteratorIiRiPiES2_iET0_T_S5_S4_RSaIT1_E(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, i32* %__result, %"class.std::allocator.1"*) #5 {
   %2 = alloca i32*, align 8
   %3 = alloca %"class.std::allocator.1"*, align 8
   %4 = alloca %"struct.std::_Deque_iterator", align 8
   %5 = alloca %"struct.std::_Deque_iterator", align 8
   store i32* %__result, i32** %2, align 8
   store %"class.std::allocator.1"* %0, %"class.std::allocator.1"** %3, align 8
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %4, %"struct.std::_Deque_iterator"* %__first) #2
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %5, %"struct.std::_Deque_iterator"* %__last) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %4, %"struct.std::_Deque_iterator"* %__first) #0
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %5, %"struct.std::_Deque_iterator"* %__last) #0
   %6 = load i32** %2, align 8
   %7 = call i32* @_ZSt18uninitialized_copyISt15_Deque_iteratorIiRiPiES2_ET0_T_S5_S4_(%"struct.std::_Deque_iterator"* %4, %"struct.std::_Deque_iterator"* %5, i32* %6)
   ret i32* %7
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt18uninitialized_copyISt15_Deque_iteratorIiRiPiES2_ET0_T_S5_S4_(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, i32* %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt18uninitialized_copyISt15_Deque_iteratorIiRiPiES2_ET0_T_S5_S4_(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, i32* %__result) #5 {
   %1 = alloca i32*, align 8
   %__assignable = alloca i8, align 1
   %2 = alloca %"struct.std::_Deque_iterator", align 8
   %3 = alloca %"struct.std::_Deque_iterator", align 8
   store i32* %__result, i32** %1, align 8
   store i8 1, i8* %__assignable, align 1
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %2, %"struct.std::_Deque_iterator"* %__first) #2
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__last) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %2, %"struct.std::_Deque_iterator"* %__first) #0
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__last) #0
   %4 = load i32** %1, align 8
   %5 = call i32* @_ZNSt20__uninitialized_copyILb1EE13__uninit_copyISt15_Deque_iteratorIiRiPiES4_EET0_T_S7_S6_(%"struct.std::_Deque_iterator"* %2, %"struct.std::_Deque_iterator"* %3, i32* %4)
   ret i32* %5
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr i32* @_ZNSt20__uninitialized_copyILb1EE13__uninit_copyISt15_Deque_iteratorIiRiPiES4_EET0_T_S7_S6_(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, i32* %__result) #3 align 2 {
   %1 = alloca i32*, align 8
   %2 = alloca %"struct.std::_Deque_iterator", align 8
   %3 = alloca %"struct.std::_Deque_iterator", align 8
   store i32* %__result, i32** %1, align 8
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %2, %"struct.std::_Deque_iterator"* %__first) #2
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__last) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %2, %"struct.std::_Deque_iterator"* %__first) #0
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__last) #0
   %4 = load i32** %1, align 8
   %5 = call i32* @_ZSt4copyISt15_Deque_iteratorIiRiPiES2_ET0_T_S5_S4_(%"struct.std::_Deque_iterator"* %2, %"struct.std::_Deque_iterator"* %3, i32* %4)
   ret i32* %5
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt4copyISt15_Deque_iteratorIiRiPiES2_ET0_T_S5_S4_(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, i32* %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt4copyISt15_Deque_iteratorIiRiPiES2_ET0_T_S5_S4_(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, i32* %__result) #5 {
   %1 = alloca i32*, align 8
   %2 = alloca %"struct.std::_Deque_iterator", align 8
   %3 = alloca %"struct.std::_Deque_iterator", align 8
   %4 = alloca %"struct.std::_Deque_iterator", align 8
   %5 = alloca %"struct.std::_Deque_iterator", align 8
   store i32* %__result, i32** %1, align 8
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__first) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__first) #0
   call void @_ZSt12__miter_baseISt15_Deque_iteratorIiRiPiEENSt11_Miter_baseIT_E13iterator_typeES5_(%"struct.std::_Deque_iterator"* sret %2, %"struct.std::_Deque_iterator"* %3)
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %5, %"struct.std::_Deque_iterator"* %__last) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %5, %"struct.std::_Deque_iterator"* %__last) #0
   call void @_ZSt12__miter_baseISt15_Deque_iteratorIiRiPiEENSt11_Miter_baseIT_E13iterator_typeES5_(%"struct.std::_Deque_iterator"* sret %4, %"struct.std::_Deque_iterator"* %5)
   %6 = load i32** %1, align 8
   %7 = call i32* @_ZSt14__copy_move_a2ILb0ESt15_Deque_iteratorIiRiPiES2_ET1_T0_S5_S4_(%"struct.std::_Deque_iterator"* %2, %"struct.std::_Deque_iterator"* %4, i32* %6)
   ret i32* %7
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt14__copy_move_a2ILb0ESt15_Deque_iteratorIiRiPiES2_ET1_T0_S5_S4_(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, i32* %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt14__copy_move_a2ILb0ESt15_Deque_iteratorIiRiPiES2_ET1_T0_S5_S4_(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, i32* %__result) #5 {
   %1 = alloca i32*, align 8
   %2 = alloca %"struct.std::_Deque_iterator", align 8
   %3 = alloca %"struct.std::_Deque_iterator", align 8
   %4 = alloca %"struct.std::_Deque_iterator", align 8
   %5 = alloca %"struct.std::_Deque_iterator", align 8
   store i32* %__result, i32** %1, align 8
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__first) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__first) #0
   call void @_ZSt12__niter_baseISt15_Deque_iteratorIiRiPiEENSt11_Niter_baseIT_E13iterator_typeES5_(%"struct.std::_Deque_iterator"* sret %2, %"struct.std::_Deque_iterator"* %3)
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %5, %"struct.std::_Deque_iterator"* %__last) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %5, %"struct.std::_Deque_iterator"* %__last) #0
   call void @_ZSt12__niter_baseISt15_Deque_iteratorIiRiPiEENSt11_Niter_baseIT_E13iterator_typeES5_(%"struct.std::_Deque_iterator"* sret %4, %"struct.std::_Deque_iterator"* %5)
   %6 = load i32** %1, align 8
   %7 = call i32* @_ZSt12__niter_baseIPiENSt11_Niter_baseIT_E13iterator_typeES2_(i32* %6)
@@ -2459,49 +2071,49 @@ define linkonce_odr i32* @_ZSt14__copy_move_a2ILb0ESt15_Deque_iteratorIiRiPiES2_
   ret i32* %8
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr void @_ZSt12__miter_baseISt15_Deque_iteratorIiRiPiEENSt11_Miter_baseIT_E13iterator_typeES5_(%"struct.std::_Deque_iterator"* noalias sret %agg.result, %"struct.std::_Deque_iterator"* %__it) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr void @_ZSt12__miter_baseISt15_Deque_iteratorIiRiPiEENSt11_Miter_baseIT_E13iterator_typeES5_(%"struct.std::_Deque_iterator"* noalias sret %agg.result, %"struct.std::_Deque_iterator"* %__it) #5 {
   %1 = alloca %"struct.std::_Deque_iterator", align 8
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %1, %"struct.std::_Deque_iterator"* %__it) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %1, %"struct.std::_Deque_iterator"* %__it) #0
   call void @_ZNSt10_Iter_baseISt15_Deque_iteratorIiRiPiELb0EE7_S_baseES3_(%"struct.std::_Deque_iterator"* sret %agg.result, %"struct.std::_Deque_iterator"* %1)
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt10_Iter_baseISt15_Deque_iteratorIiRiPiELb0EE7_S_baseES3_(%"struct.std::_Deque_iterator"* noalias sret %agg.result, %"struct.std::_Deque_iterator"* %__it) #5 align 2 {
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %agg.result, %"struct.std::_Deque_iterator"* %__it) #2
+define linkonce_odr void @_ZNSt10_Iter_baseISt15_Deque_iteratorIiRiPiELb0EE7_S_baseES3_(%"struct.std::_Deque_iterator"* noalias sret %agg.result, %"struct.std::_Deque_iterator"* %__it) #3 align 2 {
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %agg.result, %"struct.std::_Deque_iterator"* %__it) #0
   ret void
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32* @_ZSt13__copy_move_aILb0ESt15_Deque_iteratorIiRiPiES2_ET1_T0_S5_S4_(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, i32* %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32* @_ZSt13__copy_move_aILb0ESt15_Deque_iteratorIiRiPiES2_ET1_T0_S5_S4_(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, i32* %__result) #5 {
   %1 = alloca i32*, align 8
   %__simple = alloca i8, align 1
   %2 = alloca %"struct.std::_Deque_iterator", align 8
   %3 = alloca %"struct.std::_Deque_iterator", align 8
   store i32* %__result, i32** %1, align 8
   store i8 0, i8* %__simple, align 1
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %2, %"struct.std::_Deque_iterator"* %__first) #2
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__last) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %2, %"struct.std::_Deque_iterator"* %__first) #0
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %3, %"struct.std::_Deque_iterator"* %__last) #0
   %4 = load i32** %1, align 8
   %5 = call i32* @_ZNSt11__copy_moveILb0ELb0ESt26random_access_iterator_tagE8__copy_mISt15_Deque_iteratorIiRiPiES5_EET0_T_S8_S7_(%"struct.std::_Deque_iterator"* %2, %"struct.std::_Deque_iterator"* %3, i32* %4)
   ret i32* %5
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr void @_ZSt12__niter_baseISt15_Deque_iteratorIiRiPiEENSt11_Niter_baseIT_E13iterator_typeES5_(%"struct.std::_Deque_iterator"* noalias sret %agg.result, %"struct.std::_Deque_iterator"* %__it) #9 {
+define linkonce_odr void @_ZSt12__niter_baseISt15_Deque_iteratorIiRiPiEENSt11_Niter_baseIT_E13iterator_typeES5_(%"struct.std::_Deque_iterator"* noalias sret %agg.result, %"struct.std::_Deque_iterator"* %__it) #5 {
   %1 = alloca %"struct.std::_Deque_iterator", align 8
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %1, %"struct.std::_Deque_iterator"* %__it) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2ERKS2_(%"struct.std::_Deque_iterator"* %1, %"struct.std::_Deque_iterator"* %__it) #0
   call void @_ZNSt10_Iter_baseISt15_Deque_iteratorIiRiPiELb0EE7_S_baseES3_(%"struct.std::_Deque_iterator"* sret %agg.result, %"struct.std::_Deque_iterator"* %1)
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i32* @_ZNSt11__copy_moveILb0ELb0ESt26random_access_iterator_tagE8__copy_mISt15_Deque_iteratorIiRiPiES5_EET0_T_S8_S7_(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, i32* %__result) #5 align 2 {
+define linkonce_odr i32* @_ZNSt11__copy_moveILb0ELb0ESt26random_access_iterator_tagE8__copy_mISt15_Deque_iteratorIiRiPiES5_EET0_T_S8_S7_(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last, i32* %__result) #3 align 2 {
   %1 = alloca i32*, align 8
   %__n = alloca i64, align 8
   store i32* %__result, i32** %1, align 8
-  %2 = call i64 @_ZStmiIiRiPiENSt15_Deque_iteratorIT_T0_T1_E15difference_typeERKS6_S9_(%"struct.std::_Deque_iterator"* %__last, %"struct.std::_Deque_iterator"* %__first) #2
+  %2 = call i64 @_ZStmiIiRiPiENSt15_Deque_iteratorIT_T0_T1_E15difference_typeERKS6_S9_(%"struct.std::_Deque_iterator"* %__last, %"struct.std::_Deque_iterator"* %__first) #0
   store i64 %2, i64* %__n, align 8
   br label %3
 
@@ -2511,11 +2123,11 @@ define linkonce_odr i32* @_ZNSt11__copy_moveILb0ELb0ESt26random_access_iterator_
   br i1 %5, label %6, label %16
 
 ; <label>:6                                       ; preds = %3
-  %7 = call i32* @_ZNKSt15_Deque_iteratorIiRiPiEdeEv(%"struct.std::_Deque_iterator"* %__first) #2
+  %7 = call i32* @_ZNKSt15_Deque_iteratorIiRiPiEdeEv(%"struct.std::_Deque_iterator"* %__first) #0
   %8 = load i32* %7
   %9 = load i32** %1, align 8
   store i32 %8, i32* %9, align 4
-  %10 = call %"struct.std::_Deque_iterator"* @_ZNSt15_Deque_iteratorIiRiPiEppEv(%"struct.std::_Deque_iterator"* %__first) #2
+  %10 = call %"struct.std::_Deque_iterator"* @_ZNSt15_Deque_iteratorIiRiPiEppEv(%"struct.std::_Deque_iterator"* %__first) #0
   %11 = load i32** %1, align 8
   %12 = getelementptr inbounds i32* %11, i32 1
   store i32* %12, i32** %1, align 8
@@ -2533,12 +2145,12 @@ define linkonce_odr i32* @_ZNSt11__copy_moveILb0ELb0ESt26random_access_iterator_
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr i64 @_ZStmiIiRiPiENSt15_Deque_iteratorIT_T0_T1_E15difference_typeERKS6_S9_(%"struct.std::_Deque_iterator"* %__x, %"struct.std::_Deque_iterator"* %__y) #9 {
+define linkonce_odr i64 @_ZStmiIiRiPiENSt15_Deque_iteratorIT_T0_T1_E15difference_typeERKS6_S9_(%"struct.std::_Deque_iterator"* %__x, %"struct.std::_Deque_iterator"* %__y) #5 {
   %1 = alloca %"struct.std::_Deque_iterator"*, align 8
   %2 = alloca %"struct.std::_Deque_iterator"*, align 8
   store %"struct.std::_Deque_iterator"* %__x, %"struct.std::_Deque_iterator"** %1, align 8
   store %"struct.std::_Deque_iterator"* %__y, %"struct.std::_Deque_iterator"** %2, align 8
-  %3 = call i64 @_ZNSt15_Deque_iteratorIiRiPiE14_S_buffer_sizeEv() #2
+  %3 = call i64 @_ZNSt15_Deque_iteratorIiRiPiE14_S_buffer_sizeEv() #0
   %4 = load %"struct.std::_Deque_iterator"** %1, align 8
   %5 = getelementptr inbounds %"struct.std::_Deque_iterator"* %4, i32 0, i32 3
   %6 = load i32*** %5, align 8
@@ -2577,7 +2189,7 @@ define linkonce_odr i64 @_ZStmiIiRiPiENSt15_Deque_iteratorIT_T0_T1_E15difference
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i32* @_ZNKSt15_Deque_iteratorIiRiPiEdeEv(%"struct.std::_Deque_iterator"* %this) #5 align 2 {
+define linkonce_odr i32* @_ZNKSt15_Deque_iteratorIiRiPiEdeEv(%"struct.std::_Deque_iterator"* %this) #3 align 2 {
   %1 = alloca %"struct.std::_Deque_iterator"*, align 8
   store %"struct.std::_Deque_iterator"* %this, %"struct.std::_Deque_iterator"** %1, align 8
   %2 = load %"struct.std::_Deque_iterator"** %1
@@ -2587,7 +2199,7 @@ define linkonce_odr i32* @_ZNKSt15_Deque_iteratorIiRiPiEdeEv(%"struct.std::_Dequ
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %"struct.std::_Deque_iterator"* @_ZNSt15_Deque_iteratorIiRiPiEppEv(%"struct.std::_Deque_iterator"* %this) #5 align 2 {
+define linkonce_odr %"struct.std::_Deque_iterator"* @_ZNSt15_Deque_iteratorIiRiPiEppEv(%"struct.std::_Deque_iterator"* %this) #3 align 2 {
   %1 = alloca %"struct.std::_Deque_iterator"*, align 8
   store %"struct.std::_Deque_iterator"* %this, %"struct.std::_Deque_iterator"** %1, align 8
   %2 = load %"struct.std::_Deque_iterator"** %1
@@ -2606,7 +2218,7 @@ define linkonce_odr %"struct.std::_Deque_iterator"* @_ZNSt15_Deque_iteratorIiRiP
   %12 = getelementptr inbounds %"struct.std::_Deque_iterator"* %2, i32 0, i32 3
   %13 = load i32*** %12, align 8
   %14 = getelementptr inbounds i32** %13, i64 1
-  call void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"struct.std::_Deque_iterator"* %2, i32** %14) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"struct.std::_Deque_iterator"* %2, i32** %14) #0
   %15 = getelementptr inbounds %"struct.std::_Deque_iterator"* %2, i32 0, i32 1
   %16 = load i32** %15, align 8
   %17 = getelementptr inbounds %"struct.std::_Deque_iterator"* %2, i32 0, i32 0
@@ -2618,7 +2230,7 @@ define linkonce_odr %"struct.std::_Deque_iterator"* @_ZNSt15_Deque_iteratorIiRiP
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"struct.std::_Deque_iterator"* %this, i32** %__new_node) #5 align 2 {
+define linkonce_odr void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"struct.std::_Deque_iterator"* %this, i32** %__new_node) #3 align 2 {
   %1 = alloca %"struct.std::_Deque_iterator"*, align 8
   %2 = alloca i32**, align 8
   store %"struct.std::_Deque_iterator"* %this, %"struct.std::_Deque_iterator"** %1, align 8
@@ -2633,7 +2245,7 @@ define linkonce_odr void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"stru
   store i32* %7, i32** %8, align 8
   %9 = getelementptr inbounds %"struct.std::_Deque_iterator"* %3, i32 0, i32 1
   %10 = load i32** %9, align 8
-  %11 = call i64 @_ZNSt15_Deque_iteratorIiRiPiE14_S_buffer_sizeEv() #2
+  %11 = call i64 @_ZNSt15_Deque_iteratorIiRiPiE14_S_buffer_sizeEv() #0
   %12 = getelementptr inbounds i32* %10, i64 %11
   %13 = getelementptr inbounds %"struct.std::_Deque_iterator"* %3, i32 0, i32 2
   store i32* %12, i32** %13, align 8
@@ -2641,30 +2253,20 @@ define linkonce_odr void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"stru
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i64 @_ZNSt15_Deque_iteratorIiRiPiE14_S_buffer_sizeEv() #5 align 2 {
-  %1 = invoke i64 @_ZSt16__deque_buf_sizem(i64 4)
-          to label %2 unwind label %3
-
-; <label>:2                                       ; preds = %0
+define linkonce_odr i64 @_ZNSt15_Deque_iteratorIiRiPiE14_S_buffer_sizeEv() #3 align 2 {
+  %1 = call i64 @_ZSt16__deque_buf_sizem(i64 4)
   ret i64 %1
-
-; <label>:3                                       ; preds = %0
-  %4 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %5 = extractvalue { i8*, i32 } %4, 0
-  call void @__clang_call_terminate(i8* %5) #13
-  unreachable
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr i64 @_ZSt10__distanceISt15_Deque_iteratorIiRiPiEENSt15iterator_traitsIT_E15difference_typeES5_S5_St26random_access_iterator_tag(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last) #9 {
+define linkonce_odr i64 @_ZSt10__distanceISt15_Deque_iteratorIiRiPiEENSt15iterator_traitsIT_E15difference_typeES5_S5_St26random_access_iterator_tag(%"struct.std::_Deque_iterator"* %__first, %"struct.std::_Deque_iterator"* %__last) #5 {
   %1 = alloca %"struct.std::random_access_iterator_tag", align 1
-  %2 = call i64 @_ZStmiIiRiPiENSt15_Deque_iteratorIT_T0_T1_E15difference_typeERKS6_S9_(%"struct.std::_Deque_iterator"* %__last, %"struct.std::_Deque_iterator"* %__first) #2
+  %2 = call i64 @_ZStmiIiRiPiENSt15_Deque_iteratorIT_T0_T1_E15difference_typeERKS6_S9_(%"struct.std::_Deque_iterator"* %__last, %"struct.std::_Deque_iterator"* %__first) #0
   ret i64 %2
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr void @_ZSt19__iterator_categoryISt15_Deque_iteratorIiRiPiEENSt15iterator_traitsIT_E17iterator_categoryERKS5_(%"struct.std::_Deque_iterator"*) #9 {
+define linkonce_odr void @_ZSt19__iterator_categoryISt15_Deque_iteratorIiRiPiEENSt15iterator_traitsIT_E17iterator_categoryERKS5_(%"struct.std::_Deque_iterator"*) #5 {
   %2 = alloca %"struct.std::random_access_iterator_tag", align 1
   %3 = alloca %"struct.std::_Deque_iterator"*, align 8
   store %"struct.std::_Deque_iterator"* %0, %"struct.std::_Deque_iterator"** %3, align 8
@@ -2672,7 +2274,7 @@ define linkonce_odr void @_ZSt19__iterator_categoryISt15_Deque_iteratorIiRiPiEEN
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implC2ERKS0_(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this, %"class.std::allocator.1"* %__a) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implC2ERKS0_(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this, %"class.std::allocator.1"* %__a) unnamed_addr #3 align 2 {
   %1 = alloca %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"*, align 8
   %2 = alloca %"class.std::allocator.1"*, align 8
   store %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this, %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"** %1, align 8
@@ -2680,7 +2282,7 @@ define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implC2ERKS0_(%"st
   %3 = load %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"** %1
   %4 = bitcast %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %3 to %"class.std::allocator.1"*
   %5 = load %"class.std::allocator.1"** %2, align 8
-  call void @_ZNSaIiEC2ERKS_(%"class.std::allocator.1"* %4, %"class.std::allocator.1"* %5) #2
+  call void @_ZNSaIiEC2ERKS_(%"class.std::allocator.1"* %4, %"class.std::allocator.1"* %5) #0
   %6 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %3, i32 0, i32 0
   store i32* null, i32** %6, align 8
   %7 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %3, i32 0, i32 1
@@ -2691,7 +2293,7 @@ define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implC2ERKS0_(%"st
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSaIiEC2ERKS_(%"class.std::allocator.1"* %this, %"class.std::allocator.1"* %__a) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSaIiEC2ERKS_(%"class.std::allocator.1"* %this, %"class.std::allocator.1"* %__a) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::allocator.1"*, align 8
   %2 = alloca %"class.std::allocator.1"*, align 8
   store %"class.std::allocator.1"* %this, %"class.std::allocator.1"** %1, align 8
@@ -2700,12 +2302,12 @@ define linkonce_odr void @_ZNSaIiEC2ERKS_(%"class.std::allocator.1"* %this, %"cl
   %4 = bitcast %"class.std::allocator.1"* %3 to %"class.__gnu_cxx::new_allocator.2"*
   %5 = load %"class.std::allocator.1"** %2, align 8
   %6 = bitcast %"class.std::allocator.1"* %5 to %"class.__gnu_cxx::new_allocator.2"*
-  call void @_ZN9__gnu_cxx13new_allocatorIiEC2ERKS1_(%"class.__gnu_cxx::new_allocator.2"* %4, %"class.__gnu_cxx::new_allocator.2"* %6) #2
+  call void @_ZN9__gnu_cxx13new_allocatorIiEC2ERKS1_(%"class.__gnu_cxx::new_allocator.2"* %4, %"class.__gnu_cxx::new_allocator.2"* %6) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiEC2ERKS1_(%"class.__gnu_cxx::new_allocator.2"* %this, %"class.__gnu_cxx::new_allocator.2"*) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiEC2ERKS1_(%"class.__gnu_cxx::new_allocator.2"* %this, %"class.__gnu_cxx::new_allocator.2"*) unnamed_addr #3 align 2 {
   %2 = alloca %"class.__gnu_cxx::new_allocator.2"*, align 8
   %3 = alloca %"class.__gnu_cxx::new_allocator.2"*, align 8
   store %"class.__gnu_cxx::new_allocator.2"* %this, %"class.__gnu_cxx::new_allocator.2"** %2, align 8
@@ -2714,7 +2316,7 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiEC2ERKS1_(%"class.__gnu_
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEvRS0_PT_DpOT0_(%"class.std::allocator.1"* %__a, i32* %__p, i32* %__args) #3 align 2 {
   %1 = alloca %"class.std::allocator.1"*, align 8
   %2 = alloca i32*, align 8
@@ -2726,12 +2328,12 @@ define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEvRS0_
   %5 = bitcast %"class.std::allocator.1"* %4 to %"class.__gnu_cxx::new_allocator.2"*
   %6 = load i32** %2, align 8
   %7 = load i32** %3, align 8
-  %8 = call i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* %7) #2
+  %8 = call i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* %7) #0
   call void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJRKiEEEvPT_DpOT0_(%"class.__gnu_cxx::new_allocator.2"* %5, i32* %6, i32* %8)
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt5dequeIiSaIiEE17_M_push_front_auxIJRKiEEEvDpOT_(%"class.std::deque"* %this, i32* %__args) #3 align 2 {
   %1 = alloca %"class.std::deque"*, align 8
   %2 = alloca i32*, align 8
@@ -2757,7 +2359,7 @@ define linkonce_odr void @_ZNSt5dequeIiSaIiEE17_M_push_front_auxIJRKiEEEvDpOT_(%
   %18 = getelementptr inbounds %"struct.std::_Deque_iterator"* %17, i32 0, i32 3
   %19 = load i32*** %18, align 8
   %20 = getelementptr inbounds i32** %19, i64 -1
-  call void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"struct.std::_Deque_iterator"* %14, i32** %20) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"struct.std::_Deque_iterator"* %14, i32** %20) #0
   %21 = bitcast %"class.std::deque"* %3 to %"class.std::_Deque_base"*
   %22 = getelementptr inbounds %"class.std::_Deque_base"* %21, i32 0, i32 0
   %23 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %22, i32 0, i32 2
@@ -2778,12 +2380,12 @@ define linkonce_odr void @_ZNSt5dequeIiSaIiEE17_M_push_front_auxIJRKiEEEvDpOT_(%
   %37 = getelementptr inbounds %"struct.std::_Deque_iterator"* %36, i32 0, i32 0
   %38 = load i32** %37, align 8
   %39 = load i32** %2, align 8
-  %40 = call i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* %39) #2
+  %40 = call i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* %39) #0
   call void @_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEvRS0_PT_DpOT0_(%"class.std::allocator.1"* %33, i32* %38, i32* %40)
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt5dequeIiSaIiEE23_M_reserve_map_at_frontEm(%"class.std::deque"* %this, i64 %__nodes_to_add) #3 align 2 {
   %1 = alloca %"class.std::deque"*, align 8
   %2 = alloca i64, align 8
@@ -2816,7 +2418,7 @@ define linkonce_odr void @_ZNSt5dequeIiSaIiEE23_M_reserve_map_at_frontEm(%"class
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr i32* @_ZNSt11_Deque_baseIiSaIiEE16_M_allocate_nodeEv(%"class.std::_Deque_base"* %this) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base"*, align 8
   store %"class.std::_Deque_base"* %this, %"class.std::_Deque_base"** %1, align 8
@@ -2829,14 +2431,14 @@ define linkonce_odr i32* @_ZNSt11_Deque_baseIiSaIiEE16_M_allocate_nodeEv(%"class
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* %__t) #5 {
+define linkonce_odr i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* %__t) #3 {
   %1 = alloca i32*, align 8
   store i32* %__t, i32** %1, align 8
   %2 = load i32** %1, align 8
   ret i32* %2
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt5dequeIiSaIiEE17_M_reallocate_mapEmb(%"class.std::deque"* %this, i64 %__nodes_to_add, i1 zeroext %__add_at_front) #3 align 2 {
   %1 = alloca %"class.std::deque"*, align 8
   %2 = alloca i64, align 8
@@ -3014,7 +2616,7 @@ define linkonce_odr void @_ZNSt5dequeIiSaIiEE17_M_reallocate_mapEmb(%"class.std:
   %138 = getelementptr inbounds %"class.std::_Deque_base"* %137, i32 0, i32 0
   %139 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %138, i32 0, i32 1
   %140 = load i64* %139, align 8
-  call void @_ZNSt11_Deque_baseIiSaIiEE17_M_deallocate_mapEPPim(%"class.std::_Deque_base"* %132, i32** %136, i64 %140) #2
+  call void @_ZNSt11_Deque_baseIiSaIiEE17_M_deallocate_mapEPPim(%"class.std::_Deque_base"* %132, i32** %136, i64 %140) #0
   %141 = load i32*** %__new_map, align 8
   %142 = bitcast %"class.std::deque"* %5 to %"class.std::_Deque_base"*
   %143 = getelementptr inbounds %"class.std::_Deque_base"* %142, i32 0, i32 0
@@ -3032,7 +2634,7 @@ define linkonce_odr void @_ZNSt5dequeIiSaIiEE17_M_reallocate_mapEmb(%"class.std:
   %151 = getelementptr inbounds %"class.std::_Deque_base"* %150, i32 0, i32 0
   %152 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %151, i32 0, i32 2
   %153 = load i32*** %__new_nstart, align 8
-  call void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"struct.std::_Deque_iterator"* %152, i32** %153) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"struct.std::_Deque_iterator"* %152, i32** %153) #0
   %154 = bitcast %"class.std::deque"* %5 to %"class.std::_Deque_base"*
   %155 = getelementptr inbounds %"class.std::_Deque_base"* %154, i32 0, i32 0
   %156 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %155, i32 0, i32 3
@@ -3040,12 +2642,12 @@ define linkonce_odr void @_ZNSt5dequeIiSaIiEE17_M_reallocate_mapEmb(%"class.std:
   %158 = load i64* %__old_num_nodes, align 8
   %159 = getelementptr inbounds i32** %157, i64 %158
   %160 = getelementptr inbounds i32** %159, i64 -1
-  call void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"struct.std::_Deque_iterator"* %156, i32** %160) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"struct.std::_Deque_iterator"* %156, i32** %160) #0
   ret void
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32** @_ZSt4copyIPPiS1_ET0_T_S3_S2_(i32** %__first, i32** %__last, i32** %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32** @_ZSt4copyIPPiS1_ET0_T_S3_S2_(i32** %__first, i32** %__last, i32** %__result) #5 {
   %1 = alloca i32**, align 8
   %2 = alloca i32**, align 8
   %3 = alloca i32**, align 8
@@ -3061,8 +2663,8 @@ define linkonce_odr i32** @_ZSt4copyIPPiS1_ET0_T_S3_S2_(i32** %__first, i32** %_
   ret i32** %9
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32** @_ZSt13copy_backwardIPPiS1_ET0_T_S3_S2_(i32** %__first, i32** %__last, i32** %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32** @_ZSt13copy_backwardIPPiS1_ET0_T_S3_S2_(i32** %__first, i32** %__last, i32** %__result) #5 {
   %1 = alloca i32**, align 8
   %2 = alloca i32**, align 8
   %3 = alloca i32**, align 8
@@ -3078,46 +2680,24 @@ define linkonce_odr i32** @_ZSt13copy_backwardIPPiS1_ET0_T_S3_S2_(i32** %__first
   ret i32** %9
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr i32** @_ZNSt11_Deque_baseIiSaIiEE15_M_allocate_mapEm(%"class.std::_Deque_base"* %this, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base"*, align 8
   %2 = alloca i64, align 8
   %__map_alloc = alloca %"class.std::allocator.10", align 1
-  %3 = alloca i8*
-  %4 = alloca i32
-  %5 = alloca i32
+  %3 = alloca i32
   store %"class.std::_Deque_base"* %this, %"class.std::_Deque_base"** %1, align 8
   store i64 %__n, i64* %2, align 8
-  %6 = load %"class.std::_Deque_base"** %1
-  call void @_ZNKSt11_Deque_baseIiSaIiEE20_M_get_map_allocatorEv(%"class.std::allocator.10"* sret %__map_alloc, %"class.std::_Deque_base"* %6) #2
-  %7 = load i64* %2, align 8
-  %8 = invoke i32** @_ZNSt16allocator_traitsISaIPiEE8allocateERS1_m(%"class.std::allocator.10"* %__map_alloc, i64 %7)
-          to label %9 unwind label %10
-
-; <label>:9                                       ; preds = %0
-  store i32 1, i32* %5
-  call void @_ZNSaIPiED2Ev(%"class.std::allocator.10"* %__map_alloc) #2
-  ret i32** %8
-
-; <label>:10                                      ; preds = %0
-  %11 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %12 = extractvalue { i8*, i32 } %11, 0
-  store i8* %12, i8** %3
-  %13 = extractvalue { i8*, i32 } %11, 1
-  store i32 %13, i32* %4
-  call void @_ZNSaIPiED2Ev(%"class.std::allocator.10"* %__map_alloc) #2
-  br label %14
-
-; <label>:14                                      ; preds = %10
-  %15 = load i8** %3
-  %16 = load i32* %4
-  %17 = insertvalue { i8*, i32 } undef, i8* %15, 0
-  %18 = insertvalue { i8*, i32 } %17, i32 %16, 1
-  resume { i8*, i32 } %18
+  %4 = load %"class.std::_Deque_base"** %1
+  call void @_ZNKSt11_Deque_baseIiSaIiEE20_M_get_map_allocatorEv(%"class.std::allocator.10"* sret %__map_alloc, %"class.std::_Deque_base"* %4) #0
+  %5 = load i64* %2, align 8
+  %6 = call i32** @_ZNSt16allocator_traitsISaIPiEE8allocateERS1_m(%"class.std::allocator.10"* %__map_alloc, i64 %5)
+  store i32 1, i32* %3
+  call void @_ZNSaIPiED2Ev(%"class.std::allocator.10"* %__map_alloc) #0
+  ret i32** %6
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr i32** @_ZNSt16allocator_traitsISaIPiEE8allocateERS1_m(%"class.std::allocator.10"* %__a, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::allocator.10"*, align 8
   %2 = alloca i64, align 8
@@ -3130,7 +2710,7 @@ define linkonce_odr i32** @_ZNSt16allocator_traitsISaIPiEE8allocateERS1_m(%"clas
   ret i32** %6
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr i32** @_ZN9__gnu_cxx13new_allocatorIPiE8allocateEmPKv(%"class.__gnu_cxx::new_allocator.11"* %this, i64 %__n, i8*) #3 align 2 {
   %2 = alloca %"class.__gnu_cxx::new_allocator.11"*, align 8
   %3 = alloca i64, align 8
@@ -3140,12 +2720,12 @@ define linkonce_odr i32** @_ZN9__gnu_cxx13new_allocatorIPiE8allocateEmPKv(%"clas
   store i8* %0, i8** %4, align 8
   %5 = load %"class.__gnu_cxx::new_allocator.11"** %2
   %6 = load i64* %3, align 8
-  %7 = call i64 @_ZNK9__gnu_cxx13new_allocatorIPiE8max_sizeEv(%"class.__gnu_cxx::new_allocator.11"* %5) #2
+  %7 = call i64 @_ZNK9__gnu_cxx13new_allocatorIPiE8max_sizeEv(%"class.__gnu_cxx::new_allocator.11"* %5) #0
   %8 = icmp ugt i64 %6, %7
   br i1 %8, label %9, label %10
 
 ; <label>:9                                       ; preds = %1
-  call void @_ZSt17__throw_bad_allocv() #14
+  call void @_ZSt17__throw_bad_allocv() #9
   unreachable
 
 ; <label>:10                                      ; preds = %1
@@ -3157,15 +2737,15 @@ define linkonce_odr i32** @_ZN9__gnu_cxx13new_allocatorIPiE8allocateEmPKv(%"clas
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i64 @_ZNK9__gnu_cxx13new_allocatorIPiE8max_sizeEv(%"class.__gnu_cxx::new_allocator.11"* %this) #5 align 2 {
+define linkonce_odr i64 @_ZNK9__gnu_cxx13new_allocatorIPiE8max_sizeEv(%"class.__gnu_cxx::new_allocator.11"* %this) #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.11"*, align 8
   store %"class.__gnu_cxx::new_allocator.11"* %this, %"class.__gnu_cxx::new_allocator.11"** %1, align 8
   %2 = load %"class.__gnu_cxx::new_allocator.11"** %1
   ret i64 2305843009213693951
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32** @_ZSt23__copy_move_backward_a2ILb0EPPiS1_ET1_T0_S3_S2_(i32** %__first, i32** %__last, i32** %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32** @_ZSt23__copy_move_backward_a2ILb0EPPiS1_ET1_T0_S3_S2_(i32** %__first, i32** %__last, i32** %__result) #5 {
   %1 = alloca i32**, align 8
   %2 = alloca i32**, align 8
   %3 = alloca i32**, align 8
@@ -3182,8 +2762,8 @@ define linkonce_odr i32** @_ZSt23__copy_move_backward_a2ILb0EPPiS1_ET1_T0_S3_S2_
   ret i32** %10
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32** @_ZSt12__miter_baseIPPiENSt11_Miter_baseIT_E13iterator_typeES3_(i32** %__it) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32** @_ZSt12__miter_baseIPPiENSt11_Miter_baseIT_E13iterator_typeES3_(i32** %__it) #5 {
   %1 = alloca i32**, align 8
   store i32** %__it, i32*** %1, align 8
   %2 = load i32*** %1, align 8
@@ -3192,15 +2772,15 @@ define linkonce_odr i32** @_ZSt12__miter_baseIPPiENSt11_Miter_baseIT_E13iterator
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i32** @_ZNSt10_Iter_baseIPPiLb0EE7_S_baseES1_(i32** %__it) #5 align 2 {
+define linkonce_odr i32** @_ZNSt10_Iter_baseIPPiLb0EE7_S_baseES1_(i32** %__it) #3 align 2 {
   %1 = alloca i32**, align 8
   store i32** %__it, i32*** %1, align 8
   %2 = load i32*** %1, align 8
   ret i32** %2
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32** @_ZSt22__copy_move_backward_aILb0EPPiS1_ET1_T0_S3_S2_(i32** %__first, i32** %__last, i32** %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32** @_ZSt22__copy_move_backward_aILb0EPPiS1_ET1_T0_S3_S2_(i32** %__first, i32** %__last, i32** %__result) #5 {
   %1 = alloca i32**, align 8
   %2 = alloca i32**, align 8
   %3 = alloca i32**, align 8
@@ -3217,7 +2797,7 @@ define linkonce_odr i32** @_ZSt22__copy_move_backward_aILb0EPPiS1_ET1_T0_S3_S2_(
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr i32** @_ZSt12__niter_baseIPPiENSt11_Niter_baseIT_E13iterator_typeES3_(i32** %__it) #9 {
+define linkonce_odr i32** @_ZSt12__niter_baseIPPiENSt11_Niter_baseIT_E13iterator_typeES3_(i32** %__it) #5 {
   %1 = alloca i32**, align 8
   store i32** %__it, i32*** %1, align 8
   %2 = load i32*** %1, align 8
@@ -3226,7 +2806,7 @@ define linkonce_odr i32** @_ZSt12__niter_baseIPPiENSt11_Niter_baseIT_E13iterator
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i32** @_ZNSt20__copy_move_backwardILb0ELb1ESt26random_access_iterator_tagE13__copy_move_bIPiEEPT_PKS4_S7_S5_(i32** %__first, i32** %__last, i32** %__result) #5 align 2 {
+define linkonce_odr i32** @_ZNSt20__copy_move_backwardILb0ELb1ESt26random_access_iterator_tagE13__copy_move_bIPiEEPT_PKS4_S7_S5_(i32** %__first, i32** %__last, i32** %__result) #3 align 2 {
   %1 = alloca i32**, align 8
   %2 = alloca i32**, align 8
   %3 = alloca i32**, align 8
@@ -3266,8 +2846,8 @@ define linkonce_odr i32** @_ZNSt20__copy_move_backwardILb0ELb1ESt26random_access
   ret i32** %26
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32** @_ZSt14__copy_move_a2ILb0EPPiS1_ET1_T0_S3_S2_(i32** %__first, i32** %__last, i32** %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32** @_ZSt14__copy_move_a2ILb0EPPiS1_ET1_T0_S3_S2_(i32** %__first, i32** %__last, i32** %__result) #5 {
   %1 = alloca i32**, align 8
   %2 = alloca i32**, align 8
   %3 = alloca i32**, align 8
@@ -3284,8 +2864,8 @@ define linkonce_odr i32** @_ZSt14__copy_move_a2ILb0EPPiS1_ET1_T0_S3_S2_(i32** %_
   ret i32** %10
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr i32** @_ZSt13__copy_move_aILb0EPPiS1_ET1_T0_S3_S2_(i32** %__first, i32** %__last, i32** %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr i32** @_ZSt13__copy_move_aILb0EPPiS1_ET1_T0_S3_S2_(i32** %__first, i32** %__last, i32** %__result) #5 {
   %1 = alloca i32**, align 8
   %2 = alloca i32**, align 8
   %3 = alloca i32**, align 8
@@ -3302,7 +2882,7 @@ define linkonce_odr i32** @_ZSt13__copy_move_aILb0EPPiS1_ET1_T0_S3_S2_(i32** %__
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i32** @_ZNSt11__copy_moveILb0ELb1ESt26random_access_iterator_tagE8__copy_mIPiEEPT_PKS4_S7_S5_(i32** %__first, i32** %__last, i32** %__result) #5 align 2 {
+define linkonce_odr i32** @_ZNSt11__copy_moveILb0ELb1ESt26random_access_iterator_tagE8__copy_mIPiEEPT_PKS4_S7_S5_(i32** %__first, i32** %__last, i32** %__result) #3 align 2 {
   %1 = alloca i32**, align 8
   %2 = alloca i32**, align 8
   %3 = alloca i32**, align 8
@@ -3339,7 +2919,7 @@ define linkonce_odr i32** @_ZNSt11__copy_moveILb0ELb1ESt26random_access_iterator
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJRKiEEEvPT_DpOT0_(%"class.__gnu_cxx::new_allocator.2"* %this, i32* %__p, i32* %__args) #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJRKiEEEvPT_DpOT0_(%"class.__gnu_cxx::new_allocator.2"* %this, i32* %__p, i32* %__args) #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.2"*, align 8
   %2 = alloca i32*, align 8
   %3 = alloca i32*, align 8
@@ -3355,7 +2935,7 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJRKiEEEvPT_
 ; <label>:8                                       ; preds = %0
   %9 = bitcast i8* %6 to i32*
   %10 = load i32** %3, align 8
-  %11 = call i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* %10) #2
+  %11 = call i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* %10) #0
   %12 = load i32* %11
   store i32 %12, i32* %9, align 4
   br label %13
@@ -3366,7 +2946,7 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJRKiEEEvPT_
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE8pop_backEv(%"class.std::deque.4"* %this) #5 align 2 {
+define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE8pop_backEv(%"class.std::deque.4"* %this) #3 align 2 {
   %1 = alloca %"class.std::deque.4"*, align 8
   store %"class.std::deque.4"* %this, %"class.std::deque.4"** %1, align 8
   %2 = load %"class.std::deque.4"** %1
@@ -3381,7 +2961,7 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE8pop_backEv(%"class.std:
   %11 = getelementptr inbounds %"struct.std::_Deque_iterator.9"* %10, i32 0, i32 1
   %12 = load %struct.TreeNode*** %11, align 8
   %13 = icmp ne %struct.TreeNode** %7, %12
-  br i1 %13, label %14, label %30
+  br i1 %13, label %14, label %29
 
 ; <label>:14                                      ; preds = %0
   %15 = bitcast %"class.std::deque.4"* %2 to %"class.std::_Deque_base.5"*
@@ -3399,31 +2979,18 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE8pop_backEv(%"class.std:
   %26 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %25, i32 0, i32 3
   %27 = getelementptr inbounds %"struct.std::_Deque_iterator.9"* %26, i32 0, i32 0
   %28 = load %struct.TreeNode*** %27, align 8
-  invoke void @_ZNSt16allocator_traitsISaIP8TreeNodeEE7destroyIS1_EEvRS2_PT_(%"class.std::allocator.6"* %23, %struct.TreeNode** %28)
-          to label %29 unwind label %33
+  call void @_ZNSt16allocator_traitsISaIP8TreeNodeEE7destroyIS1_EEvRS2_PT_(%"class.std::allocator.6"* %23, %struct.TreeNode** %28)
+  br label %30
 
-; <label>:29                                      ; preds = %14
-  br label %32
+; <label>:29                                      ; preds = %0
+  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EE15_M_pop_back_auxEv(%"class.std::deque.4"* %2)
+  br label %30
 
-; <label>:30                                      ; preds = %0
-  invoke void @_ZNSt5dequeIP8TreeNodeSaIS1_EE15_M_pop_back_auxEv(%"class.std::deque.4"* %2)
-          to label %31 unwind label %33
-
-; <label>:31                                      ; preds = %30
-  br label %32
-
-; <label>:32                                      ; preds = %31, %29
+; <label>:30                                      ; preds = %29, %14
   ret void
-
-; <label>:33                                      ; preds = %30, %14
-  %34 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %35 = extractvalue { i8*, i32 } %34, 0
-  call void @__clang_call_terminate(i8* %35) #13
-  unreachable
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt16allocator_traitsISaIP8TreeNodeEE7destroyIS1_EEvRS2_PT_(%"class.std::allocator.6"* %__a, %struct.TreeNode** %__p) #3 align 2 {
   %1 = alloca %"class.std::allocator.6"*, align 8
   %2 = alloca %struct.TreeNode**, align 8
@@ -3436,7 +3003,7 @@ define linkonce_odr void @_ZNSt16allocator_traitsISaIP8TreeNodeEE7destroyIS1_EEv
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE15_M_pop_back_auxEv(%"class.std::deque.4"* %this) #3 align 2 {
   %1 = alloca %"class.std::deque.4"*, align 8
   store %"class.std::deque.4"* %this, %"class.std::deque.4"** %1, align 8
@@ -3447,7 +3014,7 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE15_M_pop_back_auxEv(%"cl
   %6 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %5, i32 0, i32 3
   %7 = getelementptr inbounds %"struct.std::_Deque_iterator.9"* %6, i32 0, i32 1
   %8 = load %struct.TreeNode*** %7, align 8
-  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE18_M_deallocate_nodeEPS1_(%"class.std::_Deque_base.5"* %3, %struct.TreeNode** %8) #2
+  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE18_M_deallocate_nodeEPS1_(%"class.std::_Deque_base.5"* %3, %struct.TreeNode** %8) #0
   %9 = bitcast %"class.std::deque.4"* %2 to %"class.std::_Deque_base.5"*
   %10 = getelementptr inbounds %"class.std::_Deque_base.5"* %9, i32 0, i32 0
   %11 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %10, i32 0, i32 3
@@ -3457,7 +3024,7 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE15_M_pop_back_auxEv(%"cl
   %15 = getelementptr inbounds %"struct.std::_Deque_iterator.9"* %14, i32 0, i32 3
   %16 = load %struct.TreeNode**** %15, align 8
   %17 = getelementptr inbounds %struct.TreeNode*** %16, i64 -1
-  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %11, %struct.TreeNode*** %17) #2
+  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %11, %struct.TreeNode*** %17) #0
   %18 = bitcast %"class.std::deque.4"* %2 to %"class.std::_Deque_base.5"*
   %19 = getelementptr inbounds %"class.std::_Deque_base.5"* %18, i32 0, i32 0
   %20 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %19, i32 0, i32 3
@@ -3470,7 +3037,7 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE15_M_pop_back_auxEv(%"cl
   %27 = getelementptr inbounds %"struct.std::_Deque_iterator.9"* %26, i32 0, i32 0
   store %struct.TreeNode** %23, %struct.TreeNode*** %27, align 8
   %28 = bitcast %"class.std::deque.4"* %2 to %"class.std::_Deque_base.5"*
-  %29 = call %"class.std::allocator.6"* @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base.5"* %28) #2
+  %29 = call %"class.std::allocator.6"* @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base.5"* %28) #0
   %30 = bitcast %"class.std::deque.4"* %2 to %"class.std::_Deque_base.5"*
   %31 = getelementptr inbounds %"class.std::_Deque_base.5"* %30, i32 0, i32 0
   %32 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %31, i32 0, i32 3
@@ -3481,7 +3048,7 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE15_M_pop_back_auxEv(%"cl
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE18_M_deallocate_nodeEPS1_(%"class.std::_Deque_base.5"* %this, %struct.TreeNode** %__p) #5 align 2 {
+define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE18_M_deallocate_nodeEPS1_(%"class.std::_Deque_base.5"* %this, %struct.TreeNode** %__p) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
   %2 = alloca %struct.TreeNode**, align 8
   store %"class.std::_Deque_base.5"* %this, %"class.std::_Deque_base.5"** %1, align 8
@@ -3490,26 +3057,13 @@ define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE18_M_deallocate_n
   %4 = getelementptr inbounds %"class.std::_Deque_base.5"* %3, i32 0, i32 0
   %5 = bitcast %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %4 to %"class.std::allocator.6"*
   %6 = load %struct.TreeNode*** %2, align 8
-  %7 = invoke i64 @_ZSt16__deque_buf_sizem(i64 8)
-          to label %8 unwind label %10
-
-; <label>:8                                       ; preds = %0
-  invoke void @_ZNSt16allocator_traitsISaIP8TreeNodeEE10deallocateERS2_PS1_m(%"class.std::allocator.6"* %5, %struct.TreeNode** %6, i64 %7)
-          to label %9 unwind label %10
-
-; <label>:9                                       ; preds = %8
+  %7 = call i64 @_ZSt16__deque_buf_sizem(i64 8)
+  call void @_ZNSt16allocator_traitsISaIP8TreeNodeEE10deallocateERS2_PS1_m(%"class.std::allocator.6"* %5, %struct.TreeNode** %6, i64 %7)
   ret void
-
-; <label>:10                                      ; preds = %8, %0
-  %11 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %12 = extractvalue { i8*, i32 } %11, 0
-  call void @__clang_call_terminate(i8* %12) #13
-  unreachable
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %this, %struct.TreeNode*** %__new_node) #5 align 2 {
+define linkonce_odr void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %this, %struct.TreeNode*** %__new_node) #3 align 2 {
   %1 = alloca %"struct.std::_Deque_iterator.9"*, align 8
   %2 = alloca %struct.TreeNode***, align 8
   store %"struct.std::_Deque_iterator.9"* %this, %"struct.std::_Deque_iterator.9"** %1, align 8
@@ -3524,7 +3078,7 @@ define linkonce_odr void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nod
   store %struct.TreeNode** %7, %struct.TreeNode*** %8, align 8
   %9 = getelementptr inbounds %"struct.std::_Deque_iterator.9"* %3, i32 0, i32 1
   %10 = load %struct.TreeNode*** %9, align 8
-  %11 = call i64 @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E14_S_buffer_sizeEv() #2
+  %11 = call i64 @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E14_S_buffer_sizeEv() #0
   %12 = getelementptr inbounds %struct.TreeNode** %10, i64 %11
   %13 = getelementptr inbounds %"struct.std::_Deque_iterator.9"* %3, i32 0, i32 2
   store %struct.TreeNode** %12, %struct.TreeNode*** %13, align 8
@@ -3532,7 +3086,7 @@ define linkonce_odr void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nod
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %"class.std::allocator.6"* @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base.5"* %this) #5 align 2 {
+define linkonce_odr %"class.std::allocator.6"* @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base.5"* %this) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
   store %"class.std::_Deque_base.5"* %this, %"class.std::_Deque_base.5"** %1, align 8
   %2 = load %"class.std::_Deque_base.5"** %1
@@ -3542,22 +3096,12 @@ define linkonce_odr %"class.std::allocator.6"* @_ZNSt11_Deque_baseIP8TreeNodeSaI
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i64 @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E14_S_buffer_sizeEv() #5 align 2 {
-  %1 = invoke i64 @_ZSt16__deque_buf_sizem(i64 8)
-          to label %2 unwind label %3
-
-; <label>:2                                       ; preds = %0
+define linkonce_odr i64 @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E14_S_buffer_sizeEv() #3 align 2 {
+  %1 = call i64 @_ZSt16__deque_buf_sizem(i64 8)
   ret i64 %1
-
-; <label>:3                                       ; preds = %0
-  %4 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %5 = extractvalue { i8*, i32 } %4, 0
-  call void @__clang_call_terminate(i8* %5) #13
-  unreachable
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt16allocator_traitsISaIP8TreeNodeEE10deallocateERS2_PS1_m(%"class.std::allocator.6"* %__a, %struct.TreeNode** %__p, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::allocator.6"*, align 8
   %2 = alloca %struct.TreeNode**, align 8
@@ -3574,7 +3118,7 @@ define linkonce_odr void @_ZNSt16allocator_traitsISaIP8TreeNodeEE10deallocateERS
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeE10deallocateEPS2_m(%"class.__gnu_cxx::new_allocator.7"* %this, %struct.TreeNode** %__p, i64) #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeE10deallocateEPS2_m(%"class.__gnu_cxx::new_allocator.7"* %this, %struct.TreeNode** %__p, i64) #3 align 2 {
   %2 = alloca %"class.__gnu_cxx::new_allocator.7"*, align 8
   %3 = alloca %struct.TreeNode**, align 8
   %4 = alloca i64, align 8
@@ -3584,12 +3128,12 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeE10deallocateEP
   %5 = load %"class.__gnu_cxx::new_allocator.7"** %2
   %6 = load %struct.TreeNode*** %3, align 8
   %7 = bitcast %struct.TreeNode** %6 to i8*
-  call void @_ZdlPv(i8* %7) #2
+  call void @_ZdlPv(i8* %7) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeE7destroyIS2_EEvPT_(%"class.__gnu_cxx::new_allocator.7"* %this, %struct.TreeNode** %__p) #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeE7destroyIS2_EEvPT_(%"class.__gnu_cxx::new_allocator.7"* %this, %struct.TreeNode** %__p) #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.7"*, align 8
   %2 = alloca %struct.TreeNode**, align 8
   store %"class.__gnu_cxx::new_allocator.7"* %this, %"class.__gnu_cxx::new_allocator.7"** %1, align 8
@@ -3600,31 +3144,31 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeE7destroyIS2_EE
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %struct.TreeNode** @_ZNSt5dequeIP8TreeNodeSaIS1_EE4backEv(%"class.std::deque.4"* %this) #5 align 2 {
+define linkonce_odr %struct.TreeNode** @_ZNSt5dequeIP8TreeNodeSaIS1_EE4backEv(%"class.std::deque.4"* %this) #3 align 2 {
   %1 = alloca %"class.std::deque.4"*, align 8
   %__tmp = alloca %"struct.std::_Deque_iterator.9", align 8
   store %"class.std::deque.4"* %this, %"class.std::deque.4"** %1, align 8
   %2 = load %"class.std::deque.4"** %1
-  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EE3endEv(%"struct.std::_Deque_iterator.9"* sret %__tmp, %"class.std::deque.4"* %2) #2
-  %3 = call %"struct.std::_Deque_iterator.9"* @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EmmEv(%"struct.std::_Deque_iterator.9"* %__tmp) #2
-  %4 = call %struct.TreeNode** @_ZNKSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EdeEv(%"struct.std::_Deque_iterator.9"* %__tmp) #2
+  call void @_ZNSt5dequeIP8TreeNodeSaIS1_EE3endEv(%"struct.std::_Deque_iterator.9"* sret %__tmp, %"class.std::deque.4"* %2) #0
+  %3 = call %"struct.std::_Deque_iterator.9"* @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EmmEv(%"struct.std::_Deque_iterator.9"* %__tmp) #0
+  %4 = call %struct.TreeNode** @_ZNKSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EdeEv(%"struct.std::_Deque_iterator.9"* %__tmp) #0
   ret %struct.TreeNode** %4
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE3endEv(%"struct.std::_Deque_iterator.9"* noalias sret %agg.result, %"class.std::deque.4"* %this) #5 align 2 {
+define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE3endEv(%"struct.std::_Deque_iterator.9"* noalias sret %agg.result, %"class.std::deque.4"* %this) #3 align 2 {
   %1 = alloca %"class.std::deque.4"*, align 8
   store %"class.std::deque.4"* %this, %"class.std::deque.4"** %1, align 8
   %2 = load %"class.std::deque.4"** %1
   %3 = bitcast %"class.std::deque.4"* %2 to %"class.std::_Deque_base.5"*
   %4 = getelementptr inbounds %"class.std::_Deque_base.5"* %3, i32 0, i32 0
   %5 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %4, i32 0, i32 3
-  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2ERKS4_(%"struct.std::_Deque_iterator.9"* %agg.result, %"struct.std::_Deque_iterator.9"* %5) #2
+  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2ERKS4_(%"struct.std::_Deque_iterator.9"* %agg.result, %"struct.std::_Deque_iterator.9"* %5) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %"struct.std::_Deque_iterator.9"* @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EmmEv(%"struct.std::_Deque_iterator.9"* %this) #5 align 2 {
+define linkonce_odr %"struct.std::_Deque_iterator.9"* @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EmmEv(%"struct.std::_Deque_iterator.9"* %this) #3 align 2 {
   %1 = alloca %"struct.std::_Deque_iterator.9"*, align 8
   store %"struct.std::_Deque_iterator.9"* %this, %"struct.std::_Deque_iterator.9"** %1, align 8
   %2 = load %"struct.std::_Deque_iterator.9"** %1
@@ -3639,7 +3183,7 @@ define linkonce_odr %"struct.std::_Deque_iterator.9"* @_ZNSt15_Deque_iteratorIP8
   %9 = getelementptr inbounds %"struct.std::_Deque_iterator.9"* %2, i32 0, i32 3
   %10 = load %struct.TreeNode**** %9, align 8
   %11 = getelementptr inbounds %struct.TreeNode*** %10, i64 -1
-  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %2, %struct.TreeNode*** %11) #2
+  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %2, %struct.TreeNode*** %11) #0
   %12 = getelementptr inbounds %"struct.std::_Deque_iterator.9"* %2, i32 0, i32 2
   %13 = load %struct.TreeNode*** %12, align 8
   %14 = getelementptr inbounds %"struct.std::_Deque_iterator.9"* %2, i32 0, i32 0
@@ -3655,7 +3199,7 @@ define linkonce_odr %"struct.std::_Deque_iterator.9"* @_ZNSt15_Deque_iteratorIP8
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %struct.TreeNode** @_ZNKSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EdeEv(%"struct.std::_Deque_iterator.9"* %this) #5 align 2 {
+define linkonce_odr %struct.TreeNode** @_ZNKSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EdeEv(%"struct.std::_Deque_iterator.9"* %this) #3 align 2 {
   %1 = alloca %"struct.std::_Deque_iterator.9"*, align 8
   store %"struct.std::_Deque_iterator.9"* %this, %"struct.std::_Deque_iterator.9"** %1, align 8
   %2 = load %"struct.std::_Deque_iterator.9"** %1
@@ -3665,7 +3209,7 @@ define linkonce_odr %struct.TreeNode** @_ZNKSt15_Deque_iteratorIP8TreeNodeRS1_PS
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2ERKS4_(%"struct.std::_Deque_iterator.9"* %this, %"struct.std::_Deque_iterator.9"* %__x) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2ERKS4_(%"struct.std::_Deque_iterator.9"* %this, %"struct.std::_Deque_iterator.9"* %__x) unnamed_addr #3 align 2 {
   %1 = alloca %"struct.std::_Deque_iterator.9"*, align 8
   %2 = alloca %"struct.std::_Deque_iterator.9"*, align 8
   store %"struct.std::_Deque_iterator.9"* %this, %"struct.std::_Deque_iterator.9"** %1, align 8
@@ -3695,7 +3239,7 @@ define linkonce_odr void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2ERKS4_(%"s
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr zeroext i1 @_ZNKSt5dequeIP8TreeNodeSaIS1_EE5emptyEv(%"class.std::deque.4"* %this) #5 align 2 {
+define linkonce_odr zeroext i1 @_ZNKSt5dequeIP8TreeNodeSaIS1_EE5emptyEv(%"class.std::deque.4"* %this) #3 align 2 {
   %1 = alloca %"class.std::deque.4"*, align 8
   store %"class.std::deque.4"* %this, %"class.std::deque.4"** %1, align 8
   %2 = load %"class.std::deque.4"** %1
@@ -3705,12 +3249,12 @@ define linkonce_odr zeroext i1 @_ZNKSt5dequeIP8TreeNodeSaIS1_EE5emptyEv(%"class.
   %6 = bitcast %"class.std::deque.4"* %2 to %"class.std::_Deque_base.5"*
   %7 = getelementptr inbounds %"class.std::_Deque_base.5"* %6, i32 0, i32 0
   %8 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %7, i32 0, i32 2
-  %9 = call zeroext i1 @_ZSteqIP8TreeNodeRS1_PS1_EbRKSt15_Deque_iteratorIT_T0_T1_ESA_(%"struct.std::_Deque_iterator.9"* %5, %"struct.std::_Deque_iterator.9"* %8) #2
+  %9 = call zeroext i1 @_ZSteqIP8TreeNodeRS1_PS1_EbRKSt15_Deque_iteratorIT_T0_T1_ESA_(%"struct.std::_Deque_iterator.9"* %5, %"struct.std::_Deque_iterator.9"* %8) #0
   ret i1 %9
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr zeroext i1 @_ZSteqIP8TreeNodeRS1_PS1_EbRKSt15_Deque_iteratorIT_T0_T1_ESA_(%"struct.std::_Deque_iterator.9"* %__x, %"struct.std::_Deque_iterator.9"* %__y) #9 {
+define linkonce_odr zeroext i1 @_ZSteqIP8TreeNodeRS1_PS1_EbRKSt15_Deque_iteratorIT_T0_T1_ESA_(%"struct.std::_Deque_iterator.9"* %__x, %"struct.std::_Deque_iterator.9"* %__y) #5 {
   %1 = alloca %"struct.std::_Deque_iterator.9"*, align 8
   %2 = alloca %"struct.std::_Deque_iterator.9"*, align 8
   store %"struct.std::_Deque_iterator.9"* %__x, %"struct.std::_Deque_iterator.9"** %1, align 8
@@ -3725,7 +3269,7 @@ define linkonce_odr zeroext i1 @_ZSteqIP8TreeNodeRS1_PS1_EbRKSt15_Deque_iterator
   ret i1 %9
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE9push_backERKS1_(%"class.std::deque.4"* %this, %struct.TreeNode** %__x) #3 align 2 {
   %1 = alloca %"class.std::deque.4"*, align 8
   %2 = alloca %struct.TreeNode**, align 8
@@ -3775,7 +3319,7 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE9push_backERKS1_(%"class
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt16allocator_traitsISaIP8TreeNodeEE9constructIS1_JRKS1_EEEvRS2_PT_DpOT0_(%"class.std::allocator.6"* %__a, %struct.TreeNode** %__p, %struct.TreeNode** %__args) #3 align 2 {
   %1 = alloca %"class.std::allocator.6"*, align 8
   %2 = alloca %struct.TreeNode**, align 8
@@ -3787,12 +3331,12 @@ define linkonce_odr void @_ZNSt16allocator_traitsISaIP8TreeNodeEE9constructIS1_J
   %5 = bitcast %"class.std::allocator.6"* %4 to %"class.__gnu_cxx::new_allocator.7"*
   %6 = load %struct.TreeNode*** %2, align 8
   %7 = load %struct.TreeNode*** %3, align 8
-  %8 = call %struct.TreeNode** @_ZSt7forwardIRKP8TreeNodeEOT_RNSt16remove_referenceIS4_E4typeE(%struct.TreeNode** %7) #2
+  %8 = call %struct.TreeNode** @_ZSt7forwardIRKP8TreeNodeEOT_RNSt16remove_referenceIS4_E4typeE(%struct.TreeNode** %7) #0
   call void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeE9constructIS2_JRKS2_EEEvPT_DpOT0_(%"class.__gnu_cxx::new_allocator.7"* %5, %struct.TreeNode** %6, %struct.TreeNode** %8)
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE16_M_push_back_auxIJRKS1_EEEvDpOT_(%"class.std::deque.4"* %this, %struct.TreeNode** %__args) #3 align 2 {
   %1 = alloca %"class.std::deque.4"*, align 8
   %2 = alloca %struct.TreeNode**, align 8
@@ -3818,7 +3362,7 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE16_M_push_back_auxIJRKS1
   %18 = getelementptr inbounds %"struct.std::_Deque_iterator.9"* %17, i32 0, i32 0
   %19 = load %struct.TreeNode*** %18, align 8
   %20 = load %struct.TreeNode*** %2, align 8
-  %21 = call %struct.TreeNode** @_ZSt7forwardIRKP8TreeNodeEOT_RNSt16remove_referenceIS4_E4typeE(%struct.TreeNode** %20) #2
+  %21 = call %struct.TreeNode** @_ZSt7forwardIRKP8TreeNodeEOT_RNSt16remove_referenceIS4_E4typeE(%struct.TreeNode** %20) #0
   call void @_ZNSt16allocator_traitsISaIP8TreeNodeEE9constructIS1_JRKS1_EEEvRS2_PT_DpOT0_(%"class.std::allocator.6"* %14, %struct.TreeNode** %19, %struct.TreeNode** %21)
   %22 = bitcast %"class.std::deque.4"* %3 to %"class.std::_Deque_base.5"*
   %23 = getelementptr inbounds %"class.std::_Deque_base.5"* %22, i32 0, i32 0
@@ -3829,7 +3373,7 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE16_M_push_back_auxIJRKS1
   %28 = getelementptr inbounds %"struct.std::_Deque_iterator.9"* %27, i32 0, i32 3
   %29 = load %struct.TreeNode**** %28, align 8
   %30 = getelementptr inbounds %struct.TreeNode*** %29, i64 1
-  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %24, %struct.TreeNode*** %30) #2
+  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %24, %struct.TreeNode*** %30) #0
   %31 = bitcast %"class.std::deque.4"* %3 to %"class.std::_Deque_base.5"*
   %32 = getelementptr inbounds %"class.std::_Deque_base.5"* %31, i32 0, i32 0
   %33 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %32, i32 0, i32 3
@@ -3843,7 +3387,7 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE16_M_push_back_auxIJRKS1
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE22_M_reserve_map_at_backEm(%"class.std::deque.4"* %this, i64 %__nodes_to_add) #3 align 2 {
   %1 = alloca %"class.std::deque.4"*, align 8
   %2 = alloca i64, align 8
@@ -3882,7 +3426,7 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE22_M_reserve_map_at_back
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr %struct.TreeNode** @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE16_M_allocate_nodeEv(%"class.std::_Deque_base.5"* %this) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
   store %"class.std::_Deque_base.5"* %this, %"class.std::_Deque_base.5"** %1, align 8
@@ -3895,14 +3439,14 @@ define linkonce_odr %struct.TreeNode** @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE16_
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %struct.TreeNode** @_ZSt7forwardIRKP8TreeNodeEOT_RNSt16remove_referenceIS4_E4typeE(%struct.TreeNode** %__t) #5 {
+define linkonce_odr %struct.TreeNode** @_ZSt7forwardIRKP8TreeNodeEOT_RNSt16remove_referenceIS4_E4typeE(%struct.TreeNode** %__t) #3 {
   %1 = alloca %struct.TreeNode**, align 8
   store %struct.TreeNode** %__t, %struct.TreeNode*** %1, align 8
   %2 = load %struct.TreeNode*** %1, align 8
   ret %struct.TreeNode** %2
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr %struct.TreeNode** @_ZNSt16allocator_traitsISaIP8TreeNodeEE8allocateERS2_m(%"class.std::allocator.6"* %__a, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::allocator.6"*, align 8
   %2 = alloca i64, align 8
@@ -3915,7 +3459,7 @@ define linkonce_odr %struct.TreeNode** @_ZNSt16allocator_traitsISaIP8TreeNodeEE8
   ret %struct.TreeNode** %6
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr %struct.TreeNode** @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeE8allocateEmPKv(%"class.__gnu_cxx::new_allocator.7"* %this, i64 %__n, i8*) #3 align 2 {
   %2 = alloca %"class.__gnu_cxx::new_allocator.7"*, align 8
   %3 = alloca i64, align 8
@@ -3925,12 +3469,12 @@ define linkonce_odr %struct.TreeNode** @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeE
   store i8* %0, i8** %4, align 8
   %5 = load %"class.__gnu_cxx::new_allocator.7"** %2
   %6 = load i64* %3, align 8
-  %7 = call i64 @_ZNK9__gnu_cxx13new_allocatorIP8TreeNodeE8max_sizeEv(%"class.__gnu_cxx::new_allocator.7"* %5) #2
+  %7 = call i64 @_ZNK9__gnu_cxx13new_allocatorIP8TreeNodeE8max_sizeEv(%"class.__gnu_cxx::new_allocator.7"* %5) #0
   %8 = icmp ugt i64 %6, %7
   br i1 %8, label %9, label %10
 
 ; <label>:9                                       ; preds = %1
-  call void @_ZSt17__throw_bad_allocv() #14
+  call void @_ZSt17__throw_bad_allocv() #9
   unreachable
 
 ; <label>:10                                      ; preds = %1
@@ -3942,14 +3486,14 @@ define linkonce_odr %struct.TreeNode** @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeE
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i64 @_ZNK9__gnu_cxx13new_allocatorIP8TreeNodeE8max_sizeEv(%"class.__gnu_cxx::new_allocator.7"* %this) #5 align 2 {
+define linkonce_odr i64 @_ZNK9__gnu_cxx13new_allocatorIP8TreeNodeE8max_sizeEv(%"class.__gnu_cxx::new_allocator.7"* %this) #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.7"*, align 8
   store %"class.__gnu_cxx::new_allocator.7"* %this, %"class.__gnu_cxx::new_allocator.7"** %1, align 8
   %2 = load %"class.__gnu_cxx::new_allocator.7"** %1
   ret i64 2305843009213693951
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE17_M_reallocate_mapEmb(%"class.std::deque.4"* %this, i64 %__nodes_to_add, i1 zeroext %__add_at_front) #3 align 2 {
   %1 = alloca %"class.std::deque.4"*, align 8
   %2 = alloca i64, align 8
@@ -4127,7 +3671,7 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE17_M_reallocate_mapEmb(%
   %138 = getelementptr inbounds %"class.std::_Deque_base.5"* %137, i32 0, i32 0
   %139 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %138, i32 0, i32 1
   %140 = load i64* %139, align 8
-  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE17_M_deallocate_mapEPPS1_m(%"class.std::_Deque_base.5"* %132, %struct.TreeNode*** %136, i64 %140) #2
+  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE17_M_deallocate_mapEPPS1_m(%"class.std::_Deque_base.5"* %132, %struct.TreeNode*** %136, i64 %140) #0
   %141 = load %struct.TreeNode**** %__new_map, align 8
   %142 = bitcast %"class.std::deque.4"* %5 to %"class.std::_Deque_base.5"*
   %143 = getelementptr inbounds %"class.std::_Deque_base.5"* %142, i32 0, i32 0
@@ -4145,7 +3689,7 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE17_M_reallocate_mapEmb(%
   %151 = getelementptr inbounds %"class.std::_Deque_base.5"* %150, i32 0, i32 0
   %152 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %151, i32 0, i32 2
   %153 = load %struct.TreeNode**** %__new_nstart, align 8
-  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %152, %struct.TreeNode*** %153) #2
+  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %152, %struct.TreeNode*** %153) #0
   %154 = bitcast %"class.std::deque.4"* %5 to %"class.std::_Deque_base.5"*
   %155 = getelementptr inbounds %"class.std::_Deque_base.5"* %154, i32 0, i32 0
   %156 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %155, i32 0, i32 3
@@ -4153,12 +3697,12 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE17_M_reallocate_mapEmb(%
   %158 = load i64* %__old_num_nodes, align 8
   %159 = getelementptr inbounds %struct.TreeNode*** %157, i64 %158
   %160 = getelementptr inbounds %struct.TreeNode*** %159, i64 -1
-  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %156, %struct.TreeNode*** %160) #2
+  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %156, %struct.TreeNode*** %160) #0
   ret void
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr %struct.TreeNode*** @_ZSt4copyIPPP8TreeNodeS3_ET0_T_S5_S4_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr %struct.TreeNode*** @_ZSt4copyIPPP8TreeNodeS3_ET0_T_S5_S4_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #5 {
   %1 = alloca %struct.TreeNode***, align 8
   %2 = alloca %struct.TreeNode***, align 8
   %3 = alloca %struct.TreeNode***, align 8
@@ -4174,8 +3718,8 @@ define linkonce_odr %struct.TreeNode*** @_ZSt4copyIPPP8TreeNodeS3_ET0_T_S5_S4_(%
   ret %struct.TreeNode*** %9
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr %struct.TreeNode*** @_ZSt13copy_backwardIPPP8TreeNodeS3_ET0_T_S5_S4_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr %struct.TreeNode*** @_ZSt13copy_backwardIPPP8TreeNodeS3_ET0_T_S5_S4_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #5 {
   %1 = alloca %struct.TreeNode***, align 8
   %2 = alloca %struct.TreeNode***, align 8
   %3 = alloca %struct.TreeNode***, align 8
@@ -4191,94 +3735,52 @@ define linkonce_odr %struct.TreeNode*** @_ZSt13copy_backwardIPPP8TreeNodeS3_ET0_
   ret %struct.TreeNode*** %9
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr %struct.TreeNode*** @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE15_M_allocate_mapEm(%"class.std::_Deque_base.5"* %this, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
   %2 = alloca i64, align 8
   %__map_alloc = alloca %"class.std::allocator.13", align 1
-  %3 = alloca i8*
-  %4 = alloca i32
-  %5 = alloca i32
+  %3 = alloca i32
   store %"class.std::_Deque_base.5"* %this, %"class.std::_Deque_base.5"** %1, align 8
   store i64 %__n, i64* %2, align 8
-  %6 = load %"class.std::_Deque_base.5"** %1
-  call void @_ZNKSt11_Deque_baseIP8TreeNodeSaIS1_EE20_M_get_map_allocatorEv(%"class.std::allocator.13"* sret %__map_alloc, %"class.std::_Deque_base.5"* %6) #2
-  %7 = load i64* %2, align 8
-  %8 = invoke %struct.TreeNode*** @_ZNSt16allocator_traitsISaIPP8TreeNodeEE8allocateERS3_m(%"class.std::allocator.13"* %__map_alloc, i64 %7)
-          to label %9 unwind label %10
-
-; <label>:9                                       ; preds = %0
-  store i32 1, i32* %5
-  call void @_ZNSaIPP8TreeNodeED2Ev(%"class.std::allocator.13"* %__map_alloc) #2
-  ret %struct.TreeNode*** %8
-
-; <label>:10                                      ; preds = %0
-  %11 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %12 = extractvalue { i8*, i32 } %11, 0
-  store i8* %12, i8** %3
-  %13 = extractvalue { i8*, i32 } %11, 1
-  store i32 %13, i32* %4
-  call void @_ZNSaIPP8TreeNodeED2Ev(%"class.std::allocator.13"* %__map_alloc) #2
-  br label %14
-
-; <label>:14                                      ; preds = %10
-  %15 = load i8** %3
-  %16 = load i32* %4
-  %17 = insertvalue { i8*, i32 } undef, i8* %15, 0
-  %18 = insertvalue { i8*, i32 } %17, i32 %16, 1
-  resume { i8*, i32 } %18
+  %4 = load %"class.std::_Deque_base.5"** %1
+  call void @_ZNKSt11_Deque_baseIP8TreeNodeSaIS1_EE20_M_get_map_allocatorEv(%"class.std::allocator.13"* sret %__map_alloc, %"class.std::_Deque_base.5"* %4) #0
+  %5 = load i64* %2, align 8
+  %6 = call %struct.TreeNode*** @_ZNSt16allocator_traitsISaIPP8TreeNodeEE8allocateERS3_m(%"class.std::allocator.13"* %__map_alloc, i64 %5)
+  store i32 1, i32* %3
+  call void @_ZNSaIPP8TreeNodeED2Ev(%"class.std::allocator.13"* %__map_alloc) #0
+  ret %struct.TreeNode*** %6
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE17_M_deallocate_mapEPPS1_m(%"class.std::_Deque_base.5"* %this, %struct.TreeNode*** %__p, i64 %__n) #5 align 2 {
+define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE17_M_deallocate_mapEPPS1_m(%"class.std::_Deque_base.5"* %this, %struct.TreeNode*** %__p, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
   %2 = alloca %struct.TreeNode***, align 8
   %3 = alloca i64, align 8
   %__map_alloc = alloca %"class.std::allocator.13", align 1
-  %4 = alloca i8*
-  %5 = alloca i32
   store %"class.std::_Deque_base.5"* %this, %"class.std::_Deque_base.5"** %1, align 8
   store %struct.TreeNode*** %__p, %struct.TreeNode**** %2, align 8
   store i64 %__n, i64* %3, align 8
-  %6 = load %"class.std::_Deque_base.5"** %1
-  call void @_ZNKSt11_Deque_baseIP8TreeNodeSaIS1_EE20_M_get_map_allocatorEv(%"class.std::allocator.13"* sret %__map_alloc, %"class.std::_Deque_base.5"* %6) #2
-  %7 = load %struct.TreeNode**** %2, align 8
-  %8 = load i64* %3, align 8
-  invoke void @_ZNSt16allocator_traitsISaIPP8TreeNodeEE10deallocateERS3_PS2_m(%"class.std::allocator.13"* %__map_alloc, %struct.TreeNode*** %7, i64 %8)
-          to label %9 unwind label %10
-
-; <label>:9                                       ; preds = %0
-  call void @_ZNSaIPP8TreeNodeED2Ev(%"class.std::allocator.13"* %__map_alloc) #2
+  %4 = load %"class.std::_Deque_base.5"** %1
+  call void @_ZNKSt11_Deque_baseIP8TreeNodeSaIS1_EE20_M_get_map_allocatorEv(%"class.std::allocator.13"* sret %__map_alloc, %"class.std::_Deque_base.5"* %4) #0
+  %5 = load %struct.TreeNode**** %2, align 8
+  %6 = load i64* %3, align 8
+  call void @_ZNSt16allocator_traitsISaIPP8TreeNodeEE10deallocateERS3_PS2_m(%"class.std::allocator.13"* %__map_alloc, %struct.TreeNode*** %5, i64 %6)
+  call void @_ZNSaIPP8TreeNodeED2Ev(%"class.std::allocator.13"* %__map_alloc) #0
   ret void
-
-; <label>:10                                      ; preds = %0
-  %11 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          catch i8* null
-  %12 = extractvalue { i8*, i32 } %11, 0
-  store i8* %12, i8** %4
-  %13 = extractvalue { i8*, i32 } %11, 1
-  store i32 %13, i32* %5
-  call void @_ZNSaIPP8TreeNodeED2Ev(%"class.std::allocator.13"* %__map_alloc) #2
-  br label %14
-
-; <label>:14                                      ; preds = %10
-  %15 = load i8** %4
-  call void @__clang_call_terminate(i8* %15) #13
-  unreachable
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNKSt11_Deque_baseIP8TreeNodeSaIS1_EE20_M_get_map_allocatorEv(%"class.std::allocator.13"* noalias sret %agg.result, %"class.std::_Deque_base.5"* %this) #5 align 2 {
+define linkonce_odr void @_ZNKSt11_Deque_baseIP8TreeNodeSaIS1_EE20_M_get_map_allocatorEv(%"class.std::allocator.13"* noalias sret %agg.result, %"class.std::_Deque_base.5"* %this) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
   store %"class.std::_Deque_base.5"* %this, %"class.std::_Deque_base.5"** %1, align 8
   %2 = load %"class.std::_Deque_base.5"** %1
-  %3 = call %"class.std::allocator.6"* @_ZNKSt11_Deque_baseIP8TreeNodeSaIS1_EE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base.5"* %2) #2
-  call void @_ZNSaIPP8TreeNodeEC2IS0_EERKSaIT_E(%"class.std::allocator.13"* %agg.result, %"class.std::allocator.6"* %3) #2
+  %3 = call %"class.std::allocator.6"* @_ZNKSt11_Deque_baseIP8TreeNodeSaIS1_EE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base.5"* %2) #0
+  call void @_ZNSaIPP8TreeNodeEC2IS0_EERKSaIT_E(%"class.std::allocator.13"* %agg.result, %"class.std::allocator.6"* %3) #0
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt16allocator_traitsISaIPP8TreeNodeEE10deallocateERS3_PS2_m(%"class.std::allocator.13"* %__a, %struct.TreeNode*** %__p, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::allocator.13"*, align 8
   %2 = alloca %struct.TreeNode***, align 8
@@ -4295,17 +3797,17 @@ define linkonce_odr void @_ZNSt16allocator_traitsISaIPP8TreeNodeEE10deallocateER
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSaIPP8TreeNodeED2Ev(%"class.std::allocator.13"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSaIPP8TreeNodeED2Ev(%"class.std::allocator.13"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::allocator.13"*, align 8
   store %"class.std::allocator.13"* %this, %"class.std::allocator.13"** %1, align 8
   %2 = load %"class.std::allocator.13"** %1
   %3 = bitcast %"class.std::allocator.13"* %2 to %"class.__gnu_cxx::new_allocator.14"*
-  call void @_ZN9__gnu_cxx13new_allocatorIPP8TreeNodeED2Ev(%"class.__gnu_cxx::new_allocator.14"* %3) #2
+  call void @_ZN9__gnu_cxx13new_allocatorIPP8TreeNodeED2Ev(%"class.__gnu_cxx::new_allocator.14"* %3) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPP8TreeNodeED2Ev(%"class.__gnu_cxx::new_allocator.14"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPP8TreeNodeED2Ev(%"class.__gnu_cxx::new_allocator.14"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.14"*, align 8
   store %"class.__gnu_cxx::new_allocator.14"* %this, %"class.__gnu_cxx::new_allocator.14"** %1, align 8
   %2 = load %"class.__gnu_cxx::new_allocator.14"** %1
@@ -4313,7 +3815,7 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPP8TreeNodeED2Ev(%"class.
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPP8TreeNodeE10deallocateEPS3_m(%"class.__gnu_cxx::new_allocator.14"* %this, %struct.TreeNode*** %__p, i64) #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPP8TreeNodeE10deallocateEPS3_m(%"class.__gnu_cxx::new_allocator.14"* %this, %struct.TreeNode*** %__p, i64) #3 align 2 {
   %2 = alloca %"class.__gnu_cxx::new_allocator.14"*, align 8
   %3 = alloca %struct.TreeNode***, align 8
   %4 = alloca i64, align 8
@@ -4323,24 +3825,24 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPP8TreeNodeE10deallocateE
   %5 = load %"class.__gnu_cxx::new_allocator.14"** %2
   %6 = load %struct.TreeNode**** %3, align 8
   %7 = bitcast %struct.TreeNode*** %6 to i8*
-  call void @_ZdlPv(i8* %7) #2
+  call void @_ZdlPv(i8* %7) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSaIPP8TreeNodeEC2IS0_EERKSaIT_E(%"class.std::allocator.13"* %this, %"class.std::allocator.6"*) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSaIPP8TreeNodeEC2IS0_EERKSaIT_E(%"class.std::allocator.13"* %this, %"class.std::allocator.6"*) unnamed_addr #3 align 2 {
   %2 = alloca %"class.std::allocator.13"*, align 8
   %3 = alloca %"class.std::allocator.6"*, align 8
   store %"class.std::allocator.13"* %this, %"class.std::allocator.13"** %2, align 8
   store %"class.std::allocator.6"* %0, %"class.std::allocator.6"** %3, align 8
   %4 = load %"class.std::allocator.13"** %2
   %5 = bitcast %"class.std::allocator.13"* %4 to %"class.__gnu_cxx::new_allocator.14"*
-  call void @_ZN9__gnu_cxx13new_allocatorIPP8TreeNodeEC2Ev(%"class.__gnu_cxx::new_allocator.14"* %5) #2
+  call void @_ZN9__gnu_cxx13new_allocatorIPP8TreeNodeEC2Ev(%"class.__gnu_cxx::new_allocator.14"* %5) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %"class.std::allocator.6"* @_ZNKSt11_Deque_baseIP8TreeNodeSaIS1_EE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base.5"* %this) #5 align 2 {
+define linkonce_odr %"class.std::allocator.6"* @_ZNKSt11_Deque_baseIP8TreeNodeSaIS1_EE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base.5"* %this) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
   store %"class.std::_Deque_base.5"* %this, %"class.std::_Deque_base.5"** %1, align 8
   %2 = load %"class.std::_Deque_base.5"** %1
@@ -4350,14 +3852,14 @@ define linkonce_odr %"class.std::allocator.6"* @_ZNKSt11_Deque_baseIP8TreeNodeSa
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPP8TreeNodeEC2Ev(%"class.__gnu_cxx::new_allocator.14"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIPP8TreeNodeEC2Ev(%"class.__gnu_cxx::new_allocator.14"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.14"*, align 8
   store %"class.__gnu_cxx::new_allocator.14"* %this, %"class.__gnu_cxx::new_allocator.14"** %1, align 8
   %2 = load %"class.__gnu_cxx::new_allocator.14"** %1
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr %struct.TreeNode*** @_ZNSt16allocator_traitsISaIPP8TreeNodeEE8allocateERS3_m(%"class.std::allocator.13"* %__a, i64 %__n) #3 align 2 {
   %1 = alloca %"class.std::allocator.13"*, align 8
   %2 = alloca i64, align 8
@@ -4370,7 +3872,7 @@ define linkonce_odr %struct.TreeNode*** @_ZNSt16allocator_traitsISaIPP8TreeNodeE
   ret %struct.TreeNode*** %6
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr %struct.TreeNode*** @_ZN9__gnu_cxx13new_allocatorIPP8TreeNodeE8allocateEmPKv(%"class.__gnu_cxx::new_allocator.14"* %this, i64 %__n, i8*) #3 align 2 {
   %2 = alloca %"class.__gnu_cxx::new_allocator.14"*, align 8
   %3 = alloca i64, align 8
@@ -4380,12 +3882,12 @@ define linkonce_odr %struct.TreeNode*** @_ZN9__gnu_cxx13new_allocatorIPP8TreeNod
   store i8* %0, i8** %4, align 8
   %5 = load %"class.__gnu_cxx::new_allocator.14"** %2
   %6 = load i64* %3, align 8
-  %7 = call i64 @_ZNK9__gnu_cxx13new_allocatorIPP8TreeNodeE8max_sizeEv(%"class.__gnu_cxx::new_allocator.14"* %5) #2
+  %7 = call i64 @_ZNK9__gnu_cxx13new_allocatorIPP8TreeNodeE8max_sizeEv(%"class.__gnu_cxx::new_allocator.14"* %5) #0
   %8 = icmp ugt i64 %6, %7
   br i1 %8, label %9, label %10
 
 ; <label>:9                                       ; preds = %1
-  call void @_ZSt17__throw_bad_allocv() #14
+  call void @_ZSt17__throw_bad_allocv() #9
   unreachable
 
 ; <label>:10                                      ; preds = %1
@@ -4397,15 +3899,15 @@ define linkonce_odr %struct.TreeNode*** @_ZN9__gnu_cxx13new_allocatorIPP8TreeNod
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i64 @_ZNK9__gnu_cxx13new_allocatorIPP8TreeNodeE8max_sizeEv(%"class.__gnu_cxx::new_allocator.14"* %this) #5 align 2 {
+define linkonce_odr i64 @_ZNK9__gnu_cxx13new_allocatorIPP8TreeNodeE8max_sizeEv(%"class.__gnu_cxx::new_allocator.14"* %this) #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.14"*, align 8
   store %"class.__gnu_cxx::new_allocator.14"* %this, %"class.__gnu_cxx::new_allocator.14"** %1, align 8
   %2 = load %"class.__gnu_cxx::new_allocator.14"** %1
   ret i64 2305843009213693951
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr %struct.TreeNode*** @_ZSt23__copy_move_backward_a2ILb0EPPP8TreeNodeS3_ET1_T0_S5_S4_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr %struct.TreeNode*** @_ZSt23__copy_move_backward_a2ILb0EPPP8TreeNodeS3_ET1_T0_S5_S4_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #5 {
   %1 = alloca %struct.TreeNode***, align 8
   %2 = alloca %struct.TreeNode***, align 8
   %3 = alloca %struct.TreeNode***, align 8
@@ -4422,8 +3924,8 @@ define linkonce_odr %struct.TreeNode*** @_ZSt23__copy_move_backward_a2ILb0EPPP8T
   ret %struct.TreeNode*** %10
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr %struct.TreeNode*** @_ZSt12__miter_baseIPPP8TreeNodeENSt11_Miter_baseIT_E13iterator_typeES5_(%struct.TreeNode*** %__it) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr %struct.TreeNode*** @_ZSt12__miter_baseIPPP8TreeNodeENSt11_Miter_baseIT_E13iterator_typeES5_(%struct.TreeNode*** %__it) #5 {
   %1 = alloca %struct.TreeNode***, align 8
   store %struct.TreeNode*** %__it, %struct.TreeNode**** %1, align 8
   %2 = load %struct.TreeNode**** %1, align 8
@@ -4432,15 +3934,15 @@ define linkonce_odr %struct.TreeNode*** @_ZSt12__miter_baseIPPP8TreeNodeENSt11_M
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %struct.TreeNode*** @_ZNSt10_Iter_baseIPPP8TreeNodeLb0EE7_S_baseES3_(%struct.TreeNode*** %__it) #5 align 2 {
+define linkonce_odr %struct.TreeNode*** @_ZNSt10_Iter_baseIPPP8TreeNodeLb0EE7_S_baseES3_(%struct.TreeNode*** %__it) #3 align 2 {
   %1 = alloca %struct.TreeNode***, align 8
   store %struct.TreeNode*** %__it, %struct.TreeNode**** %1, align 8
   %2 = load %struct.TreeNode**** %1, align 8
   ret %struct.TreeNode*** %2
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr %struct.TreeNode*** @_ZSt22__copy_move_backward_aILb0EPPP8TreeNodeS3_ET1_T0_S5_S4_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr %struct.TreeNode*** @_ZSt22__copy_move_backward_aILb0EPPP8TreeNodeS3_ET1_T0_S5_S4_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #5 {
   %1 = alloca %struct.TreeNode***, align 8
   %2 = alloca %struct.TreeNode***, align 8
   %3 = alloca %struct.TreeNode***, align 8
@@ -4457,7 +3959,7 @@ define linkonce_odr %struct.TreeNode*** @_ZSt22__copy_move_backward_aILb0EPPP8Tr
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr %struct.TreeNode*** @_ZSt12__niter_baseIPPP8TreeNodeENSt11_Niter_baseIT_E13iterator_typeES5_(%struct.TreeNode*** %__it) #9 {
+define linkonce_odr %struct.TreeNode*** @_ZSt12__niter_baseIPPP8TreeNodeENSt11_Niter_baseIT_E13iterator_typeES5_(%struct.TreeNode*** %__it) #5 {
   %1 = alloca %struct.TreeNode***, align 8
   store %struct.TreeNode*** %__it, %struct.TreeNode**** %1, align 8
   %2 = load %struct.TreeNode**** %1, align 8
@@ -4466,7 +3968,7 @@ define linkonce_odr %struct.TreeNode*** @_ZSt12__niter_baseIPPP8TreeNodeENSt11_N
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %struct.TreeNode*** @_ZNSt20__copy_move_backwardILb0ELb1ESt26random_access_iterator_tagE13__copy_move_bIPP8TreeNodeEEPT_PKS6_S9_S7_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #5 align 2 {
+define linkonce_odr %struct.TreeNode*** @_ZNSt20__copy_move_backwardILb0ELb1ESt26random_access_iterator_tagE13__copy_move_bIPP8TreeNodeEEPT_PKS6_S9_S7_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #3 align 2 {
   %1 = alloca %struct.TreeNode***, align 8
   %2 = alloca %struct.TreeNode***, align 8
   %3 = alloca %struct.TreeNode***, align 8
@@ -4506,8 +4008,8 @@ define linkonce_odr %struct.TreeNode*** @_ZNSt20__copy_move_backwardILb0ELb1ESt2
   ret %struct.TreeNode*** %26
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr %struct.TreeNode*** @_ZSt14__copy_move_a2ILb0EPPP8TreeNodeS3_ET1_T0_S5_S4_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr %struct.TreeNode*** @_ZSt14__copy_move_a2ILb0EPPP8TreeNodeS3_ET1_T0_S5_S4_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #5 {
   %1 = alloca %struct.TreeNode***, align 8
   %2 = alloca %struct.TreeNode***, align 8
   %3 = alloca %struct.TreeNode***, align 8
@@ -4524,8 +4026,8 @@ define linkonce_odr %struct.TreeNode*** @_ZSt14__copy_move_a2ILb0EPPP8TreeNodeS3
   ret %struct.TreeNode*** %10
 }
 
-; Function Attrs: inlinehint uwtable
-define linkonce_odr %struct.TreeNode*** @_ZSt13__copy_move_aILb0EPPP8TreeNodeS3_ET1_T0_S5_S4_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #7 {
+; Function Attrs: inlinehint nounwind uwtable
+define linkonce_odr %struct.TreeNode*** @_ZSt13__copy_move_aILb0EPPP8TreeNodeS3_ET1_T0_S5_S4_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #5 {
   %1 = alloca %struct.TreeNode***, align 8
   %2 = alloca %struct.TreeNode***, align 8
   %3 = alloca %struct.TreeNode***, align 8
@@ -4542,7 +4044,7 @@ define linkonce_odr %struct.TreeNode*** @_ZSt13__copy_move_aILb0EPPP8TreeNodeS3_
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %struct.TreeNode*** @_ZNSt11__copy_moveILb0ELb1ESt26random_access_iterator_tagE8__copy_mIPP8TreeNodeEEPT_PKS6_S9_S7_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #5 align 2 {
+define linkonce_odr %struct.TreeNode*** @_ZNSt11__copy_moveILb0ELb1ESt26random_access_iterator_tagE8__copy_mIPP8TreeNodeEEPT_PKS6_S9_S7_(%struct.TreeNode*** %__first, %struct.TreeNode*** %__last, %struct.TreeNode*** %__result) #3 align 2 {
   %1 = alloca %struct.TreeNode***, align 8
   %2 = alloca %struct.TreeNode***, align 8
   %3 = alloca %struct.TreeNode***, align 8
@@ -4579,7 +4081,7 @@ define linkonce_odr %struct.TreeNode*** @_ZNSt11__copy_moveILb0ELb1ESt26random_a
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeE9constructIS2_JRKS2_EEEvPT_DpOT0_(%"class.__gnu_cxx::new_allocator.7"* %this, %struct.TreeNode** %__p, %struct.TreeNode** %__args) #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeE9constructIS2_JRKS2_EEEvPT_DpOT0_(%"class.__gnu_cxx::new_allocator.7"* %this, %struct.TreeNode** %__p, %struct.TreeNode** %__args) #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.7"*, align 8
   %2 = alloca %struct.TreeNode**, align 8
   %3 = alloca %struct.TreeNode**, align 8
@@ -4595,7 +4097,7 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeE9constructIS2_
 ; <label>:8                                       ; preds = %0
   %9 = bitcast i8* %6 to %struct.TreeNode**
   %10 = load %struct.TreeNode*** %3, align 8
-  %11 = call %struct.TreeNode** @_ZSt7forwardIRKP8TreeNodeEOT_RNSt16remove_referenceIS4_E4typeE(%struct.TreeNode** %10) #2
+  %11 = call %struct.TreeNode** @_ZSt7forwardIRKP8TreeNodeEOT_RNSt16remove_referenceIS4_E4typeE(%struct.TreeNode** %10) #0
   %12 = load %struct.TreeNode** %11
   store %struct.TreeNode* %12, %struct.TreeNode** %9, align 8
   br label %13
@@ -4606,7 +4108,7 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeE9constructIS2_
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE15_M_destroy_dataESt15_Deque_iteratorIS1_RS1_PS1_ES7_RKS2_(%"class.std::deque.4"* %this, %"struct.std::_Deque_iterator.9"* %__first, %"struct.std::_Deque_iterator.9"* %__last, %"class.std::allocator.6"*) #5 align 2 {
+define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE15_M_destroy_dataESt15_Deque_iteratorIS1_RS1_PS1_ES7_RKS2_(%"class.std::deque.4"* %this, %"struct.std::_Deque_iterator.9"* %__first, %"struct.std::_Deque_iterator.9"* %__last, %"class.std::allocator.6"*) #3 align 2 {
   %2 = alloca %"class.std::deque.4"*, align 8
   %3 = alloca %"class.std::allocator.6"*, align 8
   store %"class.std::deque.4"* %this, %"class.std::deque.4"** %2, align 8
@@ -4616,19 +4118,19 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE15_M_destroy_dataESt15_D
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE5beginEv(%"struct.std::_Deque_iterator.9"* noalias sret %agg.result, %"class.std::deque.4"* %this) #5 align 2 {
+define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EE5beginEv(%"struct.std::_Deque_iterator.9"* noalias sret %agg.result, %"class.std::deque.4"* %this) #3 align 2 {
   %1 = alloca %"class.std::deque.4"*, align 8
   store %"class.std::deque.4"* %this, %"class.std::deque.4"** %1, align 8
   %2 = load %"class.std::deque.4"** %1
   %3 = bitcast %"class.std::deque.4"* %2 to %"class.std::_Deque_base.5"*
   %4 = getelementptr inbounds %"class.std::_Deque_base.5"* %3, i32 0, i32 0
   %5 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %4, i32 0, i32 2
-  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2ERKS4_(%"struct.std::_Deque_iterator.9"* %agg.result, %"struct.std::_Deque_iterator.9"* %5) #2
+  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2ERKS4_(%"struct.std::_Deque_iterator.9"* %agg.result, %"struct.std::_Deque_iterator.9"* %5) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EED2Ev(%"class.std::_Deque_base.5"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EED2Ev(%"class.std::_Deque_base.5"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
   store %"class.std::_Deque_base.5"* %this, %"class.std::_Deque_base.5"** %1, align 8
   %2 = load %"class.std::_Deque_base.5"** %1
@@ -4648,24 +4150,24 @@ define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EED2Ev(%"class.std:
   %14 = getelementptr inbounds %"struct.std::_Deque_iterator.9"* %13, i32 0, i32 3
   %15 = load %struct.TreeNode**** %14, align 8
   %16 = getelementptr inbounds %struct.TreeNode*** %15, i64 1
-  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE16_M_destroy_nodesEPPS1_S5_(%"class.std::_Deque_base.5"* %2, %struct.TreeNode*** %11, %struct.TreeNode*** %16) #2
+  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE16_M_destroy_nodesEPPS1_S5_(%"class.std::_Deque_base.5"* %2, %struct.TreeNode*** %11, %struct.TreeNode*** %16) #0
   %17 = getelementptr inbounds %"class.std::_Deque_base.5"* %2, i32 0, i32 0
   %18 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %17, i32 0, i32 0
   %19 = load %struct.TreeNode**** %18, align 8
   %20 = getelementptr inbounds %"class.std::_Deque_base.5"* %2, i32 0, i32 0
   %21 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %20, i32 0, i32 1
   %22 = load i64* %21, align 8
-  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE17_M_deallocate_mapEPPS1_m(%"class.std::_Deque_base.5"* %2, %struct.TreeNode*** %19, i64 %22) #2
+  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE17_M_deallocate_mapEPPS1_m(%"class.std::_Deque_base.5"* %2, %struct.TreeNode*** %19, i64 %22) #0
   br label %23
 
 ; <label>:23                                      ; preds = %7, %0
   %24 = getelementptr inbounds %"class.std::_Deque_base.5"* %2, i32 0, i32 0
-  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implD2Ev(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %24) #2
+  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implD2Ev(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %24) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE16_M_destroy_nodesEPPS1_S5_(%"class.std::_Deque_base.5"* %this, %struct.TreeNode*** %__nstart, %struct.TreeNode*** %__nfinish) #5 align 2 {
+define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE16_M_destroy_nodesEPPS1_S5_(%"class.std::_Deque_base.5"* %this, %struct.TreeNode*** %__nstart, %struct.TreeNode*** %__nfinish) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
   %2 = alloca %struct.TreeNode***, align 8
   %3 = alloca %struct.TreeNode***, align 8
@@ -4687,7 +4189,7 @@ define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE16_M_destroy_node
 ; <label>:10                                      ; preds = %6
   %11 = load %struct.TreeNode**** %__n, align 8
   %12 = load %struct.TreeNode*** %11, align 8
-  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE18_M_deallocate_nodeEPS1_(%"class.std::_Deque_base.5"* %4, %struct.TreeNode** %12) #2
+  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE18_M_deallocate_nodeEPS1_(%"class.std::_Deque_base.5"* %4, %struct.TreeNode** %12) #0
   br label %13
 
 ; <label>:13                                      ; preds = %10
@@ -4701,85 +4203,63 @@ define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE16_M_destroy_node
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implD2Ev(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %this) unnamed_addr #9 align 2 {
+define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implD2Ev(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %this) unnamed_addr #5 align 2 {
   %1 = alloca %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"*, align 8
   store %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %this, %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"** %1, align 8
   %2 = load %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"** %1
   %3 = bitcast %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %2 to %"class.std::allocator.6"*
-  call void @_ZNSaIP8TreeNodeED2Ev(%"class.std::allocator.6"* %3) #2
+  call void @_ZNSaIP8TreeNodeED2Ev(%"class.std::allocator.6"* %3) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSaIP8TreeNodeED2Ev(%"class.std::allocator.6"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSaIP8TreeNodeED2Ev(%"class.std::allocator.6"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::allocator.6"*, align 8
   store %"class.std::allocator.6"* %this, %"class.std::allocator.6"** %1, align 8
   %2 = load %"class.std::allocator.6"** %1
   %3 = bitcast %"class.std::allocator.6"* %2 to %"class.__gnu_cxx::new_allocator.7"*
-  call void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeED2Ev(%"class.__gnu_cxx::new_allocator.7"* %3) #2
+  call void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeED2Ev(%"class.__gnu_cxx::new_allocator.7"* %3) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeED2Ev(%"class.__gnu_cxx::new_allocator.7"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeED2Ev(%"class.__gnu_cxx::new_allocator.7"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.7"*, align 8
   store %"class.__gnu_cxx::new_allocator.7"* %this, %"class.__gnu_cxx::new_allocator.7"** %1, align 8
   %2 = load %"class.__gnu_cxx::new_allocator.7"** %1
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EEC2Ev(%"class.std::_Deque_base.5"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
-  %2 = alloca i8*
-  %3 = alloca i32
   store %"class.std::_Deque_base.5"* %this, %"class.std::_Deque_base.5"** %1, align 8
-  %4 = load %"class.std::_Deque_base.5"** %1
-  %5 = getelementptr inbounds %"class.std::_Deque_base.5"* %4, i32 0, i32 0
-  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implC2Ev(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %5)
-  invoke void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE17_M_initialize_mapEm(%"class.std::_Deque_base.5"* %4, i64 0)
-          to label %6 unwind label %7
-
-; <label>:6                                       ; preds = %0
+  %2 = load %"class.std::_Deque_base.5"** %1
+  %3 = getelementptr inbounds %"class.std::_Deque_base.5"* %2, i32 0, i32 0
+  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implC2Ev(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %3)
+  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE17_M_initialize_mapEm(%"class.std::_Deque_base.5"* %2, i64 0)
   ret void
-
-; <label>:7                                       ; preds = %0
-  %8 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %9 = extractvalue { i8*, i32 } %8, 0
-  store i8* %9, i8** %2
-  %10 = extractvalue { i8*, i32 } %8, 1
-  store i32 %10, i32* %3
-  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implD2Ev(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %5) #2
-  br label %11
-
-; <label>:11                                      ; preds = %7
-  %12 = load i8** %2
-  %13 = load i32* %3
-  %14 = insertvalue { i8*, i32 } undef, i8* %12, 0
-  %15 = insertvalue { i8*, i32 } %14, i32 %13, 1
-  resume { i8*, i32 } %15
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implC2Ev(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implC2Ev(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"*, align 8
   store %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %this, %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"** %1, align 8
   %2 = load %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"** %1
   %3 = bitcast %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %2 to %"class.std::allocator.6"*
-  call void @_ZNSaIP8TreeNodeEC2Ev(%"class.std::allocator.6"* %3) #2
+  call void @_ZNSaIP8TreeNodeEC2Ev(%"class.std::allocator.6"* %3) #0
   %4 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %2, i32 0, i32 0
   store %struct.TreeNode*** null, %struct.TreeNode**** %4, align 8
   %5 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %2, i32 0, i32 1
   store i64 0, i64* %5, align 8
   %6 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %2, i32 0, i32 2
-  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2Ev(%"struct.std::_Deque_iterator.9"* %6) #2
+  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2Ev(%"struct.std::_Deque_iterator.9"* %6) #0
   %7 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %2, i32 0, i32 3
-  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2Ev(%"struct.std::_Deque_iterator.9"* %7) #2
+  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2Ev(%"struct.std::_Deque_iterator.9"* %7) #0
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE17_M_initialize_mapEm(%"class.std::_Deque_base.5"* %this, i64 %__num_elements) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
   %2 = alloca i64, align 8
@@ -4833,12 +4313,12 @@ define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE17_M_initialize_m
   %37 = getelementptr inbounds %"class.std::_Deque_base.5"* %5, i32 0, i32 0
   %38 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %37, i32 0, i32 2
   %39 = load %struct.TreeNode**** %__nstart, align 8
-  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %38, %struct.TreeNode*** %39) #2
+  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %38, %struct.TreeNode*** %39) #0
   %40 = getelementptr inbounds %"class.std::_Deque_base.5"* %5, i32 0, i32 0
   %41 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %40, i32 0, i32 3
   %42 = load %struct.TreeNode**** %__nfinish, align 8
   %43 = getelementptr inbounds %struct.TreeNode*** %42, i64 -1
-  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %41, %struct.TreeNode*** %43) #2
+  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_E11_M_set_nodeEPS3_(%"struct.std::_Deque_iterator.9"* %41, %struct.TreeNode*** %43) #0
   %44 = getelementptr inbounds %"class.std::_Deque_base.5"* %5, i32 0, i32 0
   %45 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %44, i32 0, i32 2
   %46 = getelementptr inbounds %"struct.std::_Deque_iterator.9"* %45, i32 0, i32 1
@@ -4862,7 +4342,7 @@ define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE17_M_initialize_m
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE15_M_create_nodesEPPS1_S5_(%"class.std::_Deque_base.5"* %this, %struct.TreeNode*** %__nstart, %struct.TreeNode*** %__nfinish) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
   %2 = alloca %struct.TreeNode***, align 8
@@ -4899,17 +4379,17 @@ define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE15_M_create_nodes
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSaIP8TreeNodeEC2Ev(%"class.std::allocator.6"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSaIP8TreeNodeEC2Ev(%"class.std::allocator.6"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::allocator.6"*, align 8
   store %"class.std::allocator.6"* %this, %"class.std::allocator.6"** %1, align 8
   %2 = load %"class.std::allocator.6"** %1
   %3 = bitcast %"class.std::allocator.6"* %2 to %"class.__gnu_cxx::new_allocator.7"*
-  call void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeEC2Ev(%"class.__gnu_cxx::new_allocator.7"* %3) #2
+  call void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeEC2Ev(%"class.__gnu_cxx::new_allocator.7"* %3) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2Ev(%"struct.std::_Deque_iterator.9"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2Ev(%"struct.std::_Deque_iterator.9"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"struct.std::_Deque_iterator.9"*, align 8
   store %"struct.std::_Deque_iterator.9"* %this, %"struct.std::_Deque_iterator.9"** %1, align 8
   %2 = load %"struct.std::_Deque_iterator.9"** %1
@@ -4925,14 +4405,14 @@ define linkonce_odr void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2Ev(%"struc
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeEC2Ev(%"class.__gnu_cxx::new_allocator.7"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeEC2Ev(%"class.__gnu_cxx::new_allocator.7"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.__gnu_cxx::new_allocator.7"*, align 8
   store %"class.__gnu_cxx::new_allocator.7"* %this, %"class.__gnu_cxx::new_allocator.7"** %1, align 8
   %2 = load %"class.__gnu_cxx::new_allocator.7"** %1
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EEC2EOS3_(%"class.std::deque.4"* %this, %"class.std::deque.4"* %__x) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::deque.4"*, align 8
   %2 = alloca %"class.std::deque.4"*, align 8
@@ -4941,21 +4421,21 @@ define linkonce_odr void @_ZNSt5dequeIP8TreeNodeSaIS1_EEC2EOS3_(%"class.std::deq
   %3 = load %"class.std::deque.4"** %1
   %4 = bitcast %"class.std::deque.4"* %3 to %"class.std::_Deque_base.5"*
   %5 = load %"class.std::deque.4"** %2, align 8
-  %6 = call %"class.std::deque.4"* @_ZSt4moveIRSt5dequeIP8TreeNodeSaIS2_EEEONSt16remove_referenceIT_E4typeEOS7_(%"class.std::deque.4"* %5) #2
+  %6 = call %"class.std::deque.4"* @_ZSt4moveIRSt5dequeIP8TreeNodeSaIS2_EEEONSt16remove_referenceIT_E4typeEOS7_(%"class.std::deque.4"* %5) #0
   %7 = bitcast %"class.std::deque.4"* %6 to %"class.std::_Deque_base.5"*
   call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EEC2EOS3_(%"class.std::_Deque_base.5"* %4, %"class.std::_Deque_base.5"* %7)
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %"class.std::deque.4"* @_ZSt4moveIRSt5dequeIP8TreeNodeSaIS2_EEEONSt16remove_referenceIT_E4typeEOS7_(%"class.std::deque.4"* %__t) #5 {
+define linkonce_odr %"class.std::deque.4"* @_ZSt4moveIRSt5dequeIP8TreeNodeSaIS2_EEEONSt16remove_referenceIT_E4typeEOS7_(%"class.std::deque.4"* %__t) #3 {
   %1 = alloca %"class.std::deque.4"*, align 8
   store %"class.std::deque.4"* %__t, %"class.std::deque.4"** %1, align 8
   %2 = load %"class.std::deque.4"** %1, align 8
   ret %"class.std::deque.4"* %2
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EEC2EOS3_(%"class.std::_Deque_base.5"* %this, %"class.std::_Deque_base.5"* %__x) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
   %2 = alloca %"class.std::_Deque_base.5"*, align 8
@@ -4965,68 +4445,46 @@ define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EEC2EOS3_(%"class.s
   store %"class.std::_Deque_base.5"* %__x, %"class.std::_Deque_base.5"** %2, align 8
   %5 = load %"class.std::_Deque_base.5"** %1
   %6 = load %"class.std::_Deque_base.5"** %2, align 8
-  %7 = call %"class.std::_Deque_base.5"* @_ZSt4moveIRSt11_Deque_baseIP8TreeNodeSaIS2_EEEONSt16remove_referenceIT_E4typeEOS7_(%"class.std::_Deque_base.5"* %6) #2
+  %7 = call %"class.std::_Deque_base.5"* @_ZSt4moveIRSt11_Deque_baseIP8TreeNodeSaIS2_EEEONSt16remove_referenceIT_E4typeEOS7_(%"class.std::_Deque_base.5"* %6) #0
   %8 = bitcast %"struct.__gnu_cxx::__allocator_always_compares_equal"* %4 to %"struct.std::integral_constant"*
   call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EEC2EOS3_St17integral_constantIbLb1EE(%"class.std::_Deque_base.5"* %5, %"class.std::_Deque_base.5"* %7)
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EEC2EOS3_St17integral_constantIbLb1EE(%"class.std::_Deque_base.5"* %this, %"class.std::_Deque_base.5"* %__x) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
   %2 = alloca %"class.std::_Deque_base.5"*, align 8
   %3 = alloca %"struct.std::integral_constant", align 1
-  %4 = alloca i8*
-  %5 = alloca i32
   store %"class.std::_Deque_base.5"* %this, %"class.std::_Deque_base.5"** %1, align 8
   store %"class.std::_Deque_base.5"* %__x, %"class.std::_Deque_base.5"** %2, align 8
-  %6 = load %"class.std::_Deque_base.5"** %1
-  %7 = getelementptr inbounds %"class.std::_Deque_base.5"* %6, i32 0, i32 0
-  %8 = load %"class.std::_Deque_base.5"** %2, align 8
-  %9 = call %"class.std::allocator.6"* @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base.5"* %8) #2
-  %10 = call %"class.std::allocator.6"* @_ZSt4moveIRSaIP8TreeNodeEEONSt16remove_referenceIT_E4typeEOS5_(%"class.std::allocator.6"* %9) #2
-  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implC2EOS2_(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %7, %"class.std::allocator.6"* %10) #2
-  invoke void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE17_M_initialize_mapEm(%"class.std::_Deque_base.5"* %6, i64 0)
-          to label %11 unwind label %21
+  %4 = load %"class.std::_Deque_base.5"** %1
+  %5 = getelementptr inbounds %"class.std::_Deque_base.5"* %4, i32 0, i32 0
+  %6 = load %"class.std::_Deque_base.5"** %2, align 8
+  %7 = call %"class.std::allocator.6"* @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE19_M_get_Tp_allocatorEv(%"class.std::_Deque_base.5"* %6) #0
+  %8 = call %"class.std::allocator.6"* @_ZSt4moveIRSaIP8TreeNodeEEONSt16remove_referenceIT_E4typeEOS5_(%"class.std::allocator.6"* %7) #0
+  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implC2EOS2_(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %5, %"class.std::allocator.6"* %8) #0
+  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE17_M_initialize_mapEm(%"class.std::_Deque_base.5"* %4, i64 0)
+  %9 = load %"class.std::_Deque_base.5"** %2, align 8
+  %10 = getelementptr inbounds %"class.std::_Deque_base.5"* %9, i32 0, i32 0
+  %11 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %10, i32 0, i32 0
+  %12 = load %struct.TreeNode**** %11, align 8
+  %13 = icmp ne %struct.TreeNode*** %12, null
+  br i1 %13, label %14, label %18
 
-; <label>:11                                      ; preds = %0
-  %12 = load %"class.std::_Deque_base.5"** %2, align 8
-  %13 = getelementptr inbounds %"class.std::_Deque_base.5"* %12, i32 0, i32 0
-  %14 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %13, i32 0, i32 0
-  %15 = load %struct.TreeNode**** %14, align 8
-  %16 = icmp ne %struct.TreeNode*** %15, null
-  br i1 %16, label %17, label %25
+; <label>:14                                      ; preds = %0
+  %15 = getelementptr inbounds %"class.std::_Deque_base.5"* %4, i32 0, i32 0
+  %16 = load %"class.std::_Deque_base.5"** %2, align 8
+  %17 = getelementptr inbounds %"class.std::_Deque_base.5"* %16, i32 0, i32 0
+  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_impl12_M_swap_dataERS4_(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %15, %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %17) #0
+  br label %18
 
-; <label>:17                                      ; preds = %11
-  %18 = getelementptr inbounds %"class.std::_Deque_base.5"* %6, i32 0, i32 0
-  %19 = load %"class.std::_Deque_base.5"** %2, align 8
-  %20 = getelementptr inbounds %"class.std::_Deque_base.5"* %19, i32 0, i32 0
-  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_impl12_M_swap_dataERS4_(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %18, %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %20) #2
-  br label %25
-
-; <label>:21                                      ; preds = %0
-  %22 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %23 = extractvalue { i8*, i32 } %22, 0
-  store i8* %23, i8** %4
-  %24 = extractvalue { i8*, i32 } %22, 1
-  store i32 %24, i32* %5
-  call void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implD2Ev(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %7) #2
-  br label %26
-
-; <label>:25                                      ; preds = %17, %11
+; <label>:18                                      ; preds = %14, %0
   ret void
-
-; <label>:26                                      ; preds = %21
-  %27 = load i8** %4
-  %28 = load i32* %5
-  %29 = insertvalue { i8*, i32 } undef, i8* %27, 0
-  %30 = insertvalue { i8*, i32 } %29, i32 %28, 1
-  resume { i8*, i32 } %30
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %"class.std::_Deque_base.5"* @_ZSt4moveIRSt11_Deque_baseIP8TreeNodeSaIS2_EEEONSt16remove_referenceIT_E4typeEOS7_(%"class.std::_Deque_base.5"* %__t) #5 {
+define linkonce_odr %"class.std::_Deque_base.5"* @_ZSt4moveIRSt11_Deque_baseIP8TreeNodeSaIS2_EEEONSt16remove_referenceIT_E4typeEOS7_(%"class.std::_Deque_base.5"* %__t) #3 {
   %1 = alloca %"class.std::_Deque_base.5"*, align 8
   store %"class.std::_Deque_base.5"* %__t, %"class.std::_Deque_base.5"** %1, align 8
   %2 = load %"class.std::_Deque_base.5"** %1, align 8
@@ -5034,7 +4492,7 @@ define linkonce_odr %"class.std::_Deque_base.5"* @_ZSt4moveIRSt11_Deque_baseIP8T
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implC2EOS2_(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %this, %"class.std::allocator.6"* %__a) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implC2EOS2_(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %this, %"class.std::allocator.6"* %__a) unnamed_addr #3 align 2 {
   %1 = alloca %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"*, align 8
   %2 = alloca %"class.std::allocator.6"*, align 8
   store %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %this, %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"** %1, align 8
@@ -5042,21 +4500,21 @@ define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_implC2EO
   %3 = load %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"** %1
   %4 = bitcast %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %3 to %"class.std::allocator.6"*
   %5 = load %"class.std::allocator.6"** %2, align 8
-  %6 = call %"class.std::allocator.6"* @_ZSt4moveIRSaIP8TreeNodeEEONSt16remove_referenceIT_E4typeEOS5_(%"class.std::allocator.6"* %5) #2
-  call void @_ZNSaIP8TreeNodeEC2ERKS1_(%"class.std::allocator.6"* %4, %"class.std::allocator.6"* %6) #2
+  %6 = call %"class.std::allocator.6"* @_ZSt4moveIRSaIP8TreeNodeEEONSt16remove_referenceIT_E4typeEOS5_(%"class.std::allocator.6"* %5) #0
+  call void @_ZNSaIP8TreeNodeEC2ERKS1_(%"class.std::allocator.6"* %4, %"class.std::allocator.6"* %6) #0
   %7 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %3, i32 0, i32 0
   store %struct.TreeNode*** null, %struct.TreeNode**** %7, align 8
   %8 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %3, i32 0, i32 1
   store i64 0, i64* %8, align 8
   %9 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %3, i32 0, i32 2
-  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2Ev(%"struct.std::_Deque_iterator.9"* %9) #2
+  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2Ev(%"struct.std::_Deque_iterator.9"* %9) #0
   %10 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %3, i32 0, i32 3
-  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2Ev(%"struct.std::_Deque_iterator.9"* %10) #2
+  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2Ev(%"struct.std::_Deque_iterator.9"* %10) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %"class.std::allocator.6"* @_ZSt4moveIRSaIP8TreeNodeEEONSt16remove_referenceIT_E4typeEOS5_(%"class.std::allocator.6"* %__t) #5 {
+define linkonce_odr %"class.std::allocator.6"* @_ZSt4moveIRSaIP8TreeNodeEEONSt16remove_referenceIT_E4typeEOS5_(%"class.std::allocator.6"* %__t) #3 {
   %1 = alloca %"class.std::allocator.6"*, align 8
   store %"class.std::allocator.6"* %__t, %"class.std::allocator.6"** %1, align 8
   %2 = load %"class.std::allocator.6"** %1, align 8
@@ -5064,7 +4522,7 @@ define linkonce_odr %"class.std::allocator.6"* @_ZSt4moveIRSaIP8TreeNodeEEONSt16
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_impl12_M_swap_dataERS4_(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %this, %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %__x) #5 align 2 {
+define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_impl12_M_swap_dataERS4_(%"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %this, %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %__x) #3 align 2 {
   %1 = alloca %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"*, align 8
   %2 = alloca %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"*, align 8
   store %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %this, %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"** %1, align 8
@@ -5073,40 +4531,40 @@ define linkonce_odr void @_ZNSt11_Deque_baseIP8TreeNodeSaIS1_EE11_Deque_impl12_M
   %4 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %3, i32 0, i32 2
   %5 = load %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"** %2, align 8
   %6 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %5, i32 0, i32 2
-  call void @_ZSt4swapISt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEvRT_S7_(%"struct.std::_Deque_iterator.9"* %4, %"struct.std::_Deque_iterator.9"* %6) #2
+  call void @_ZSt4swapISt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEvRT_S7_(%"struct.std::_Deque_iterator.9"* %4, %"struct.std::_Deque_iterator.9"* %6) #0
   %7 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %3, i32 0, i32 3
   %8 = load %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"** %2, align 8
   %9 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %8, i32 0, i32 3
-  call void @_ZSt4swapISt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEvRT_S7_(%"struct.std::_Deque_iterator.9"* %7, %"struct.std::_Deque_iterator.9"* %9) #2
+  call void @_ZSt4swapISt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEvRT_S7_(%"struct.std::_Deque_iterator.9"* %7, %"struct.std::_Deque_iterator.9"* %9) #0
   %10 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %3, i32 0, i32 0
   %11 = load %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"** %2, align 8
   %12 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %11, i32 0, i32 0
-  call void @_ZSt4swapIPPP8TreeNodeEvRT_S5_(%struct.TreeNode**** %10, %struct.TreeNode**** %12) #2
+  call void @_ZSt4swapIPPP8TreeNodeEvRT_S5_(%struct.TreeNode**** %10, %struct.TreeNode**** %12) #0
   %13 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %3, i32 0, i32 1
   %14 = load %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"** %2, align 8
   %15 = getelementptr inbounds %"struct.std::_Deque_base<TreeNode *, std::allocator<TreeNode *> >::_Deque_impl"* %14, i32 0, i32 1
-  call void @_ZSt4swapImEvRT_S1_(i64* %13, i64* %15) #2
+  call void @_ZSt4swapImEvRT_S1_(i64* %13, i64* %15) #0
   ret void
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr void @_ZSt4swapISt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEvRT_S7_(%"struct.std::_Deque_iterator.9"* %__a, %"struct.std::_Deque_iterator.9"* %__b) #9 {
+define linkonce_odr void @_ZSt4swapISt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEvRT_S7_(%"struct.std::_Deque_iterator.9"* %__a, %"struct.std::_Deque_iterator.9"* %__b) #5 {
   %1 = alloca %"struct.std::_Deque_iterator.9"*, align 8
   %2 = alloca %"struct.std::_Deque_iterator.9"*, align 8
   %__tmp = alloca %"struct.std::_Deque_iterator.9", align 8
   store %"struct.std::_Deque_iterator.9"* %__a, %"struct.std::_Deque_iterator.9"** %1, align 8
   store %"struct.std::_Deque_iterator.9"* %__b, %"struct.std::_Deque_iterator.9"** %2, align 8
   %3 = load %"struct.std::_Deque_iterator.9"** %1, align 8
-  %4 = call %"struct.std::_Deque_iterator.9"* @_ZSt4moveIRSt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEONSt16remove_referenceIT_E4typeEOS8_(%"struct.std::_Deque_iterator.9"* %3) #2
-  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2ERKS4_(%"struct.std::_Deque_iterator.9"* %__tmp, %"struct.std::_Deque_iterator.9"* %4) #2
+  %4 = call %"struct.std::_Deque_iterator.9"* @_ZSt4moveIRSt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEONSt16remove_referenceIT_E4typeEOS8_(%"struct.std::_Deque_iterator.9"* %3) #0
+  call void @_ZNSt15_Deque_iteratorIP8TreeNodeRS1_PS1_EC2ERKS4_(%"struct.std::_Deque_iterator.9"* %__tmp, %"struct.std::_Deque_iterator.9"* %4) #0
   %5 = load %"struct.std::_Deque_iterator.9"** %1, align 8
   %6 = load %"struct.std::_Deque_iterator.9"** %2, align 8
-  %7 = call %"struct.std::_Deque_iterator.9"* @_ZSt4moveIRSt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEONSt16remove_referenceIT_E4typeEOS8_(%"struct.std::_Deque_iterator.9"* %6) #2
+  %7 = call %"struct.std::_Deque_iterator.9"* @_ZSt4moveIRSt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEONSt16remove_referenceIT_E4typeEOS8_(%"struct.std::_Deque_iterator.9"* %6) #0
   %8 = bitcast %"struct.std::_Deque_iterator.9"* %5 to i8*
   %9 = bitcast %"struct.std::_Deque_iterator.9"* %7 to i8*
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* %8, i8* %9, i64 32, i32 8, i1 false)
   %10 = load %"struct.std::_Deque_iterator.9"** %2, align 8
-  %11 = call %"struct.std::_Deque_iterator.9"* @_ZSt4moveIRSt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEONSt16remove_referenceIT_E4typeEOS8_(%"struct.std::_Deque_iterator.9"* %__tmp) #2
+  %11 = call %"struct.std::_Deque_iterator.9"* @_ZSt4moveIRSt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEONSt16remove_referenceIT_E4typeEOS8_(%"struct.std::_Deque_iterator.9"* %__tmp) #0
   %12 = bitcast %"struct.std::_Deque_iterator.9"* %10 to i8*
   %13 = bitcast %"struct.std::_Deque_iterator.9"* %11 to i8*
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* %12, i8* %13, i64 32, i32 8, i1 false)
@@ -5114,22 +4572,22 @@ define linkonce_odr void @_ZSt4swapISt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEvRT_
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr void @_ZSt4swapIPPP8TreeNodeEvRT_S5_(%struct.TreeNode**** %__a, %struct.TreeNode**** %__b) #9 {
+define linkonce_odr void @_ZSt4swapIPPP8TreeNodeEvRT_S5_(%struct.TreeNode**** %__a, %struct.TreeNode**** %__b) #5 {
   %1 = alloca %struct.TreeNode****, align 8
   %2 = alloca %struct.TreeNode****, align 8
   %__tmp = alloca %struct.TreeNode***, align 8
   store %struct.TreeNode**** %__a, %struct.TreeNode***** %1, align 8
   store %struct.TreeNode**** %__b, %struct.TreeNode***** %2, align 8
   %3 = load %struct.TreeNode***** %1, align 8
-  %4 = call %struct.TreeNode**** @_ZSt4moveIRPPP8TreeNodeEONSt16remove_referenceIT_E4typeEOS6_(%struct.TreeNode**** %3) #2
+  %4 = call %struct.TreeNode**** @_ZSt4moveIRPPP8TreeNodeEONSt16remove_referenceIT_E4typeEOS6_(%struct.TreeNode**** %3) #0
   %5 = load %struct.TreeNode**** %4
   store %struct.TreeNode*** %5, %struct.TreeNode**** %__tmp, align 8
   %6 = load %struct.TreeNode***** %2, align 8
-  %7 = call %struct.TreeNode**** @_ZSt4moveIRPPP8TreeNodeEONSt16remove_referenceIT_E4typeEOS6_(%struct.TreeNode**** %6) #2
+  %7 = call %struct.TreeNode**** @_ZSt4moveIRPPP8TreeNodeEONSt16remove_referenceIT_E4typeEOS6_(%struct.TreeNode**** %6) #0
   %8 = load %struct.TreeNode**** %7
   %9 = load %struct.TreeNode***** %1, align 8
   store %struct.TreeNode*** %8, %struct.TreeNode**** %9, align 8
-  %10 = call %struct.TreeNode**** @_ZSt4moveIRPPP8TreeNodeEONSt16remove_referenceIT_E4typeEOS6_(%struct.TreeNode**** %__tmp) #2
+  %10 = call %struct.TreeNode**** @_ZSt4moveIRPPP8TreeNodeEONSt16remove_referenceIT_E4typeEOS6_(%struct.TreeNode**** %__tmp) #0
   %11 = load %struct.TreeNode**** %10
   %12 = load %struct.TreeNode***** %2, align 8
   store %struct.TreeNode*** %11, %struct.TreeNode**** %12, align 8
@@ -5137,22 +4595,22 @@ define linkonce_odr void @_ZSt4swapIPPP8TreeNodeEvRT_S5_(%struct.TreeNode**** %_
 }
 
 ; Function Attrs: inlinehint nounwind uwtable
-define linkonce_odr void @_ZSt4swapImEvRT_S1_(i64* %__a, i64* %__b) #9 {
+define linkonce_odr void @_ZSt4swapImEvRT_S1_(i64* %__a, i64* %__b) #5 {
   %1 = alloca i64*, align 8
   %2 = alloca i64*, align 8
   %__tmp = alloca i64, align 8
   store i64* %__a, i64** %1, align 8
   store i64* %__b, i64** %2, align 8
   %3 = load i64** %1, align 8
-  %4 = call i64* @_ZSt4moveIRmEONSt16remove_referenceIT_E4typeEOS2_(i64* %3) #2
+  %4 = call i64* @_ZSt4moveIRmEONSt16remove_referenceIT_E4typeEOS2_(i64* %3) #0
   %5 = load i64* %4
   store i64 %5, i64* %__tmp, align 8
   %6 = load i64** %2, align 8
-  %7 = call i64* @_ZSt4moveIRmEONSt16remove_referenceIT_E4typeEOS2_(i64* %6) #2
+  %7 = call i64* @_ZSt4moveIRmEONSt16remove_referenceIT_E4typeEOS2_(i64* %6) #0
   %8 = load i64* %7
   %9 = load i64** %1, align 8
   store i64 %8, i64* %9, align 8
-  %10 = call i64* @_ZSt4moveIRmEONSt16remove_referenceIT_E4typeEOS2_(i64* %__tmp) #2
+  %10 = call i64* @_ZSt4moveIRmEONSt16remove_referenceIT_E4typeEOS2_(i64* %__tmp) #0
   %11 = load i64* %10
   %12 = load i64** %2, align 8
   store i64 %11, i64* %12, align 8
@@ -5160,7 +4618,7 @@ define linkonce_odr void @_ZSt4swapImEvRT_S1_(i64* %__a, i64* %__b) #9 {
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr i64* @_ZSt4moveIRmEONSt16remove_referenceIT_E4typeEOS2_(i64* %__t) #5 {
+define linkonce_odr i64* @_ZSt4moveIRmEONSt16remove_referenceIT_E4typeEOS2_(i64* %__t) #3 {
   %1 = alloca i64*, align 8
   store i64* %__t, i64** %1, align 8
   %2 = load i64** %1, align 8
@@ -5168,7 +4626,7 @@ define linkonce_odr i64* @_ZSt4moveIRmEONSt16remove_referenceIT_E4typeEOS2_(i64*
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %struct.TreeNode**** @_ZSt4moveIRPPP8TreeNodeEONSt16remove_referenceIT_E4typeEOS6_(%struct.TreeNode**** %__t) #5 {
+define linkonce_odr %struct.TreeNode**** @_ZSt4moveIRPPP8TreeNodeEONSt16remove_referenceIT_E4typeEOS6_(%struct.TreeNode**** %__t) #3 {
   %1 = alloca %struct.TreeNode****, align 8
   store %struct.TreeNode**** %__t, %struct.TreeNode***** %1, align 8
   %2 = load %struct.TreeNode***** %1, align 8
@@ -5176,7 +4634,7 @@ define linkonce_odr %struct.TreeNode**** @_ZSt4moveIRPPP8TreeNodeEONSt16remove_r
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr %"struct.std::_Deque_iterator.9"* @_ZSt4moveIRSt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEONSt16remove_referenceIT_E4typeEOS8_(%"struct.std::_Deque_iterator.9"* %__t) #5 {
+define linkonce_odr %"struct.std::_Deque_iterator.9"* @_ZSt4moveIRSt15_Deque_iteratorIP8TreeNodeRS2_PS2_EEONSt16remove_referenceIT_E4typeEOS8_(%"struct.std::_Deque_iterator.9"* %__t) #3 {
   %1 = alloca %"struct.std::_Deque_iterator.9"*, align 8
   store %"struct.std::_Deque_iterator.9"* %__t, %"struct.std::_Deque_iterator.9"** %1, align 8
   %2 = load %"struct.std::_Deque_iterator.9"** %1, align 8
@@ -5184,7 +4642,7 @@ define linkonce_odr %"struct.std::_Deque_iterator.9"* @_ZSt4moveIRSt15_Deque_ite
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSaIP8TreeNodeEC2ERKS1_(%"class.std::allocator.6"* %this, %"class.std::allocator.6"* %__a) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSaIP8TreeNodeEC2ERKS1_(%"class.std::allocator.6"* %this, %"class.std::allocator.6"* %__a) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::allocator.6"*, align 8
   %2 = alloca %"class.std::allocator.6"*, align 8
   store %"class.std::allocator.6"* %this, %"class.std::allocator.6"** %1, align 8
@@ -5193,12 +4651,12 @@ define linkonce_odr void @_ZNSaIP8TreeNodeEC2ERKS1_(%"class.std::allocator.6"* %
   %4 = bitcast %"class.std::allocator.6"* %3 to %"class.__gnu_cxx::new_allocator.7"*
   %5 = load %"class.std::allocator.6"** %2, align 8
   %6 = bitcast %"class.std::allocator.6"* %5 to %"class.__gnu_cxx::new_allocator.7"*
-  call void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeEC2ERKS3_(%"class.__gnu_cxx::new_allocator.7"* %4, %"class.__gnu_cxx::new_allocator.7"* %6) #2
+  call void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeEC2ERKS3_(%"class.__gnu_cxx::new_allocator.7"* %4, %"class.__gnu_cxx::new_allocator.7"* %6) #0
   ret void
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeEC2ERKS3_(%"class.__gnu_cxx::new_allocator.7"* %this, %"class.__gnu_cxx::new_allocator.7"*) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeEC2ERKS3_(%"class.__gnu_cxx::new_allocator.7"* %this, %"class.__gnu_cxx::new_allocator.7"*) unnamed_addr #3 align 2 {
   %2 = alloca %"class.__gnu_cxx::new_allocator.7"*, align 8
   %3 = alloca %"class.__gnu_cxx::new_allocator.7"*, align 8
   store %"class.__gnu_cxx::new_allocator.7"* %this, %"class.__gnu_cxx::new_allocator.7"** %2, align 8
@@ -5207,58 +4665,36 @@ define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIP8TreeNodeEC2ERKS3_(%"cla
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEEC2Ev(%"class.std::_Deque_base"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"class.std::_Deque_base"*, align 8
-  %2 = alloca i8*
-  %3 = alloca i32
   store %"class.std::_Deque_base"* %this, %"class.std::_Deque_base"** %1, align 8
-  %4 = load %"class.std::_Deque_base"** %1
-  %5 = getelementptr inbounds %"class.std::_Deque_base"* %4, i32 0, i32 0
-  call void @_ZNSt11_Deque_baseIiSaIiEE11_Deque_implC2Ev(%"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %5)
-  invoke void @_ZNSt11_Deque_baseIiSaIiEE17_M_initialize_mapEm(%"class.std::_Deque_base"* %4, i64 0)
-          to label %6 unwind label %7
-
-; <label>:6                                       ; preds = %0
+  %2 = load %"class.std::_Deque_base"** %1
+  %3 = getelementptr inbounds %"class.std::_Deque_base"* %2, i32 0, i32 0
+  call void @_ZNSt11_Deque_baseIiSaIiEE11_Deque_implC2Ev(%"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %3)
+  call void @_ZNSt11_Deque_baseIiSaIiEE17_M_initialize_mapEm(%"class.std::_Deque_base"* %2, i64 0)
   ret void
-
-; <label>:7                                       ; preds = %0
-  %8 = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*)
-          cleanup
-  %9 = extractvalue { i8*, i32 } %8, 0
-  store i8* %9, i8** %2
-  %10 = extractvalue { i8*, i32 } %8, 1
-  store i32 %10, i32* %3
-  call void @_ZNSt11_Deque_baseIiSaIiEE11_Deque_implD2Ev(%"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %5) #2
-  br label %11
-
-; <label>:11                                      ; preds = %7
-  %12 = load i8** %2
-  %13 = load i32* %3
-  %14 = insertvalue { i8*, i32 } undef, i8* %12, 0
-  %15 = insertvalue { i8*, i32 } %14, i32 %13, 1
-  resume { i8*, i32 } %15
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE11_Deque_implC2Ev(%"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE11_Deque_implC2Ev(%"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"*, align 8
   store %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %this, %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"** %1, align 8
   %2 = load %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"** %1
   %3 = bitcast %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %2 to %"class.std::allocator.1"*
-  call void @_ZNSaIiEC2Ev(%"class.std::allocator.1"* %3) #2
+  call void @_ZNSaIiEC2Ev(%"class.std::allocator.1"* %3) #0
   %4 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %2, i32 0, i32 0
   store i32** null, i32*** %4, align 8
   %5 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %2, i32 0, i32 1
   store i64 0, i64* %5, align 8
   %6 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %2, i32 0, i32 2
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2Ev(%"struct.std::_Deque_iterator"* %6) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2Ev(%"struct.std::_Deque_iterator"* %6) #0
   %7 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %2, i32 0, i32 3
-  call void @_ZNSt15_Deque_iteratorIiRiPiEC2Ev(%"struct.std::_Deque_iterator"* %7) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiEC2Ev(%"struct.std::_Deque_iterator"* %7) #0
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE17_M_initialize_mapEm(%"class.std::_Deque_base"* %this, i64 %__num_elements) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base"*, align 8
   %2 = alloca i64, align 8
@@ -5312,12 +4748,12 @@ define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE17_M_initialize_mapEm(%"clas
   %37 = getelementptr inbounds %"class.std::_Deque_base"* %5, i32 0, i32 0
   %38 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %37, i32 0, i32 2
   %39 = load i32*** %__nstart, align 8
-  call void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"struct.std::_Deque_iterator"* %38, i32** %39) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"struct.std::_Deque_iterator"* %38, i32** %39) #0
   %40 = getelementptr inbounds %"class.std::_Deque_base"* %5, i32 0, i32 0
   %41 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %40, i32 0, i32 3
   %42 = load i32*** %__nfinish, align 8
   %43 = getelementptr inbounds i32** %42, i64 -1
-  call void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"struct.std::_Deque_iterator"* %41, i32** %43) #2
+  call void @_ZNSt15_Deque_iteratorIiRiPiE11_M_set_nodeEPS1_(%"struct.std::_Deque_iterator"* %41, i32** %43) #0
   %44 = getelementptr inbounds %"class.std::_Deque_base"* %5, i32 0, i32 0
   %45 = getelementptr inbounds %"struct.std::_Deque_base<int, std::allocator<int> >::_Deque_impl"* %44, i32 0, i32 2
   %46 = getelementptr inbounds %"struct.std::_Deque_iterator"* %45, i32 0, i32 1
@@ -5341,7 +4777,7 @@ define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE17_M_initialize_mapEm(%"clas
   ret void
 }
 
-; Function Attrs: uwtable
+; Function Attrs: nounwind uwtable
 define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE15_M_create_nodesEPPiS3_(%"class.std::_Deque_base"* %this, i32** %__nstart, i32** %__nfinish) #3 align 2 {
   %1 = alloca %"class.std::_Deque_base"*, align 8
   %2 = alloca i32**, align 8
@@ -5378,7 +4814,7 @@ define linkonce_odr void @_ZNSt11_Deque_baseIiSaIiEE15_M_create_nodesEPPiS3_(%"c
 }
 
 ; Function Attrs: nounwind uwtable
-define linkonce_odr void @_ZNSt15_Deque_iteratorIiRiPiEC2Ev(%"struct.std::_Deque_iterator"* %this) unnamed_addr #5 align 2 {
+define linkonce_odr void @_ZNSt15_Deque_iteratorIiRiPiEC2Ev(%"struct.std::_Deque_iterator"* %this) unnamed_addr #3 align 2 {
   %1 = alloca %"struct.std::_Deque_iterator"*, align 8
   store %"struct.std::_Deque_iterator"* %this, %"struct.std::_Deque_iterator"** %1, align 8
   %2 = load %"struct.std::_Deque_iterator"** %1
@@ -5393,26 +4829,22 @@ define linkonce_odr void @_ZNSt15_Deque_iteratorIiRiPiEC2Ev(%"struct.std::_Deque
   ret void
 }
 
-define internal void @_GLOBAL__I_a() section ".text.startup" {
+; Function Attrs: nounwind
+define internal void @_GLOBAL__I_a() #0 section ".text.startup" {
   call void @__cxx_global_var_init()
   ret void
 }
 
-attributes #0 = { "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #1 = { nounwind "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #2 = { nounwind }
-attributes #3 = { uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #0 = { nounwind }
+attributes #1 = { "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #4 = { nobuiltin "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #5 = { nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #5 = { inlinehint nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #6 = { nobuiltin nounwind "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #7 = { inlinehint uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #8 = { noreturn "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #9 = { inlinehint nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #10 = { noinline noreturn nounwind }
-attributes #11 = { builtin }
-attributes #12 = { builtin nounwind }
-attributes #13 = { noreturn nounwind }
-attributes #14 = { noreturn }
+attributes #7 = { noreturn "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #8 = { builtin }
+attributes #9 = { noreturn }
 
 !llvm.ident = !{!0}
 
