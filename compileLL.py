@@ -27,7 +27,7 @@ for cpp_file in files:
     
     # 3. Run clang command with C++11 enabled
     # Clang 3.4 supports this flag perfectly.
-    cmd = ["clang++", "-emit-llvm", "-S", "-std=c++11", "-o", output_path, source_path]
+    cmd = ["clang++", "-emit-llvm", "-S", "-std=c++11", "-fno-exceptions", "-o", output_path, source_path]
     
     try:
         subprocess.check_call(cmd)
