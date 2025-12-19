@@ -2,7 +2,6 @@ Algorithm,SDC,Hang,Crash,Benign
 in_01_recursive,147,0,538,315
 in_02_iterative_stack,125,0,545,330
 in_03_morris,153,0,560,287
-in_24_state_machine,91,0,573,336
 in_09_tagged,116,0,548,336
 in_10_leetcode_iter,160,0,516,324
 in_11_class_recursive,174,0,529,297
@@ -16,6 +15,7 @@ in_19_dual_stack,91,0,588,321
 in_20_cps,45,0,831,124
 in_21_schorr_waite,20,0,539,441
 in_23_custom_iterator,141,0,579,280
+in_24_state_machine,91,0,573,336
 in_25_trampoline,17,0,911,72
 in_26_bit_packed,118,0,563,319
 in_28_random_walk,27,0,494,479
@@ -44,3 +44,4 @@ po_25_peek_prune,213,0,527,260
 po_26_std_set,91,0,509,400
 po_29_map_state,92,0,606,302
 po_30_parent_map,120,0,535,345
+
