@@ -33,3 +33,14 @@ po_11_null_marker,222,0,585,193
 po_12_recursive_member,229,0,527,244
 po_14_vector_stack,242,0,517,241
 po_15_list_stack,235,0,538,227
+po_17_visitor,291,0,521,188
+po_18_function_pointer,294,0,512,194
+po_19_deque,189,0,639,172
+po_21_destructive_sign,233,0,547,220
+po_22_goto_spaghetti,220,0,548,232
+po_23_tagged_pointer,188,0,581,231
+po_24_task_stack,162,0,623,215
+po_25_peek_prune,213,0,527,260
+po_26_std_set,91,0,509,400
+po_29_map_state,92,0,606,302
+po_30_parent_map,120,0,535,345
