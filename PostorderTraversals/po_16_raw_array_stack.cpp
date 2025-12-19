@@ -34,7 +34,7 @@ public:
         if (root == NULL) return result;
 
         // Raw Array Stack Simulation
-        const int MAX_SIZE = 2000; // Buffer size
+        const int MAX_SIZE = 100000; // Buffer size
         TreeNode* stack[MAX_SIZE];
         int top = -1;
 
