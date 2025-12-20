@@ -51,10 +51,6 @@ int main(int argc, char** argv) {
     }
 
     ifstream file(filename.c_str());
-    if (!file.is_open()) {
-        fprintf(stderr, "Error: cannot open file! %s\n", filename.c_str());
-        return 1;
-    }
 
     int num;
     Node* root = NULL;

@@ -89,10 +89,6 @@ int main(int argc, char** argv) {
 
     // 3. Open file
     ifstream file(filename.c_str());
-    if (!file.is_open()) {
-        cerr << "Error: cannot open file! " << filename << endl;
-        return 1;
-    }
 
     int num;
     while(file >> num) {
