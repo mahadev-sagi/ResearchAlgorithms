@@ -2,7 +2,6 @@
  * Implementation: 20 - Struct of Arrays (Global Memory)
  * Filename: po_20_struct_of_arrays.cpp
  * Compatibility: C++98 (Clang 3.4 Safe)
- * Logic: Traversing Indices in Global Arrays.
  */
 
 #include <iostream>
@@ -17,7 +16,7 @@
 using namespace std;
 
 // Global Arrays simulating the Tree Memory
-const int MAX_NODES = 2000; // Increased size
+const int MAX_NODES = 2000; 
 int val[MAX_NODES];
 int left_child[MAX_NODES];  // -1 indicates NULL
 int right_child[MAX_NODES]; // -1 indicates NULL
@@ -35,7 +34,6 @@ void initMemory() {
 
 // Helper to insert into the Array-based BST
 int insertArray(int rootIdx, int value) {
-    // If tree is empty (rootIdx is -1), create root at index 0
     if (rootIdx == -1) {
         int newIdx = free_idx++;
         val[newIdx] = value;
@@ -97,9 +95,9 @@ public:
     }
 };
 
-// --- MAIN ---
+// --- MAIN (Updated) ---
 int main(int argc, char** argv) {
-    string filename = "numbers.txt";
+    string filename = "../../numbers.txt";
     if (argc > 1) {
         filename = argv[1];
     }
@@ -111,17 +109,15 @@ int main(int argc, char** argv) {
     int num;
     int array_root_idx = -1;
 
-    if (!file.is_open()) {
-        vector<int> f; f.push_back(1); f.push_back(2); f.push_back(3); f.push_back(4); f.push_back(5);
-        for(size_t i=0; i<f.size(); ++i) array_root_idx = insertArray(array_root_idx, f[i]);
-    } else {
-        while(file >> num) array_root_idx = insertArray(array_root_idx, num);
-        file.close();
+    while(file >> num) {
+        array_root_idx = insertArray(array_root_idx, num);
     }
+    file.close();
 
     Solution sol;
     std::vector<int> result = sol.postorderTraversal(array_root_idx);
 
+    // Print Actual Output
     for (size_t i = 0; i < result.size(); ++i) {
         cout << result[i] << " ";
     }
