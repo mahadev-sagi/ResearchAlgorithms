@@ -1,16 +1,13 @@
 /*
- * Implementation: 26 - Visited Tracking using std::set
- * Filename: po_26_std_set.cpp
+ * Implementation: 22 - GOTO-based State Machine (Spaghetti Code)
+ * Filename: po_22_goto_spaghetti.cpp
  * Compatibility: C++98 (Clang 3.4 Safe)
- * Logic:
- * Uses an external std::set to track which nodes have been 'expanded'.
- * High memory overhead (O(N) Set nodes) but conceptually simple.
+ * Logic: Simulates recursion using explicit labels and jumps.
  */
 
 #include <iostream>
 #include <vector>
 #include <stack>
-#include <set> // O(log N) lookups
 #include <cstdio>
 #include <fstream>
 #include <string>
@@ -32,25 +29,33 @@ public:
         if (!root) return result;
 
         std::stack<TreeNode*> s;
-        std::set<TreeNode*> visited; // Tracks if children expanded
+        TreeNode* curr = root;
+        TreeNode* lastVisited = NULL;
 
-        s.push(root);
+    START:
+        if (curr != NULL) {
+            s.push(curr);
+            curr = curr->left;
+            goto START;
+        }
 
-        while (!s.empty()) {
-            TreeNode* node = s.top();
+    CHECK_STACK:
+        if (s.empty()) goto END;
 
-            // Check if we already expanded this node
-            if (visited.count(node)) {
-                result.push_back(node->val);
-                s.pop();
-                // cleanup optimization: visited.erase(node);
+        {
+            TreeNode* peek = s.top();
+            if (peek->right != NULL && lastVisited != peek->right) {
+                curr = peek->right;
+                goto START;
             } else {
-                visited.insert(node);
-                // Push children (Right first, then Left)
-                if (node->right) s.push(node->right);
-                if (node->left) s.push(node->left);
+                result.push_back(peek->val);
+                lastVisited = peek;
+                s.pop();
+                goto CHECK_STACK;
             }
         }
+
+    END:
         return result;
     }
 };
