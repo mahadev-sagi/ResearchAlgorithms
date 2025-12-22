@@ -2,21 +2,21 @@
  * Implementation: 20 - Struct of Arrays (Global Memory)
  * Filename: po_20_struct_of_arrays.cpp
  * Compatibility: C++98 (Clang 3.4 Safe)
+ * Logic: Traversing Indices in Global Arrays.
+ * Fix:
  */
 
 #include <iostream>
 #include <vector>
 #include <stack>
-#include <cstdio>
-#include <fstream>
+#include <cstdio>  // for fopen, fscanf
+#include <cstdlib> // for exit
 #include <algorithm>
-#include <string>
-#include <cstdlib>
 
 using namespace std;
 
 // Global Arrays simulating the Tree Memory
-const int MAX_NODES = 2000; 
+const int MAX_NODES = 50000; // Sufficient size for input
 int val[MAX_NODES];
 int left_child[MAX_NODES];  // -1 indicates NULL
 int right_child[MAX_NODES]; // -1 indicates NULL
@@ -34,6 +34,7 @@ void initMemory() {
 
 // Helper to insert into the Array-based BST
 int insertArray(int rootIdx, int value) {
+    // If tree is empty (rootIdx is -1), create root at index 0
     if (rootIdx == -1) {
         int newIdx = free_idx++;
         val[newIdx] = value;
@@ -95,29 +96,44 @@ public:
     }
 };
 
-// --- MAIN (Updated) ---
+// --- MAIN (Updated to C-Style I/O) ---
 int main(int argc, char** argv) {
-    string filename = "../../numbers.txt";
+    // 1. Determine Filename (char* instead of string)
+    const char* filename = "../../numbers.txt";
     if (argc > 1) {
         filename = argv[1];
     }
 
-    ifstream file(filename.c_str());
+    // 2. Open File using C-style fopen
+    FILE* fp = fopen(filename, "r");
+    if (!fp) {
+        // Fallback: Try looking in current directory if ../../ failed
+        filename = "numbers.txt";
+        fp = fopen(filename, "r");
+    }
+
+    // If still failing, output error (optional, mostly for debug)
+    if (!fp) {
+        fprintf(stderr, "Error: cannot open file %s\n", filename);
+        return 1;
+    }
     
     initMemory(); // Clear arrays
     
     int num;
     int array_root_idx = -1;
 
-    while(file >> num) {
+    // 3. Read using fscanf
+    while(fscanf(fp, "%d", &num) == 1) {
         array_root_idx = insertArray(array_root_idx, num);
     }
-    file.close();
+    fclose(fp);
 
+    // 4. Run Traversal
     Solution sol;
     std::vector<int> result = sol.postorderTraversal(array_root_idx);
 
-    // Print Actual Output
+    // 5. Print Actual Output
     for (size_t i = 0; i < result.size(); ++i) {
         cout << result[i] << " ";
     }
