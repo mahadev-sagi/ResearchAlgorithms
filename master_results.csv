@@ -59,3 +59,6 @@ po_27_bit_vector,156,1,590,253
 po_29_map_state,83,0,544,373
 po_30_parent_map,41,40,527,392
 
+bfs_01_map_visited,72,0,527,401
+bfs_02_custom_queue,204,0,564,232
+bfs_03_full_map,56,0,609,335

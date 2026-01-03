@@ -5,8 +5,8 @@ import csv
 import glob
 
 # Configuration
-MASTER_CSV = "master_results.csv"
-LOGS_DIR = "raw_logs"
+MASTER_CSV = "bfs_results.csv"
+LOGS_DIR = "raw_logs_bfs"
 
 def store_experiment_data(algo_name):
     print("--- Processing Results for: " + algo_name + " ---")
